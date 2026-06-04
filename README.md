@@ -1,4 +1,4 @@
-# Numerical Methods Handbook for Engineers
+# Numerical Methods Lecture for Chemical Engineers
 
 An interactive educational website covering the most important numerical methods used in engineering, applied mathematics, and scientific computing.
 
