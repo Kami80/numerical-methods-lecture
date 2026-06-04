@@ -265,8 +265,13 @@ p{margin-bottom:.5rem}
   <div class="sb-header">
     <div class="sb-title">Numerical Methods<br>for ODEs</div>
     <div class="sb-sub">ChemE · Year 4 · Problem-Solving Session</div>
+    <a class="nav-item" href="pde.html">
+        <span class="nav-icon">🌊</span>
+        <span class="nav-label">PDE Methods Page</span>
+      </a>
   </div>
   <nav class="sb-nav">
+    
     <a class="nav-item active" href="#gaussian-elimination"><span class="nav-icon">📋</span><span class="nav-label">gaussian-elimination</span></a>
     <a class="nav-item" href="#taylor"><span class="nav-icon">📈</span><span class="nav-label">Taylor Series</span></a>
     <a class="nav-item" href="#rk2"><span class="nav-icon">🔄</span><span class="nav-label">Runge-Kutta 2</span></a>
@@ -293,6 +298,7 @@ p{margin-bottom:.5rem}
       Finite Difference Methods (1D &amp; 2D) with full hand calculations.
     </p>
     <div class="hero-chips">
+        
       <span class="chip">kamyabsafaie80@gmail.com</span>
       <span class="chip">09928582327</span>
     </div>
@@ -7887,8 +7893,928 @@ title(<span class="str">'Surface Plot of Temperature Distribution'</span>);</cod
       </details>
     </div>
   </details>
+
+<!-- P9 -->
+<details class="prob">
+    <summary><span class="prob-num">P9</span>&ensp;<strong>Trial-and-Error</strong> — Nonlinear CSTR Design</summary>
+  
+    <div class="prob-body">
+      <p>
+        A liquid-phase reaction \(A \rightarrow B\) occurs in a CSTR. The reaction rate is nonlinear:
+      </p>
+  
+      \[
+        -r_A = kC_A^2
+      \]
+  
+      <p><strong>Given:</strong></p>
+  
+      \[
+        F_{A0}=10\;mol/min,\qquad C_{A0}=2\;mol/L
+      \]
+  
+      \[
+        k=0.15\;L/(mol\cdot min),\qquad V=20\;L
+      \]
+  
+      <p>
+        Find the conversion \(X\) using the <strong>trial-and-error fixed point method</strong>.
+      </p>
+  
+      <details class="ans">
+        <summary>▶ Reveal Detailed Answer</summary>
+  
+        <div class="ans-body">
+  
+          <h4>Step 1 — CSTR Design Equation</h4>
+  
+          \[
+            V=\frac{F_{A0}X}{-r_A}
+          \]
+  
+          Since:
+  
+          \[
+            C_A=C_{A0}(1-X)
+          \]
+  
+          \[
+            C_A=2(1-X)
+          \]
+  
+          The rate law becomes:
+  
+          \[
+            -r_A=kC_A^2
+          \]
+  
+          \[
+            -r_A=0.15[2(1-X)]^2
+          \]
+  
+          \[
+            -r_A=0.6(1-X)^2
+          \]
+  
+          Substitute into the CSTR design equation:
+  
+          \[
+            20=\frac{10X}{0.6(1-X)^2}
+          \]
+  
+          Multiply both sides:
+  
+          \[
+            20[0.6(1-X)^2]=10X
+          \]
+  
+          \[
+            12(1-X)^2=10X
+          \]
+  
+          Expand:
+  
+          \[
+            12(1-2X+X^2)=10X
+          \]
+  
+          \[
+            12-24X+12X^2=10X
+          \]
+  
+          \[
+            12X^2-34X+12=0
+          \]
+  
+          <h4>Step 2 — Rearrange for Trial-and-Error</h4>
+  
+          <p>
+            For fixed point trial-and-error, rearrange the equation into the form:
+          </p>
+  
+          \[
+            X_{new}=g(X_{old})
+          \]
+  
+          Starting from:
+  
+          \[
+            12X^2-34X+12=0
+          \]
+  
+          Move the middle term:
+  
+          \[
+            34X=12X^2+12
+          \]
+  
+          Divide by 34:
+  
+          \[
+            \boxed{
+            X_{new}=\frac{12X_{old}^2+12}{34}
+            }
+          \]
+  
+          <div class="info-box">
+            <strong>Important:</strong>
+            In trial-and-error fixed point iteration, the answer from each trial becomes the
+            guess for the next trial.
+          </div>
+  
+          <hr>
+  
+          <h4>Trial 1</h4>
+  
+          \[
+            X_0=0.3000
+          \]
+  
+          \[
+            X_1=\frac{12(0.3000)^2+12}{34}
+          \]
+  
+          \[
+            X_1=\frac{12(0.0900)+12}{34}
+          \]
+  
+          \[
+            X_1=\frac{1.0800+12}{34}
+          \]
+  
+          \[
+            X_1=0.3847
+          \]
+  
+          <p class="note">
+            The answer \(0.3847\) becomes the next guess.
+          </p>
+  
+          <hr>
+  
+          <h4>Trial 2</h4>
+  
+          \[
+            X_1=0.3847
+          \]
+  
+          \[
+            X_2=\frac{12(0.3847)^2+12}{34}
+          \]
+  
+          \[
+            X_2=\frac{12(0.14799)+12}{34}
+          \]
+  
+          \[
+            X_2=\frac{1.7759+12}{34}
+          \]
+  
+          \[
+            X_2=0.4052
+          \]
+  
+          <hr>
+  
+          <h4>Trial 3</h4>
+  
+          \[
+            X_2=0.4052
+          \]
+  
+          \[
+            X_3=\frac{12(0.4052)^2+12}{34}
+          \]
+  
+          \[
+            X_3=\frac{12(0.1642)+12}{34}
+          \]
+  
+          \[
+            X_3=\frac{1.9704+12}{34}
+          \]
+  
+          \[
+            X_3=0.4109
+          \]
+  
+          <hr>
+  
+          <h4>Trial 4</h4>
+  
+          \[
+            X_3=0.4109
+          \]
+  
+          \[
+            X_4=\frac{12(0.4109)^2+12}{34}
+          \]
+  
+          \[
+            X_4=\frac{12(0.1688)+12}{34}
+          \]
+  
+          \[
+            X_4=\frac{2.0256+12}{34}
+          \]
+  
+          \[
+            X_4=0.4125
+          \]
+  
+          <hr>
+  
+          <h4>Trial 5</h4>
+  
+          \[
+            X_4=0.4125
+          \]
+  
+          \[
+            X_5=\frac{12(0.4125)^2+12}{34}
+          \]
+  
+          \[
+            X_5=\frac{12(0.1702)+12}{34}
+          \]
+  
+          \[
+            X_5=\frac{2.0424+12}{34}
+          \]
+  
+          \[
+            X_5=0.4130
+          \]
+  
+          <hr>
+  
+          <h4>Trial 6</h4>
+  
+          \[
+            X_5=0.4130
+          \]
+  
+          \[
+            X_6=\frac{12(0.4130)^2+12}{34}
+          \]
+  
+          \[
+            X_6=\frac{12(0.1706)+12}{34}
+          \]
+  
+          \[
+            X_6=\frac{2.0472+12}{34}
+          \]
+  
+          \[
+            X_6=0.4132
+          \]
+  
+          <hr>
+  
+          <h4>Convergence Table</h4>
+  
+          <div class="tbl-wrap">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>Trial</th>
+                  <th>Old Guess \(X_{old}\)</th>
+                  <th>New Answer \(X_{new}\)</th>
+                  <th>Error \(|X_{new}-X_{old}|\)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>0.3000</td><td>0.3847</td><td>0.0847</td></tr>
+                <tr><td>2</td><td>0.3847</td><td>0.4052</td><td>0.0205</td></tr>
+                <tr><td>3</td><td>0.4052</td><td>0.4109</td><td>0.0057</td></tr>
+                <tr><td>4</td><td>0.4109</td><td>0.4125</td><td>0.0016</td></tr>
+                <tr><td>5</td><td>0.4125</td><td>0.4130</td><td>0.0005</td></tr>
+                <tr><td>6</td><td>0.4130</td><td>0.4132</td><td>0.0002</td></tr>
+              </tbody>
+            </table>
+          </div>
+  
+          <h4>Final Answer</h4>
+  
+          \[
+            \boxed{X\approx0.4132}
+          \]
+  
+          \[
+            \boxed{X\approx41.32\%}
+          \]
+  
+        </div>
+      </details>
+  
+      <details class="ans">
+        <summary>▶ MATLAB Code</summary>
+  
+        <div class="ans-body">
+  
+          <h4 class="subsub">MATLAB Code — Trial-and-Error Fixed Point Iteration</h4>
+  
+          <div class="formula-box matlab-panel">
+            <div class="formula-title">Nonlinear CSTR Conversion</div>
+  
+  <pre class="matlab-code"><code><span class="com">%% P9 - Trial-and-Error Fixed Point Iteration</span>
+  <span class="com">% Reaction:</span>
+  <span class="com">% A -> B</span>
+  <span class="com">%</span>
+  <span class="com">% Rate law:</span>
+  <span class="com">% -rA = k*CA^2</span>
+  <span class="com">%</span>
+  <span class="com">% CSTR design equation:</span>
+  <span class="com">% V = FA0*X/(-rA)</span>
+  <span class="com">%</span>
+  <span class="com">% Rearranged fixed point form:</span>
+  <span class="com">% X_new = (12*X_old^2 + 12)/34</span>
+  <span class="com">%</span>
+  <span class="com">% The answer from each trial becomes the next guess.</span>
+  
+  <span class="kw">clc</span>;
+  <span class="kw">clear</span>;
+  <span class="kw">close</span> <span class="kw">all</span>;
+  
+  <span class="com">%% Step 1: Given data</span>
+  
+  FA0 = <span class="num">10</span>;       <span class="com">% mol/min</span>
+  CA0 = <span class="num">2</span>;        <span class="com">% mol/L</span>
+  k = <span class="num">0.15</span>;       <span class="com">% L/(mol min)</span>
+  V = <span class="num">20</span>;         <span class="com">% L</span>
+  
+  <span class="com">%% Step 2: Initial guess</span>
+  
+  Xold = <span class="num">0.30</span>;
+  
+  <span class="com">%% Step 3: Iteration settings</span>
+  
+  tol = <span class="num">1e-6</span>;
+  maxIter = <span class="num">50</span>;
+  
+  <span class="com">%% Step 4: Storage arrays</span>
+  
+  Trial = [];
+  OldGuess = [];
+  NewAnswer = [];
+  Error = [];
+  
+  <span class="com">%% Step 5: Trial-and-error iteration</span>
+  
+  <span class="kw">for</span> n = <span class="num">1</span>:maxIter
+  
+      <span class="com">% Fixed point formula</span>
+      Xnew = (<span class="num">12</span>*Xold^<span class="num">2</span> + <span class="num">12</span>) / <span class="num">34</span>;
+  
+      <span class="com">% Difference between new answer and old guess</span>
+      err = abs(Xnew - Xold);
+  
+      <span class="com">% Store results</span>
+      Trial(end+<span class="num">1</span>) = n;
+      OldGuess(end+<span class="num">1</span>) = Xold;
+      NewAnswer(end+<span class="num">1</span>) = Xnew;
+      Error(end+<span class="num">1</span>) = err;
+  
+      <span class="com">% Print each trial</span>
+      fprintf(<span class="str">'Trial %d\n'</span>, n);
+      fprintf(<span class="str">'Old guess  = %.6f\n'</span>, Xold);
+      fprintf(<span class="str">'New answer = %.6f\n'</span>, Xnew);
+      fprintf(<span class="str">'Error      = %.6e\n\n'</span>, err);
+  
+      <span class="com">% Check convergence</span>
+      <span class="kw">if</span> err &lt; tol
+          <span class="kw">break</span>
+      <span class="kw">end</span>
+  
+      <span class="com">% Important trial-and-error step:</span>
+      <span class="com">% the answer becomes the next guess</span>
+      Xold = Xnew;
+  
+  <span class="kw">end</span>
+  
+  <span class="com">%% Step 6: Results table</span>
+  
+  Results = table(Trial', OldGuess', NewAnswer', Error', ...
+      <span class="str">'VariableNames'</span>, ...
+      {<span class="str">'Trial'</span>, <span class="str">'Old_Guess'</span>, <span class="str">'New_Answer'</span>, <span class="str">'Error'</span>});
+  
+  disp(<span class="str">'Trial-and-Error Results:'</span>)
+  disp(Results)
+  
+  <span class="com">%% Step 7: Final conversion</span>
+  
+  fprintf(<span class="str">'Final conversion X = %.6f\n'</span>, Xnew);
+  fprintf(<span class="str">'Final conversion = %.2f percent\n'</span>, Xnew*<span class="num">100</span>);
+  
+  <span class="com">%% Step 8: Check original CSTR equation</span>
+  
+  CA = CA0*(<span class="num">1</span> - Xnew);
+  rate = k*CA^<span class="num">2</span>;
+  Vcheck = FA0*Xnew/rate;
+  
+  fprintf(<span class="str">'Check volume from final X = %.6f L\n'</span>, Vcheck);
+  
+  <span class="com">%% Step 9: Plot convergence</span>
+  
+  figure;
+  plot(Trial, NewAnswer, <span class="str">'-o'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+  grid on;
+  
+  xlabel(<span class="str">'Trial Number'</span>);
+  ylabel(<span class="str">'Conversion X'</span>);
+  title(<span class="str">'Trial-and-Error Convergence'</span>);
+  
+  <span class="com">%% Step 10: Plot error</span>
+  
+  figure;
+  semilogy(Trial, Error, <span class="str">'-s'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+  grid on;
+  
+  xlabel(<span class="str">'Trial Number'</span>);
+  ylabel(<span class="str">'Absolute Error'</span>);
+  title(<span class="str">'Error Reduction in Trial-and-Error Method'</span>);</code></pre>
+  
+          </div>
+        </div>
+      </details>
+  
+    </div>
+  </details>
+
+  <!-- P9 -->
+<details class="prob">
+    <summary><span class="prob-num">P10</span>&ensp;<strong>Trial-and-Error</strong> — Complex Multi-Step CSTR Reaction Network</summary>
+  
+    <div class="prob-body">
+      <p>
+        A liquid-phase reaction network occurs in a continuous stirred tank reactor:
+      </p>
+  
+      \[
+        A \rightarrow B \rightarrow C
+      \]
+  
+      <p>
+        with an unwanted side reaction:
+      </p>
+  
+      \[
+        A \rightarrow D
+      \]
+  
+      <p>The rates are:</p>
+  
+      \[
+        r_1=\frac{k_1C_A}{K_m+C_A}
+      \]
+  
+      \[
+        r_2=k_2C_B^2
+      \]
+  
+      \[
+        r_3=k_3C_A^2
+      \]
+  
+      <p><strong>Given:</strong></p>
+  
+      \[
+        C_{A0}=5.0\;mol/L,\qquad \tau=0.5\;min
+      \]
+  
+      \[
+        k_1=2.0,\qquad K_m=1.0,\qquad k_2=0.15,\qquad k_3=0.05
+      \]
+  
+      <p>
+        Use the <strong>trial-and-error fixed point method</strong> to find the steady-state
+        concentrations \(C_A\) and \(C_B\).
+      </p>
+  
+      <details class="ans">
+        <summary>▶ Reveal Detailed Answer</summary>
+  
+        <div class="ans-body">
+  
+          <h4>Step 1 — Steady-State CSTR Balances</h4>
+  
+          <p>For species \(A\):</p>
+  
+          \[
+            C_A=C_{A0}-\tau(r_1+r_3)
+          \]
+  
+          <p>For species \(B\):</p>
+  
+          \[
+            C_B=\tau(r_1-r_2)
+          \]
+  
+          <p>Substitute the rates:</p>
+  
+          \[
+            C_A=5-0.5\left(\frac{2C_A}{1+C_A}+0.05C_A^2\right)
+          \]
+  
+          \[
+            C_B=0.5\left(\frac{2C_A}{1+C_A}-0.15C_B^2\right)
+          \]
+  
+          <h4>Step 2 — Fixed Point Form</h4>
+  
+          \[
+            C_{A,new}=5-0.5\left(\frac{2C_{A,old}}{1+C_{A,old}}+0.05C_{A,old}^2\right)
+          \]
+  
+          \[
+            C_{B,new}=0.5\left(\frac{2C_{A,old}}{1+C_{A,old}}-0.15C_{B,old}^2\right)
+          \]
+  
+          <div class="info-box">
+            <strong>Trial-and-error rule:</strong>
+            the answer from each trial becomes the guess for the next trial.
+          </div>
+  
+          <hr>
+  
+          <h4>Initial Guess</h4>
+  
+          \[
+            C_A^{(0)}=4.0000,\qquad C_B^{(0)}=0.5000
+          \]
+  
+          <hr>
+  
+          <h4>Trial 1</h4>
+  
+          \[
+            r_1=\frac{2(4.0000)}{1+4.0000}=1.6000
+          \]
+  
+          \[
+            r_2=0.15(0.5000)^2=0.0375
+          \]
+  
+          \[
+            r_3=0.05(4.0000)^2=0.8000
+          \]
+  
+          \[
+            C_A^{(1)}=5-0.5(1.6000+0.8000)=3.8000
+          \]
+  
+          \[
+            C_B^{(1)}=0.5(1.6000-0.0375)=0.7813
+          \]
+  
+          <hr>
+  
+          <h4>Trial 2</h4>
+  
+          \[
+            C_A^{(1)}=3.8000,\qquad C_B^{(1)}=0.7813
+          \]
+  
+          \[
+            r_1=\frac{2(3.8000)}{1+3.8000}=1.5833
+          \]
+  
+          \[
+            r_2=0.15(0.7813)^2=0.0916
+          \]
+  
+          \[
+            r_3=0.05(3.8000)^2=0.7220
+          \]
+  
+          \[
+            C_A^{(2)}=5-0.5(1.5833+0.7220)=3.8473
+          \]
+  
+          \[
+            C_B^{(2)}=0.5(1.5833-0.0916)=0.7459
+          \]
+  
+          <hr>
+  
+          <h4>Trial 3</h4>
+  
+          \[
+            C_A^{(2)}=3.8473,\qquad C_B^{(2)}=0.7459
+          \]
+  
+          \[
+            r_1=\frac{2(3.8473)}{1+3.8473}=1.5874
+          \]
+  
+          \[
+            r_2=0.15(0.7459)^2=0.0835
+          \]
+  
+          \[
+            r_3=0.05(3.8473)^2=0.7401
+          \]
+  
+          \[
+            C_A^{(3)}=5-0.5(1.5874+0.7401)=3.8362
+          \]
+  
+          \[
+            C_B^{(3)}=0.5(1.5874-0.0835)=0.7520
+          \]
+  
+          <hr>
+  
+          <h4>Trial 4</h4>
+  
+          \[
+            C_A^{(3)}=3.8362,\qquad C_B^{(3)}=0.7520
+          \]
+  
+          \[
+            r_1=1.5865
+          \]
+  
+          \[
+            r_2=0.0848
+          \]
+  
+          \[
+            r_3=0.7358
+          \]
+  
+          \[
+            C_A^{(4)}=5-0.5(1.5865+0.7358)=3.8389
+          \]
+  
+          \[
+            C_B^{(4)}=0.5(1.5865-0.0848)=0.7508
+          \]
+  
+          <hr>
+  
+          <h4>Trial 5</h4>
+  
+          \[
+            C_A^{(4)}=3.8389,\qquad C_B^{(4)}=0.7508
+          \]
+  
+          \[
+            r_1=1.5867
+          \]
+  
+          \[
+            r_2=0.0846
+          \]
+  
+          \[
+            r_3=0.7368
+          \]
+  
+          \[
+            C_A^{(5)}=5-0.5(1.5867+0.7368)=3.8382
+          \]
+  
+          \[
+            C_B^{(5)}=0.5(1.5867-0.0846)=0.7511
+          \]
+  
+          <hr>
+  
+          <h4>Convergence Table</h4>
+  
+          <div class="tbl-wrap">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>Trial</th>
+                  <th>\(C_A^{old}\)</th>
+                  <th>\(C_B^{old}\)</th>
+                  <th>\(C_A^{new}\)</th>
+                  <th>\(C_B^{new}\)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>4.0000</td><td>0.5000</td><td>3.8000</td><td>0.7813</td></tr>
+                <tr><td>2</td><td>3.8000</td><td>0.7813</td><td>3.8473</td><td>0.7459</td></tr>
+                <tr><td>3</td><td>3.8473</td><td>0.7459</td><td>3.8362</td><td>0.7520</td></tr>
+                <tr><td>4</td><td>3.8362</td><td>0.7520</td><td>3.8389</td><td>0.7508</td></tr>
+                <tr><td>5</td><td>3.8389</td><td>0.7508</td><td>3.8382</td><td>0.7511</td></tr>
+              </tbody>
+            </table>
+          </div>
+  
+          <h4>Final Answer</h4>
+  
+          \[
+            \boxed{C_A\approx3.838\;mol/L}
+          \]
+  
+          \[
+            \boxed{C_B\approx0.751\;mol/L}
+          \]
+  
+        </div>
+      </details>
+  
+      <details class="ans">
+        <summary>▶ MATLAB Code</summary>
+  
+        <div class="ans-body">
+  
+          <h4 class="subsub">MATLAB Code — Trial-and-Error Multi-Step Reactor</h4>
+  
+          <div class="formula-box matlab-panel">
+            <div class="formula-title">Fixed Point Iteration for Multi-Step CSTR</div>
+  
+  <pre class="matlab-code"><code><span class="com">%% P9 - Trial-and-Error for Multi-Step CSTR Reaction Network</span>
+  <span class="com">% Reaction network:</span>
+  <span class="com">%</span>
+  <span class="com">%     A -> B -> C</span>
+  <span class="com">%     A -> D   side reaction</span>
+  <span class="com">%</span>
+  <span class="com">% Rates:</span>
+  <span class="com">%     r1 = k1*CA/(Km + CA)</span>
+  <span class="com">%     r2 = k2*CB^2</span>
+  <span class="com">%     r3 = k3*CA^2</span>
+  <span class="com">%</span>
+  <span class="com">% CSTR fixed point equations:</span>
+  <span class="com">%     CA_new = CA0 - tau*(r1 + r3)</span>
+  <span class="com">%     CB_new = tau*(r1 - r2)</span>
+  <span class="com">%</span>
+  <span class="com">% The answer from each trial becomes the guess for the next trial.</span>
+  
+  <span class="kw">clc</span>;
+  <span class="kw">clear</span>;
+  <span class="kw">close</span> <span class="kw">all</span>;
+  
+  <span class="com">%% Given data</span>
+  
+  CA0 = <span class="num">5.0</span>;
+  tau = <span class="num">0.5</span>;
+  
+  k1 = <span class="num">2.0</span>;
+  Km = <span class="num">1.0</span>;
+  k2 = <span class="num">0.15</span>;
+  k3 = <span class="num">0.05</span>;
+  
+  <span class="com">%% Initial guesses</span>
+  
+  CA_old = <span class="num">4.0</span>;
+  CB_old = <span class="num">0.5</span>;
+  
+  <span class="com">%% Iteration settings</span>
+  
+  tol = <span class="num">1e-6</span>;
+  maxIter = <span class="num">50</span>;
+  
+  <span class="com">%% Storage arrays</span>
+  
+  Trial = [];
+  CA_guess = [];
+  CB_guess = [];
+  CA_new_store = [];
+  CB_new_store = [];
+  Error = [];
+  
+  <span class="com">%% Trial-and-error fixed point iteration</span>
+  
+  <span class="kw">for</span> n = <span class="num">1</span>:maxIter
+  
+      <span class="com">% Calculate reaction rates using old guesses</span>
+      r1 = k1*CA_old/(Km + CA_old);
+      r2 = k2*CB_old^<span class="num">2</span>;
+      r3 = k3*CA_old^<span class="num">2</span>;
+  
+      <span class="com">% Fixed point equations</span>
+      CA_new = CA0 - tau*(r1 + r3);
+      CB_new = tau*(r1 - r2);
+  
+      <span class="com">% Error between old guess and new answer</span>
+      err = max(abs([CA_new - CA_old, CB_new - CB_old]));
+  
+      <span class="com">% Store values</span>
+      Trial(end+<span class="num">1</span>) = n;
+      CA_guess(end+<span class="num">1</span>) = CA_old;
+      CB_guess(end+<span class="num">1</span>) = CB_old;
+      CA_new_store(end+<span class="num">1</span>) = CA_new;
+      CB_new_store(end+<span class="num">1</span>) = CB_new;
+      Error(end+<span class="num">1</span>) = err;
+  
+      <span class="com">% Print trial</span>
+      fprintf(<span class="str">'Trial %d\n'</span>, n);
+      fprintf(<span class="str">'Old CA = %.6f, Old CB = %.6f\n'</span>, CA_old, CB_old);
+      fprintf(<span class="str">'New CA = %.6f, New CB = %.6f\n'</span>, CA_new, CB_new);
+      fprintf(<span class="str">'Error  = %.6e\n\n'</span>, err);
+  
+      <span class="com">% Stop if converged</span>
+      <span class="kw">if</span> err &lt; tol
+          <span class="kw">break</span>
+      <span class="kw">end</span>
+  
+      <span class="com">% IMPORTANT:</span>
+      <span class="com">% The answer becomes the next guess</span>
+      CA_old = CA_new;
+      CB_old = CB_new;
+  
+  <span class="kw">end</span>
+  
+  <span class="com">%% Results table</span>
+  
+  Results = table(Trial', CA_guess', CB_guess', CA_new_store', CB_new_store', Error', ...
+      <span class="str">'VariableNames'</span>, ...
+      {<span class="str">'Trial'</span>, ...
+       <span class="str">'CA_old'</span>, ...
+       <span class="str">'CB_old'</span>, ...
+       <span class="str">'CA_new'</span>, ...
+       <span class="str">'CB_new'</span>, ...
+       <span class="str">'Error'</span>});
+  
+  disp(<span class="str">'Trial-and-Error Results:'</span>)
+  disp(Results)
+  
+  <span class="com">%% Final answer</span>
+  
+  fprintf(<span class="str">'Final CA = %.6f mol/L\n'</span>, CA_new);
+  fprintf(<span class="str">'Final CB = %.6f mol/L\n'</span>, CB_new);
+  
+  <span class="com">%% Final reaction rates</span>
+  
+  r1_final = k1*CA_new/(Km + CA_new);
+  r2_final = k2*CB_new^<span class="num">2</span>;
+  r3_final = k3*CA_new^<span class="num">2</span>;
+  
+  fprintf(<span class="str">'Final r1 = %.6f\n'</span>, r1_final);
+  fprintf(<span class="str">'Final r2 = %.6f\n'</span>, r2_final);
+  fprintf(<span class="str">'Final r3 = %.6f\n'</span>, r3_final);
+  
+  <span class="com">%% Plot convergence</span>
+  
+  figure;
+  plot(Trial, CA_new_store, <span class="str">'-o'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+  hold on;
+  plot(Trial, CB_new_store, <span class="str">'-s'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+  grid on;
+  
+  xlabel(<span class="str">'Trial Number'</span>);
+  ylabel(<span class="str">'Concentration (mol/L)'</span>);
+  title(<span class="str">'Trial-and-Error Convergence for Multi-Step CSTR'</span>);
+  legend(<span class="str">'C_A'</span>, <span class="str">'C_B'</span>, <span class="str">'Location'</span>, <span class="str">'best'</span>);
+  
+  <span class="com">%% Plot error reduction</span>
+  
+  figure;
+  semilogy(Trial, Error, <span class="str">'-d'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+  grid on;
+  
+  xlabel(<span class="str">'Trial Number'</span>);
+  ylabel(<span class="str">'Maximum Absolute Error'</span>);
+  title(<span class="str">'Error Reduction in Fixed Point Iteration'</span>);</code></pre>
+  
+          </div>
+        </div>
+      </details>
+  
+    </div>
+  </details>
 </section>
 
 
 
-  
+</main>
+
+<script>
+  const progress = document.getElementById("progress");
+
+  window.addEventListener("scroll", () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.body.scrollHeight - window.innerHeight;
+    const progressWidth = (scrollTop / docHeight) * 100;
+    progress.style.width = progressWidth + "%";
+  });
+
+  const sections = document.querySelectorAll("section[id]");
+  const navLinks = document.querySelectorAll(".nav-item[href^='#']");
+
+  window.addEventListener("scroll", () => {
+    let current = "";
+
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 120;
+      if (window.scrollY >= sectionTop) {
+        current = section.getAttribute("id");
+      }
+    });
+
+    navLinks.forEach(link => {
+      link.classList.remove("active");
+      if (link.getAttribute("href") === "#" + current) {
+        link.classList.add("active");
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
