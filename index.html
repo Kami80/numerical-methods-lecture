@@ -267,7 +267,7 @@ p{margin-bottom:.5rem}
     <div class="sb-sub">ChemE · Year 4 · Problem-Solving Session</div>
     <a class="nav-item" href="pde.html">
         <span class="nav-icon">🌊</span>
-        <span class="nav-label">Go to PDE Methods</span>
+        <span class="nav-label">PDE Methods Page</span>
       </a>
   </div>
   <nav class="sb-nav">
@@ -280,6 +280,7 @@ p{margin-bottom:.5rem}
     <a class="nav-item" href="#shooting"><span class="nav-icon">🎯</span><span class="nav-label">Shooting Method</span></a>
     <a class="nav-item" href="#fdm1d"><span class="nav-icon">📐</span><span class="nav-label">FDM — 1D</span></a>
     <a class="nav-item" href="#fdm2d"><span class="nav-icon">🌡️</span><span class="nav-label">FDM — 2D Heat</span></a>
+    <a class="nav-item" href="#regression"><span class="nav-icon">📈</span><span class="nav-label">Regression</span></a>
     <a class="nav-item" href="#practice"><span class="nav-icon">📝</span><span class="nav-label">Practice Problems</span></a>
   </nav>
   <div class="sb-footer">Click any step box to expand it</div>
@@ -5300,13 +5301,1265 @@ title(<span class="str">'Surface Plot of Temperature Distribution'</span>);</cod
         
         </div>
 </section>
+<!--=========================================
+            SECTION 09
+==============================================-->
+<section id="regression" class="sect">
+  <div class="sect-number">09</div>
 
+  <h2 class="sect-title">
+    Regression Analysis
+    <span class="badge badge-gold">Parameter Estimation</span>
+  </h2>
+
+  <p class="sect-subtitle">
+    Regression is the process of estimating model parameters from experimental data by minimizing
+    the difference between measured values and predicted values. In numerical methods, regression is
+    essential for fitting kinetic constants, heat-transfer coefficients, diffusion parameters,
+    and ODE model parameters.
+  </p>
+
+  <div class="formula-box">
+    <div class="formula-title">Professional Definition</div>
+
+    <p>
+      Suppose experimental data are given as:
+    </p>
+
+    \[
+      (x_1,y_1),\;(x_2,y_2),\;\ldots,\;(x_n,y_n)
+    \]
+
+    <p>
+      and a mathematical model is proposed:
+    </p>
+
+    \[
+      y=f(x;\theta)
+    \]
+
+    <p>
+      where \(\theta\) is the vector of unknown parameters. Regression finds the best
+      \(\theta\) by minimizing the sum of squared residuals:
+    </p>
+
+    \[
+      S(\theta)=\sum_{i=1}^{n}\left[y_i-f(x_i;\theta)\right]^2
+    \]
+
+    <p>
+      The residual at data point \(i\) is:
+    </p>
+
+    \[
+      r_i=y_i-y_{i,\text{pred}}
+    \]
+
+    <div class="info-box">
+      <strong>Regression vs interpolation:</strong>
+      Interpolation forces the curve to pass exactly through every data point.
+      Regression does not. Regression finds the best overall trend, which is better
+      for noisy experimental engineering data.
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-title">Linear and Nonlinear Regression</div>
+
+    <div class="formula-grid">
+      <div class="formula-cell">
+        <div class="formula-cell-label">Linear least squares</div>
+
+        \[
+          \mathbf{y}=\mathbf{X}\boldsymbol{\beta}
+        \]
+
+        \[
+          \boldsymbol{\beta}
+          =
+          (\mathbf{X}^T\mathbf{X})^{-1}
+          \mathbf{X}^T\mathbf{y}
+        \]
+
+        <p class="note">
+          Used when the unknown parameters appear linearly.
+        </p>
+      </div>
+
+      <div class="formula-cell">
+        <div class="formula-cell-label">Nonlinear least squares</div>
+
+        \[
+          \boldsymbol{\theta}_{new}
+          =
+          \boldsymbol{\theta}_{old}
+          +
+          \Delta\boldsymbol{\theta}
+        \]
+
+        \[
+          (\mathbf{J}^T\mathbf{J})\Delta\boldsymbol{\theta}
+          =
+          \mathbf{J}^T\mathbf{r}
+        \]
+
+        <p class="note">
+          Used when parameters appear inside exponentials, denominators, ODE solutions, or nonlinear functions.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMPLE 1 -->
+  <div class="example-card">
+    <div class="example-header">
+      <span class="example-icon">🔥</span>
+      <div class="example-title">
+        Worked Example 1 — Arrhenius Regression for Reaction Rate Constants
+      </div>
+    </div>
+
+    <div class="problem-box">
+      <p>
+        A chemical reaction rate constant was measured at several temperatures:
+      </p>
+
+      <div class="tbl-wrap">
+        <table class="dtbl">
+          <thead>
+            <tr>
+              <th>Temperature \(T\) (K)</th>
+              <th>Rate constant \(k\)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>300</td><td>0.058</td></tr>
+            <tr><td>320</td><td>0.161</td></tr>
+            <tr><td>340</td><td>0.405</td></tr>
+            <tr><td>360</td><td>0.930</td></tr>
+            <tr><td>380</td><td>1.900</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Fit the Arrhenius model:
+      </p>
+
+      \[
+        k=Ae^{-E/(RT)}
+      \]
+
+      <p>
+        Estimate the pre-exponential factor \(A\) and activation term \(E/R\).
+      </p>
+    </div>
+
+    <details class="step" open>
+      <summary>
+        <span class="step-num">1</span>
+        <span class="step-label">Linearize the Arrhenius equation</span>
+      </summary>
+
+      <div class="step-body">
+        <p>
+          Start with:
+        </p>
+
+        \[
+          k=Ae^{-E/(RT)}
+        \]
+
+        <p>
+          Take the natural logarithm of both sides:
+        </p>
+
+        \[
+          \ln k=\ln A-\frac{E}{R}\frac{1}{T}
+        \]
+
+        <p>
+          To make the numbers easier, define:
+        </p>
+
+        \[
+          x=\frac{1000}{T}
+        \]
+
+        <p>
+          Then:
+        </p>
+
+        \[
+          \ln k=a+bx
+        \]
+
+        where:
+
+        \[
+          a=\ln A
+        \]
+
+        and:
+
+        \[
+          b=-\frac{E}{1000R}
+        \]
+      </div>
+    </details>
+
+    <details class="step">
+      <summary>
+        <span class="step-num">2</span>
+        <span class="step-label">Prepare the regression table</span>
+      </summary>
+
+      <div class="step-body">
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead>
+              <tr>
+                <th>\(T\)</th>
+                <th>\(k\)</th>
+                <th>\(x=1000/T\)</th>
+                <th>\(Y=\ln k\)</th>
+                <th>\(x^2\)</th>
+                <th>\(xY\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>300</td><td>0.058</td><td>3.3333</td><td>-2.8473</td><td>11.1111</td><td>-9.4910</td></tr>
+              <tr><td>320</td><td>0.161</td><td>3.1250</td><td>-1.8264</td><td>9.7656</td><td>-5.7074</td></tr>
+              <tr><td>340</td><td>0.405</td><td>2.9412</td><td>-0.9039</td><td>8.6505</td><td>-2.6584</td></tr>
+              <tr><td>360</td><td>0.930</td><td>2.7778</td><td>-0.0726</td><td>7.7160</td><td>-0.2016</td></tr>
+              <tr><td>380</td><td>1.900</td><td>2.6316</td><td>0.6419</td><td>6.9252</td><td>1.6889</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Now compute the required summations:
+        </p>
+
+        \[
+          n=5
+        \]
+
+        \[
+          \sum x=14.8089
+        \]
+
+        \[
+          \sum Y=-5.0082
+        \]
+
+        \[
+          \sum x^2=44.1685
+        \]
+
+        \[
+          \sum xY=-16.3693
+        \]
+      </div>
+    </details>
+
+    <details class="step">
+      <summary>
+        <span class="step-num">3</span>
+        <span class="step-label">Compute slope and intercept by least squares</span>
+      </summary>
+
+      <div class="step-body">
+        <p>
+          For the linear model:
+        </p>
+
+        \[
+          Y=a+bx
+        \]
+
+        <p>
+          the slope is:
+        </p>
+
+        \[
+          b=
+          \frac{
+          n\sum xY-(\sum x)(\sum Y)
+          }
+          {
+          n\sum x^2-(\sum x)^2
+          }
+        \]
+
+        <p>
+          Substitute values:
+        </p>
+
+        \[
+          b=
+          \frac{
+          5(-16.3693)-(14.8089)(-5.0082)
+          }
+          {
+          5(44.1685)-(14.8089)^2
+          }
+        \]
+
+        \[
+          b=
+          \frac{
+          -81.8465+74.1709
+          }
+          {
+          220.8425-219.3025
+          }
+        \]
+
+        \[
+          b=
+          \frac{-7.6756}{1.5399}
+        \]
+
+        \[
+          \boxed{b=-4.9870}
+        \]
+
+        <p>
+          The intercept is:
+        </p>
+
+        \[
+          a=
+          \frac{\sum Y-b\sum x}{n}
+        \]
+
+        \[
+          a=
+          \frac{-5.0082-(-4.9870)(14.8089)}{5}
+        \]
+
+        \[
+          a=
+          \frac{-5.0082+73.8515}{5}
+        \]
+
+        \[
+          a=13.7687
+        \]
+
+        \[
+          \boxed{a=13.7687}
+        \]
+      </div>
+    </details>
+
+    <details class="step">
+      <summary>
+        <span class="step-num">4</span>
+        <span class="step-label">Recover Arrhenius parameters</span>
+      </summary>
+
+      <div class="step-body">
+        <p>
+          Since:
+        </p>
+
+        \[
+          a=\ln A
+        \]
+
+        then:
+
+        \[
+          A=e^a
+        \]
+
+        \[
+          A=e^{13.7687}
+        \]
+
+        \[
+          \boxed{A=9.54\times10^5}
+        \]
+
+        <p>
+          Since:
+        </p>
+
+        \[
+          b=-\frac{E}{1000R}
+        \]
+
+        then:
+
+        \[
+          \frac{E}{R}=-1000b
+        \]
+
+        \[
+          \frac{E}{R}=-1000(-4.9870)
+        \]
+
+        \[
+          \boxed{\frac{E}{R}=4987\;K}
+        \]
+
+        <p>
+          The fitted Arrhenius equation is:
+        </p>
+
+        \[
+          \boxed{
+          k=9.54\times10^5 e^{-4987/T}
+          }
+        \]
+      </div>
+    </details>
+
+    <details class="step">
+      <summary>
+        <span class="step-num">5</span>
+        <span class="step-label">Check fitted values and residuals</span>
+      </summary>
+
+      <div class="step-body">
+        <p>
+          The fitted linear equation is:
+        </p>
+
+        \[
+          \ln k=13.7687-4.9870\left(\frac{1000}{T}\right)
+        \]
+
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead>
+              <tr>
+                <th>\(T\)</th>
+                <th>Measured \(\ln k\)</th>
+                <th>Predicted \(\ln k\)</th>
+                <th>Residual</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>300</td><td>-2.8473</td><td>-2.8546</td><td class="exact">0.0073</td></tr>
+              <tr><td>320</td><td>-1.8264</td><td>-1.8157</td><td class="err">-0.0107</td></tr>
+              <tr><td>340</td><td>-0.9039</td><td>-0.8989</td><td class="err">-0.0049</td></tr>
+              <tr><td>360</td><td>-0.0726</td><td>-0.0841</td><td class="exact">0.0115</td></tr>
+              <tr><td>380</td><td>0.6419</td><td>0.6450</td><td class="err">-0.0032</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Sum of squared residuals:
+        </p>
+
+        \[
+          SSE=0.000334
+        \]
+
+        <p>
+          The coefficient of determination is approximately:
+        </p>
+
+        \[
+          R^2=0.99996
+        \]
+
+        <div class="info-box">
+          The Arrhenius model fits the data extremely well because \(R^2\) is very close to 1.
+        </div>
+      </div>
+    </details>
+
+    <details class="ans">
+      <summary>▶ MATLAB Code — Arrhenius Regression</summary>
+
+      <div class="ans-body">
+        <div class="formula-box matlab-panel">
+          <div class="formula-title">MATLAB Implementation with Complete Notes</div>
+
+<pre class="matlab-code"><code><span class="com">%% Arrhenius Regression by Linear Least Squares</span>
+<span class="com">% Model:</span>
+<span class="com">%     k = A*exp(-E/(R*T))</span>
+<span class="com">%</span>
+<span class="com">% Linearized form:</span>
+<span class="com">%     ln(k) = ln(A) - (E/R)*(1/T)</span>
+<span class="com">%</span>
+<span class="com">% To improve numerical scaling, define:</span>
+<span class="com">%     x = 1000/T</span>
+<span class="com">%</span>
+<span class="com">% Then:</span>
+<span class="com">%     ln(k) = a + b*x</span>
+<span class="com">%     a = ln(A)</span>
+<span class="com">%     b = -E/(1000R)</span>
+
+<span class="kw">clc</span>;
+<span class="kw">clear</span>;
+<span class="kw">close</span> <span class="kw">all</span>;
+
+T = [<span class="num">300</span>; <span class="num">320</span>; <span class="num">340</span>; <span class="num">360</span>; <span class="num">380</span>];
+k = [<span class="num">0.058</span>; <span class="num">0.161</span>; <span class="num">0.405</span>; <span class="num">0.930</span>; <span class="num">1.900</span>];
+
+x = <span class="num">1000</span>./T;
+Y = log(k);
+
+n = length(T);
+
+Sx = sum(x);
+SY = sum(Y);
+Sxx = sum(x.^<span class="num">2</span>);
+SxY = sum(x.*Y);
+
+b = (n*SxY - Sx*SY)/(n*Sxx - Sx^<span class="num">2</span>);
+a = (SY - b*Sx)/n;
+
+A = exp(a);
+E_over_R = -<span class="num">1000</span>*b;
+
+Y_pred = a + b*x;
+residual = Y - Y_pred;
+
+SSE = sum(residual.^<span class="num">2</span>);
+SST = sum((Y - mean(Y)).^<span class="num">2</span>);
+R2 = <span class="num">1</span> - SSE/SST;
+
+Results = table(T, k, x, Y, Y_pred, residual, ...
+    <span class="str">'VariableNames'</span>, ...
+    {<span class="str">'Temperature_K'</span>, <span class="str">'k_measured'</span>, <span class="str">'x_1000_over_T'</span>, ...
+     <span class="str">'ln_k_measured'</span>, <span class="str">'ln_k_predicted'</span>, <span class="str">'Residual'</span>});
+
+disp(<span class="str">'Arrhenius Regression Results:'</span>)
+disp(Results)
+
+fprintf(<span class="str">'ln(A) = %.6f\n'</span>, a)
+fprintf(<span class="str">'A = %.6e\n'</span>, A)
+fprintf(<span class="str">'E/R = %.4f K\n'</span>, E_over_R)
+fprintf(<span class="str">'SSE = %.6e\n'</span>, SSE)
+fprintf(<span class="str">'R2 = %.6f\n'</span>, R2)
+
+figure;
+plot(x, Y, <span class="str">'o'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+hold on;
+plot(x, Y_pred, <span class="str">'-'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+grid on;
+
+xlabel(<span class="str">'1000/T'</span>);
+ylabel(<span class="str">'ln(k)'</span>);
+title(<span class="str">'Arrhenius Regression'</span>);
+legend(<span class="str">'Measured Data'</span>, <span class="str">'Least-Squares Fit'</span>, <span class="str">'Location'</span>, <span class="str">'best'</span>);</code></pre>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- EXAMPLE 2 -->
+  <div class="example-card">
+    <div class="example-header">
+      <span class="example-icon">⚗️</span>
+      <div class="example-title">
+        Worked Example 2 — Nonlinear ODE Regression by Gauss-Newton Iteration
+      </div>
+    </div>
+
+    <div class="problem-box">
+      <p>
+        A batch reactor concentration approaches a nonzero equilibrium concentration:
+      </p>
+
+      \[
+        \frac{dC}{dt}=-k(C-C_\infty)
+      \]
+
+      <p>
+        The analytical solution is:
+      </p>
+
+      \[
+        C(t)=C_\infty+(C_0-C_\infty)e^{-kt}
+      \]
+
+      <p>
+        Experimental data:
+      </p>
+
+      <div class="tbl-wrap">
+        <table class="dtbl">
+          <thead>
+            <tr>
+              <th>\(t\)</th>
+              <th>\(C_{obs}\)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>0.0</td><td>5.000</td></tr>
+            <tr><td>0.5</td><td>3.715</td></tr>
+            <tr><td>1.0</td><td>2.785</td></tr>
+            <tr><td>1.5</td><td>2.096</td></tr>
+            <tr><td>2.0</td><td>1.590</td></tr>
+            <tr><td>2.5</td><td>1.218</td></tr>
+            <tr><td>3.0</td><td>0.944</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Estimate \(k\) and \(C_\infty\) using nonlinear regression.
+      </p>
+
+      \[
+        C_0=5.0
+      \]
+
+      <p>
+        Initial guess:
+      </p>
+
+      \[
+        k^{(0)}=0.5000,\qquad C_\infty^{(0)}=0.1000
+      \]
+    </div>
+
+    <div class="formula-box">
+      <div class="formula-title">Gauss-Newton Regression Formulation</div>
+
+      <p>
+        Define the parameter vector:
+      </p>
+
+      \[
+        \boldsymbol{\theta}
+        =
+        \begin{bmatrix}
+        k\\
+        C_\infty
+        \end{bmatrix}
+      \]
+
+      <p>
+        The model prediction is:
+      </p>
+
+      \[
+        C_{calc}(t;k,C_\infty)
+        =
+        C_\infty+(5-C_\infty)e^{-kt}
+      \]
+
+      <p>
+        The residual is:
+      </p>
+
+      \[
+        r_i=C_{obs,i}-C_{calc,i}
+      \]
+
+      <p>
+        The sensitivity matrix \(\mathbf{D}\) contains derivatives of the predicted concentration:
+      </p>
+
+      \[
+        D_{i,1}=\frac{\partial C_{calc}}{\partial k}
+        =
+        -(5-C_\infty)t_i e^{-kt_i}
+      \]
+
+      \[
+        D_{i,2}=\frac{\partial C_{calc}}{\partial C_\infty}
+        =
+        1-e^{-kt_i}
+      \]
+
+      <p>
+        The Gauss-Newton update is:
+      </p>
+
+      \[
+        (\mathbf{D}^T\mathbf{D})\Delta\boldsymbol{\theta}
+        =
+        \mathbf{D}^T\mathbf{r}
+      \]
+
+      \[
+        \boldsymbol{\theta}^{new}
+        =
+        \boldsymbol{\theta}^{old}
+        +
+        \Delta\boldsymbol{\theta}
+      \]
+    </div>
+
+    <details class="step" open>
+      <summary>
+        <span class="step-num">1</span>
+        <span class="step-label">Iteration 0: start with \(k=0.5000,\;C_\infty=0.1000\)</span>
+      </summary>
+
+      <div class="step-body">
+        <p>
+          Use:
+        </p>
+
+        \[
+          C_{calc}=0.1+(5-0.1)e^{-0.5t}
+        \]
+
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead>
+              <tr>
+                <th>\(t\)</th>
+                <th>\(C_{obs}\)</th>
+                <th>\(C_{calc}\)</th>
+                <th>\(r=C_{obs}-C_{calc}\)</th>
+                <th>\(D_k\)</th>
+                <th>\(D_{C_\infty}\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0.0</td><td>5.000</td><td>5.0000</td><td>0.0000</td><td>0.0000</td><td>0.0000</td></tr>
+              <tr><td>0.5</td><td>3.715</td><td>3.9161</td><td>-0.2011</td><td>-1.9081</td><td>0.2212</td></tr>
+              <tr><td>1.0</td><td>2.785</td><td>3.0720</td><td>-0.2870</td><td>-2.9720</td><td>0.3935</td></tr>
+              <tr><td>1.5</td><td>2.096</td><td>2.4146</td><td>-0.3186</td><td>-3.4719</td><td>0.5276</td></tr>
+              <tr><td>2.0</td><td>1.590</td><td>1.9026</td><td>-0.3126</td><td>-3.6052</td><td>0.6321</td></tr>
+              <tr><td>2.5</td><td>1.218</td><td>1.5039</td><td>-0.2859</td><td>-3.5097</td><td>0.7135</td></tr>
+              <tr><td>3.0</td><td>0.944</td><td>1.1933</td><td>-0.2493</td><td>-3.2800</td><td>0.7769</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Sum of squared residuals:
+        </p>
+
+        \[
+          SSE^{(0)}=0.46594
+        \]
+
+        <p>
+          After forming the normal equations:
+        </p>
+
+        \[
+        \mathbf{D}^T\mathbf{D}
+        =
+        \begin{bmatrix}
+        60.6015 & -10.7546\\
+        -10.7546 & 1.9943
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{D}^T\mathbf{r}
+        =
+        \begin{bmatrix}
+        5.2910\\
+        -0.9208
+        \end{bmatrix}
+        \]
+
+        <p>
+          Solve:
+        </p>
+
+        \[
+        \begin{bmatrix}
+        60.6015 & -10.7546\\
+        -10.7546 & 1.9943
+        \end{bmatrix}
+        \begin{bmatrix}
+        \Delta k\\
+        \Delta C_\infty
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+        5.2910\\
+        -0.9208
+        \end{bmatrix}
+        \]
+
+        \[
+          \Delta k=0.1249,
+          \qquad
+          \Delta C_\infty=0.2118
+        \]
+
+        <p>
+          Update:
+        </p>
+
+        \[
+          k^{(1)}=0.5000+0.1249=0.6249
+        \]
+
+        \[
+          C_\infty^{(1)}=0.1000+0.2118=0.3118
+        \]
+      </div>
+    </details>
+
+    <details class="step">
+      <summary>
+        <span class="step-num">2</span>
+        <span class="step-label">Iteration 1: use \(k=0.6249,\;C_\infty=0.3118\)</span>
+      </summary>
+
+      <div class="step-body">
+        <p>
+          New model:
+        </p>
+
+        \[
+          C_{calc}=0.3118+(5-0.3118)e^{-0.6249t}
+        \]
+
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead>
+              <tr>
+                <th>\(t\)</th>
+                <th>\(C_{obs}\)</th>
+                <th>\(C_{calc}\)</th>
+                <th>Residual</th>
+                <th>\(D_k\)</th>
+                <th>\(D_{C_\infty}\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0.0</td><td>5.000</td><td>5.0000</td><td>0.0000</td><td>0.0000</td><td>0.0000</td></tr>
+              <tr><td>0.5</td><td>3.715</td><td>3.7419</td><td>-0.0269</td><td>-1.7151</td><td>0.2683</td></tr>
+              <tr><td>1.0</td><td>2.785</td><td>2.8215</td><td>-0.0365</td><td>-2.5096</td><td>0.4647</td></tr>
+              <tr><td>1.5</td><td>2.096</td><td>2.1480</td><td>-0.0520</td><td>-2.7543</td><td>0.6083</td></tr>
+              <tr><td>2.0</td><td>1.590</td><td>1.6553</td><td>-0.0653</td><td>-2.6869</td><td>0.7134</td></tr>
+              <tr><td>2.5</td><td>1.218</td><td>1.2948</td><td>-0.0768</td><td>-2.4573</td><td>0.7903</td></tr>
+              <tr><td>3.0</td><td>0.944</td><td>1.0310</td><td>-0.0870</td><td>-2.1575</td><td>0.8466</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        \[
+          SSE^{(1)}=0.02248
+        \]
+
+        <p>
+          The error has decreased from \(0.46594\) to \(0.02248\).
+        </p>
+
+        \[
+        \mathbf{D}^T\mathbf{D}
+        =
+        \begin{bmatrix}
+        34.7387 & -8.9876\\
+        -8.9876 & 2.5084
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{D}^T\mathbf{r}
+        =
+        \begin{bmatrix}
+        0.8327\\
+        -0.2367
+        \end{bmatrix}
+        \]
+
+        <p>
+          Solve:
+        </p>
+
+        \[
+        \begin{bmatrix}
+        34.7387 & -8.9876\\
+        -8.9876 & 2.5084
+        \end{bmatrix}
+        \begin{bmatrix}
+        \Delta k\\
+        \Delta C_\infty
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+        0.8327\\
+        -0.2367
+        \end{bmatrix}
+        \]
+
+        \[
+          \Delta k=-0.0061,
+          \qquad
+          \Delta C_\infty=-0.1162
+        \]
+
+        <p>
+          Update:
+        </p>
+
+        \[
+          k^{(2)}=0.6249-0.0061=0.6188
+        \]
+
+        \[
+          C_\infty^{(2)}=0.3118-0.1162=0.1957
+        \]
+      </div>
+    </details>
+
+    <details class="step">
+      <summary>
+        <span class="step-num">3</span>
+        <span class="step-label">Iteration 2: use \(k=0.6188,\;C_\infty=0.1957\)</span>
+      </summary>
+
+      <div class="step-body">
+        <p>
+          New model:
+        </p>
+
+        \[
+          C_{calc}=0.1957+(5-0.1957)e^{-0.6188t}
+        \]
+
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead>
+              <tr>
+                <th>\(t\)</th>
+                <th>\(C_{obs}\)</th>
+                <th>\(C_{calc}\)</th>
+                <th>Residual</th>
+                <th>\(D_k\)</th>
+                <th>\(D_{C_\infty}\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0.0</td><td>5.000</td><td>5.0000</td><td>0.0000</td><td>0.0000</td><td>0.0000</td></tr>
+              <tr><td>0.5</td><td>3.715</td><td>3.7215</td><td>-0.0065</td><td>-1.7629</td><td>0.2661</td></tr>
+              <tr><td>1.0</td><td>2.785</td><td>2.7832</td><td>0.0018</td><td>-2.5875</td><td>0.4614</td></tr>
+              <tr><td>1.5</td><td>2.096</td><td>2.0946</td><td>0.0014</td><td>-2.8484</td><td>0.6047</td></tr>
+              <tr><td>2.0</td><td>1.590</td><td>1.5893</td><td>0.0007</td><td>-2.7872</td><td>0.7099</td></tr>
+              <tr><td>2.5</td><td>1.218</td><td>1.2184</td><td>-0.0004</td><td>-2.5568</td><td>0.7871</td></tr>
+              <tr><td>3.0</td><td>0.944</td><td>0.9462</td><td>-0.0022</td><td>-2.2517</td><td>0.8438</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        \[
+          SSE^{(2)}=0.0000528
+        \]
+
+        <p>
+          The residuals are now very small.
+        </p>
+
+        \[
+        \mathbf{D}^T\mathbf{D}
+        =
+        \begin{bmatrix}
+        37.2919 & -9.2767\\
+        -9.2767 & 2.4850
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{D}^T\mathbf{r}
+        =
+        \begin{bmatrix}
+        0.0066\\
+        -0.0017
+        \end{bmatrix}
+        \]
+
+        <p>
+          Solve:
+        </p>
+
+        \[
+          \Delta k=0.0001,
+          \qquad
+          \Delta C_\infty=-0.0002
+        \]
+
+        <p>
+          Update:
+        </p>
+
+        \[
+          k^{(3)}=0.6188+0.0001=0.6189
+        \]
+
+        \[
+          C_\infty^{(3)}=0.1957-0.0002=0.19545
+        \]
+      </div>
+    </details>
+
+    <details class="step">
+      <summary>
+        <span class="step-num">4</span>
+        <span class="step-label">Iteration 3: convergence check</span>
+      </summary>
+
+      <div class="step-body">
+        <p>
+          Use:
+        </p>
+
+        \[
+          k=0.61894,
+          \qquad
+          C_\infty=0.19545
+        \]
+
+        <p>
+          The predicted values are:
+        </p>
+
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead>
+              <tr>
+                <th>\(t\)</th>
+                <th>\(C_{obs}\)</th>
+                <th>\(C_{calc}\)</th>
+                <th>Residual</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0.0</td><td>5.000</td><td>5.0000</td><td>0.0000</td></tr>
+              <tr><td>0.5</td><td>3.715</td><td>3.7212</td><td>-0.0062</td></tr>
+              <tr><td>1.0</td><td>2.785</td><td>2.7828</td><td>0.0022</td></tr>
+              <tr><td>1.5</td><td>2.096</td><td>2.0941</td><td>0.0019</td></tr>
+              <tr><td>2.0</td><td>1.590</td><td>1.5888</td><td>0.0012</td></tr>
+              <tr><td>2.5</td><td>1.218</td><td>1.2179</td><td>0.0001</td></tr>
+              <tr><td>3.0</td><td>0.944</td><td>0.9458</td><td>-0.0018</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        \[
+          SSE^{(3)}=0.0000516
+        \]
+
+        <p>
+          Parameter change from the previous iteration is essentially zero:
+        </p>
+
+        \[
+          |\Delta k|<10^{-6},
+          \qquad
+          |\Delta C_\infty|<10^{-6}
+        \]
+
+        <div class="info-box">
+          The nonlinear regression has converged.
+        </div>
+      </div>
+    </details>
+
+    <h4 class="subsub">Convergence Summary</h4>
+
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead>
+          <tr>
+            <th>Iteration</th>
+            <th>\(k\)</th>
+            <th>\(C_\infty\)</th>
+            <th>SSE</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>0.5000</td><td>0.1000</td><td>0.465940</td><td>Initial guess</td></tr>
+          <tr><td>1</td><td>0.6249</td><td>0.3118</td><td>0.022485</td><td>Large improvement</td></tr>
+          <tr><td>2</td><td>0.6188</td><td>0.1957</td><td>0.0000528</td><td>Nearly converged</td></tr>
+          <tr><td>3</td><td>0.61894</td><td>0.19545</td><td>0.0000516</td><td class="exact">Converged</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="formula-box">
+      <div class="formula-title">Final Nonlinear Regression Model</div>
+
+      \[
+        \boxed{k=0.61894}
+      \]
+
+      \[
+        \boxed{C_\infty=0.19545}
+      \]
+
+      \[
+        \boxed{
+        C(t)=0.19545+(5-0.19545)e^{-0.61894t}
+        }
+      \]
+    </div>
+
+    <details class="ans">
+      <summary>▶ MATLAB Code — Nonlinear ODE Regression</summary>
+
+      <div class="ans-body">
+        <div class="formula-box matlab-panel">
+          <div class="formula-title">Gauss-Newton Parameter Estimation</div>
+
+<pre class="matlab-code"><code><span class="com">%% Nonlinear Regression for an ODE Solution using Gauss-Newton</span>
+<span class="com">% ODE model:</span>
+<span class="com">%     dC/dt = -k*(C - Cinf)</span>
+<span class="com">%</span>
+<span class="com">% Analytical solution:</span>
+<span class="com">%     C(t) = Cinf + (C0 - Cinf)*exp(-k*t)</span>
+<span class="com">%</span>
+<span class="com">% Unknown parameters:</span>
+<span class="com">%     k</span>
+<span class="com">%     Cinf</span>
+<span class="com">%</span>
+<span class="com">% Method:</span>
+<span class="com">%     Nonlinear least squares using Gauss-Newton iteration</span>
+
+<span class="kw">clc</span>;
+<span class="kw">clear</span>;
+<span class="kw">close</span> <span class="kw">all</span>;
+
+<span class="com">%% Experimental data</span>
+
+t = [<span class="num">0</span>; <span class="num">0.5</span>; <span class="num">1.0</span>; <span class="num">1.5</span>; <span class="num">2.0</span>; <span class="num">2.5</span>; <span class="num">3.0</span>];
+
+Cobs = [<span class="num">5.000</span>; <span class="num">3.715</span>; <span class="num">2.785</span>; <span class="num">2.096</span>; <span class="num">1.590</span>; <span class="num">1.218</span>; <span class="num">0.944</span>];
+
+C0 = <span class="num">5.0</span>;
+
+<span class="com">%% Initial parameter guesses</span>
+
+k = <span class="num">0.5000</span>;
+Cinf = <span class="num">0.1000</span>;
+
+tol = <span class="num">1e-6</span>;
+maxIter = <span class="num">20</span>;
+
+Iter = [];
+k_store = [];
+Cinf_store = [];
+SSE_store = [];
+dk_store = [];
+dCinf_store = [];
+
+<span class="com">%% Gauss-Newton iteration</span>
+
+<span class="kw">for</span> iter = <span class="num">0</span>:maxIter
+
+    <span class="com">% Model prediction</span>
+    Ccalc = Cinf + (C0 - Cinf)*exp(-k*t);
+
+    <span class="com">% Residual vector</span>
+    r = Cobs - Ccalc;
+
+    <span class="com">% Sum of squared errors</span>
+    SSE = sum(r.^<span class="num">2</span>);
+
+    <span class="com">% Sensitivity matrix D = d(Ccalc)/d(parameters)</span>
+    Dk = -(C0 - Cinf)*t.*exp(-k*t);
+    DCinf = <span class="num">1</span> - exp(-k*t);
+
+    D = [Dk, DCinf];
+
+    <span class="com">% Normal equation:</span>
+    <span class="com">% (D'*D)*delta = D'*r</span>
+    delta = (D'*D)\(D'*r);
+
+    dk = delta(<span class="num">1</span>);
+    dCinf = delta(<span class="num">2</span>);
+
+    <span class="com">% Store results</span>
+    Iter(end+<span class="num">1</span>) = iter;
+    k_store(end+<span class="num">1</span>) = k;
+    Cinf_store(end+<span class="num">1</span>) = Cinf;
+    SSE_store(end+<span class="num">1</span>) = SSE;
+    dk_store(end+<span class="num">1</span>) = dk;
+    dCinf_store(end+<span class="num">1</span>) = dCinf;
+
+    fprintf(<span class="str">'Iteration %d\n'</span>, iter)
+    fprintf(<span class="str">'k = %.8f, Cinf = %.8f, SSE = %.8e\n'</span>, k, Cinf, SSE)
+    fprintf(<span class="str">'dk = %.8e, dCinf = %.8e\n\n'</span>, dk, dCinf)
+
+    <span class="com">% Check convergence</span>
+    <span class="kw">if</span> max(abs(delta)) &lt; tol
+        <span class="kw">break</span>
+    <span class="kw">end</span>
+
+    <span class="com">% Update parameters</span>
+    k = k + dk;
+    Cinf = Cinf + dCinf;
+
+<span class="kw">end</span>
+
+<span class="com">%% Final model</span>
+
+Cfit = Cinf + (C0 - Cinf)*exp(-k*t);
+residual = Cobs - Cfit;
+
+Results = table(t, Cobs, Cfit, residual, ...
+    <span class="str">'VariableNames'</span>, ...
+    {<span class="str">'Time'</span>, <span class="str">'Observed_C'</span>, <span class="str">'Predicted_C'</span>, <span class="str">'Residual'</span>});
+
+disp(<span class="str">'Final Regression Table:'</span>)
+disp(Results)
+
+Convergence = table(Iter', k_store', Cinf_store', SSE_store', dk_store', dCinf_store', ...
+    <span class="str">'VariableNames'</span>, ...
+    {<span class="str">'Iteration'</span>, <span class="str">'k'</span>, <span class="str">'Cinf'</span>, <span class="str">'SSE'</span>, <span class="str">'dk'</span>, <span class="str">'dCinf'</span>});
+
+disp(<span class="str">'Gauss-Newton Convergence History:'</span>)
+disp(Convergence)
+
+fprintf(<span class="str">'Final k = %.8f\n'</span>, k)
+fprintf(<span class="str">'Final Cinf = %.8f\n'</span>, Cinf)
+
+<span class="com">%% Plot data and fitted model</span>
+
+tfine = linspace(<span class="num">0</span>, <span class="num">3</span>, <span class="num">200</span>)';
+Cfine = Cinf + (C0 - Cinf)*exp(-k*tfine);
+
+figure;
+plot(t, Cobs, <span class="str">'o'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+hold on;
+plot(tfine, Cfine, <span class="str">'-'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+grid on;
+
+xlabel(<span class="str">'Time'</span>);
+ylabel(<span class="str">'Concentration C'</span>);
+title(<span class="str">'Nonlinear Regression of ODE Model'</span>);
+legend(<span class="str">'Experimental Data'</span>, <span class="str">'Gauss-Newton Fit'</span>, <span class="str">'Location'</span>, <span class="str">'best'</span>);
+
+<span class="com">%% Plot convergence of SSE</span>
+
+figure;
+semilogy(Iter, SSE_store, <span class="str">'-o'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+grid on;
+
+xlabel(<span class="str">'Iteration'</span>);
+ylabel(<span class="str">'SSE'</span>);
+title(<span class="str">'Gauss-Newton Convergence'</span>);</code></pre>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="warn-box">
+    <strong>Professional note:</strong>
+    Linear regression gives a direct solution using normal equations. Nonlinear regression
+    requires iteration because the parameters appear inside nonlinear functions. In engineering
+    practice, nonlinear regression is often used for kinetic models, adsorption isotherms,
+    heat-transfer correlations, diffusion parameters, and ODE/PDE model calibration.
+  </div>
+</section>
 
 <!-- ════════════════════════════════════════════
      SECTION 13 — PRACTICE PROBLEMS
 ═════════════════════════════════════════════ -->
 <section id="practice" class="sect">
-  <div class="sect-number">09</div>
+  <div class="sect-number">10</div>
   <h2 class="sect-title">Practice Problems</h2>
   <p class="sect-subtitle">Work through these independently. Click <strong>"Reveal Answer"</strong> when you're done. All problems have a ChemE application context.</p>
 
