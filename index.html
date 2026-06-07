@@ -264,15 +264,24 @@ p{margin-bottom:.5rem}
 <aside class="sidebar">
   <div class="sb-header">
     <div class="sb-title">Numerical Methods<br>for ODEs</div>
-    <div class="sb-sub">ChemE · Problem-Solving Lecture</div>
+    <div class="sb-sub">ChemE · Year 4 · Problem-Solving Session</div>
     <a class="nav-item" href="pde.html">
         <span class="nav-icon">🌊</span>
         <span class="nav-label">PDE Methods Page</span>
       </a>
   </div>
   <nav class="sb-nav">
-    
+    <a class="nav-item" href="#method-choice"><span class="nav-icon">🧭</span><span class="nav-label">Method Selection</span></a>
     <a class="nav-item active" href="#gaussian-elimination"><span class="nav-icon">📋</span><span class="nav-label">gaussian-elimination</span></a>
+    <a class="nav-item" href="#gauss-jordan">
+      <span class="nav-icon">🧮</span>
+      <span class="nav-label">Gauss-Jordan</span>
+    </a>
+    
+    <a class="nav-item" href="#gauss-seidel">
+      <span class="nav-icon">🔁</span>
+      <span class="nav-label">Gauss-Seidel</span>
+    </a>
     <a class="nav-item" href="#taylor"><span class="nav-icon">📈</span><span class="nav-label">Taylor Series</span></a>
     <a class="nav-item" href="#rk2"><span class="nav-icon">🔄</span><span class="nav-label">Runge-Kutta 2</span></a>
     <a class="nav-item" href="#rk3"><span class="nav-icon">🔄</span><span class="nav-label">Runge-Kutta 3</span></a>
@@ -304,7 +313,904 @@ p{margin-bottom:.5rem}
       <span class="chip">09928582327</span>
     </div>
   </div>
+
+  <!-- ====================================
+       ====================================-->
+  <section id="method-choice" class="sect">
+    <div class="sect-number">00</div>
   
+    <h2 class="sect-title">
+      How to Choose a Numerical Method
+      <span class="badge badge-teal">Decision Guide</span>
+    </h2>
+  
+    <p class="sect-subtitle">
+      Numerical methods are not chosen randomly. The correct method depends on the type of problem:
+      IVP, BVP, PDE, data fitting, accuracy requirement, stability, computational cost, and whether
+      the governing equation is linear, nonlinear, single-variable, or multi-variable.
+    </p>
+  
+    <div class="formula-box">
+      <div class="formula-title">Big Picture Classification</div>
+  
+      <p>
+        Before choosing a numerical method, first identify the mathematical structure of the problem.
+      </p>
+  
+      <div class="tbl-wrap">
+        <table class="dtbl">
+          <thead>
+            <tr>
+              <th>Problem Type</th>
+              <th>Typical Form</th>
+              <th>Main Question</th>
+              <th>Recommended Method</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Initial Value Problem</td>
+              <td>\(y'=f(t,y),\; y(t_0)=y_0\)</td>
+              <td>March forward in time</td>
+              <td class="exact">Taylor, RK2, RK3, RK4</td>
+            </tr>
+            <tr>
+              <td>Boundary Value Problem</td>
+              <td>\(y''=g(x,y,y'),\; y(a)=\alpha,\;y(b)=\beta\)</td>
+              <td>Match two boundary values</td>
+              <td class="exact">Shooting Method or FDM 1D</td>
+            </tr>
+            <tr>
+              <td>1D Spatial PDE / BVP</td>
+              <td>\(\dfrac{d^2T}{dx^2}+S=0\)</td>
+              <td>Find values at spatial nodes</td>
+              <td class="exact">FDM — 1D</td>
+            </tr>
+            <tr>
+              <td>2D Steady Heat / Laplace / Poisson</td>
+              <td>\(\dfrac{\partial^2T}{\partial x^2}+\dfrac{\partial^2T}{\partial y^2}=f(x,y)\)</td>
+              <td>Find temperature field over a grid</td>
+              <td class="exact">FDM — 2D Heat</td>
+            </tr>
+            <tr>
+              <td>Experimental Data Fitting</td>
+              <td>\(y=f(x;\theta)\)</td>
+              <td>Estimate unknown parameters</td>
+              <td class="exact">Regression</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <div class="example-card">
+      <div class="example-header">
+        <span class="example-icon">🧭</span>
+        <div class="example-title">Step-by-Step Decision Tree</div>
+      </div>
+  
+      <div class="steps">
+  
+        <details class="step" open>
+          <summary>
+            <span class="step-num">1</span>
+            <span class="step-label">Ask: Is the problem data-based or equation-based?</span>
+          </summary>
+  
+          <div class="step-body">
+            <p>
+              If you are given experimental data and asked to find a best-fit model, use regression.
+            </p>
+  
+            <div class="eq-row">
+              Example: Given \(T\) and \(k\), fit \(k=Ae^{-E/RT}\) → use <strong>Regression</strong>.
+            </div>
+  
+            <p>
+              If you are given a differential equation and initial or boundary conditions, continue to the next step.
+            </p>
+          </div>
+        </details>
+  
+        <details class="step" open>
+          <summary>
+            <span class="step-num">2</span>
+            <span class="step-label">Ask: Is it an ODE or PDE?</span>
+          </summary>
+  
+          <div class="step-body">
+            <p>
+              An ODE has derivatives with respect to one independent variable.
+            </p>
+  
+            \[
+              \frac{dy}{dt}=f(t,y)
+            \]
+  
+            <p>
+              A PDE has partial derivatives with respect to more than one independent variable.
+            </p>
+  
+            \[
+              \frac{\partial T}{\partial t}
+              =
+              \alpha
+              \frac{\partial^2T}{\partial x^2}
+            \]
+  
+            <div class="eq-row">
+              ODE → Taylor, RK2, RK3, RK4, Shooting
+            </div>
+  
+            <div class="eq-row">
+              PDE or spatial heat equation → FDM 1D or FDM 2D
+            </div>
+          </div>
+        </details>
+  
+        <details class="step" open>
+          <summary>
+            <span class="step-num">3</span>
+            <span class="step-label">Ask: Is it an initial value problem or boundary value problem?</span>
+          </summary>
+  
+          <div class="step-body">
+            <p>
+              If all conditions are given at the starting point, it is an IVP.
+            </p>
+  
+            \[
+              y(0)=1
+            \]
+  
+            \[
+              y'(0)=2
+            \]
+  
+            <p>
+              Use a time-marching method:
+            </p>
+  
+            \[
+              \text{Taylor, RK2, RK3, or RK4}
+            \]
+  
+            <p>
+              If conditions are given at different locations, it is a BVP.
+            </p>
+  
+            \[
+              y(0)=1,\qquad y(1)=3
+            \]
+  
+            <p>
+              Use:
+            </p>
+  
+            \[
+              \text{Shooting Method or FDM}
+            \]
+          </div>
+        </details>
+  
+        <details class="step">
+          <summary>
+            <span class="step-num">4</span>
+            <span class="step-label">Ask: Do you need high accuracy?</span>
+          </summary>
+  
+          <div class="step-body">
+            <p>
+              If the solution must be accurate over many time steps, choose a higher-order method.
+            </p>
+  
+            <div class="tbl-wrap">
+              <table class="dtbl">
+                <thead>
+                  <tr>
+                    <th>Method</th>
+                    <th>Order</th>
+                    <th>Accuracy</th>
+                    <th>Cost per Step</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Taylor 2nd</td><td>2</td><td>Medium</td><td>Low, but requires derivatives</td></tr>
+                  <tr><td>RK2</td><td>2</td><td>Medium</td><td>2 function evaluations</td></tr>
+                  <tr><td>RK3</td><td>3</td><td>High</td><td>3 function evaluations</td></tr>
+                  <tr><td>RK4</td><td>4</td><td class="exact">Very high</td><td>4 function evaluations</td></tr>
+                </tbody>
+              </table>
+            </div>
+  
+            <div class="info-box">
+              For most general ODE problems, RK4 is the safest default choice because it is accurate,
+              stable for many practical problems, and does not require analytical higher derivatives.
+            </div>
+          </div>
+        </details>
+  
+      </div>
+    </div>
+  
+    <h4 class="subsub">Method-by-Method Selection Guide</h4>
+  
+    <div class="steps">
+  
+      <details class="step" open>
+        <summary>
+          <span class="step-num">A</span>
+          <span class="step-label">Taylor Series Method</span>
+        </summary>
+  
+        <div class="step-body">
+          <p>
+            Choose the Taylor method when the ODE is simple and higher derivatives can be found analytically.
+          </p>
+  
+          <div class="formula-box" style="margin:.5rem 0 1rem">
+            <div class="formula-title">Best Use Case</div>
+  
+            \[
+              y'=f(t,y)
+            \]
+  
+            \[
+              y_{n+1}=y_n+hy'_n+\frac{h^2}{2}y''_n+\frac{h^3}{6}y'''_n+\cdots
+            \]
+  
+            <p>
+              Taylor methods are excellent for teaching accuracy and truncation error because
+              they directly show how higher-order terms improve the solution.
+            </p>
+          </div>
+  
+          <div class="tbl-wrap">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>Use Taylor When</th>
+                  <th>Avoid Taylor When</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>The ODE is simple</td>
+                  <td>The ODE is very nonlinear</td>
+                </tr>
+                <tr>
+                  <td>You can compute \(y'',y'''\) easily</td>
+                  <td>Higher derivatives become messy</td>
+                </tr>
+                <tr>
+                  <td>You want to understand local truncation error</td>
+                  <td>You need a general-purpose solver</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+  
+          <div class="eq-row">
+            Example: \(y'=-2y\) → Taylor is easy because derivatives repeat.
+          </div>
+  
+          <div class="eq-row">
+            Bad example: \(y'=e^{-E/RT}C^n+\sin(y^2t)\) → Taylor becomes impractical.
+          </div>
+        </div>
+      </details>
+  
+      <details class="step">
+        <summary>
+          <span class="step-num">B</span>
+          <span class="step-label">Runge-Kutta 2 Method</span>
+        </summary>
+  
+        <div class="step-body">
+          <p>
+            Choose RK2 when you want better accuracy than Euler but still want a simple and low-cost method.
+          </p>
+  
+          <div class="formula-box" style="margin:.5rem 0 1rem">
+            <div class="formula-title">Heun's RK2 Method</div>
+  
+            \[
+              k_1=f(t_n,y_n)
+            \]
+  
+            \[
+              y^*=y_n+hk_1
+            \]
+  
+            \[
+              k_2=f(t_n+h,y^*)
+            \]
+  
+            \[
+              y_{n+1}=y_n+\frac{h}{2}(k_1+k_2)
+            \]
+          </div>
+  
+          <p>
+            RK2 estimates the slope at the beginning and end of the interval, then averages them.
+          </p>
+  
+          <div class="info-box">
+            RK2 is good for quick engineering estimates when RK4 is more accuracy than you need.
+          </div>
+  
+          <div class="eq-row">
+            Use RK2 for: tank mixing, simple reaction decay, moderate nonlinear ODEs.
+          </div>
+  
+          <div class="eq-row">
+            Avoid RK2 for: stiff systems, very long simulations, or problems requiring high precision.
+          </div>
+        </div>
+      </details>
+  
+      <details class="step">
+        <summary>
+          <span class="step-num">C</span>
+          <span class="step-label">Runge-Kutta 3 Method</span>
+        </summary>
+  
+        <div class="step-body">
+          <p>
+            RK3 is a middle ground between RK2 and RK4. It gives third-order accuracy
+            with fewer function evaluations than RK4.
+          </p>
+  
+          <div class="formula-box" style="margin:.5rem 0 1rem">
+            <div class="formula-title">When RK3 Makes Sense</div>
+  
+            <p>
+              Use RK3 when RK2 is not accurate enough, but RK4 is unnecessarily expensive.
+            </p>
+  
+            \[
+              \text{Accuracy: RK2 < RK3 < RK4}
+            \]
+  
+            \[
+              \text{Cost: RK2 < RK3 < RK4}
+            \]
+          </div>
+  
+          <div class="tbl-wrap">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>Situation</th>
+                  <th>Recommendation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Moderately nonlinear ODE</td><td class="exact">RK3 is a good choice</td></tr>
+                <tr><td>Need very accurate final answer</td><td>Use RK4</td></tr>
+                <tr><td>Need only rough estimate</td><td>Use RK2</td></tr>
+                <tr><td>Higher derivative available easily</td><td>Taylor may be acceptable</td></tr>
+              </tbody>
+            </table>
+          </div>
+  
+          <div class="eq-row">
+            Example: nonlinear reaction \(dC/dt=-kC^2+\sin t\) with moderate step size.
+          </div>
+        </div>
+      </details>
+  
+      <details class="step">
+        <summary>
+          <span class="step-num">D</span>
+          <span class="step-label">Runge-Kutta 4 Method</span>
+        </summary>
+  
+        <div class="step-body">
+          <p>
+            RK4 is usually the best general-purpose method for non-stiff ODE initial value problems.
+            It is accurate, stable for many engineering problems, and does not require analytical derivatives.
+          </p>
+  
+          <div class="formula-box" style="margin:.5rem 0 1rem">
+            <div class="formula-title">Classical RK4</div>
+  
+            \[
+            k_1=f(t_n,y_n)
+            \]
+  
+            \[
+            k_2=f\left(t_n+\frac{h}{2},y_n+\frac{h}{2}k_1\right)
+            \]
+  
+            \[
+            k_3=f\left(t_n+\frac{h}{2},y_n+\frac{h}{2}k_2\right)
+            \]
+  
+            \[
+            k_4=f(t_n+h,y_n+hk_3)
+            \]
+  
+            \[
+            y_{n+1}
+            =
+            y_n+\frac{h}{6}
+            (k_1+2k_2+2k_3+k_4)
+            \]
+          </div>
+  
+          <p>
+            RK4 works especially well for:
+          </p>
+  
+          <div class="tbl-wrap">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>Application</th>
+                  <th>Why RK4 Works Well</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Reaction kinetics</td><td>Handles nonlinear rate laws accurately</td></tr>
+                <tr><td>Batch reactors</td><td>Accurate over multiple time steps</td></tr>
+                <tr><td>Bioreactor growth</td><td>Good for nonlinear logistic systems</td></tr>
+                <tr><td>Coupled ODE systems</td><td>Works naturally with vector equations</td></tr>
+                <tr><td>Shooting method</td><td>Accurately integrates guessed IVPs</td></tr>
+              </tbody>
+            </table>
+          </div>
+  
+          <div class="warn-box">
+            RK4 is not always best for stiff systems. If the solution has very fast and very slow time scales,
+            explicit RK4 may require a very small step size.
+          </div>
+        </div>
+      </details>
+  
+      <details class="step">
+        <summary>
+          <span class="step-num">E</span>
+          <span class="step-label">Shooting Method</span>
+        </summary>
+  
+        <div class="step-body">
+          <p>
+            Choose the shooting method for boundary value problems where one boundary condition is missing
+            at the start and must be guessed.
+          </p>
+  
+          <div class="formula-box" style="margin:.5rem 0 1rem">
+            <div class="formula-title">BVP Form</div>
+  
+            \[
+              y''=g(x,y,y')
+            \]
+  
+            \[
+              y(a)=\alpha,\qquad y(b)=\beta
+            \]
+  
+            <p>
+              Convert to:
+            </p>
+  
+            \[
+              u_1=y,\qquad u_2=y'
+            \]
+  
+            \[
+              u_1'=u_2
+            \]
+  
+            \[
+              u_2'=g(x,u_1,u_2)
+            \]
+  
+            <p>
+              Guess:
+            </p>
+  
+            \[
+              u_2(a)=s
+            \]
+  
+            <p>
+              Then integrate using RK4 and adjust \(s\) until:
+            </p>
+  
+            \[
+              y(b;s)-\beta=0
+            \]
+          </div>
+  
+          <p>
+            Shooting is especially useful when:
+          </p>
+  
+          <div class="eq-row">
+            The BVP can be converted easily into an IVP.
+          </div>
+  
+          <div class="eq-row">
+            The problem is nonlinear and FDM would produce nonlinear algebraic equations.
+          </div>
+  
+          <div class="eq-row">
+            You already have an accurate IVP solver such as RK4.
+          </div>
+  
+          <div class="warn-box">
+            Avoid shooting when the BVP is highly sensitive to the guessed slope.
+            Small changes in the initial slope may cause the solution to explode or miss the boundary badly.
+          </div>
+        </div>
+      </details>
+  
+      <details class="step">
+        <summary>
+          <span class="step-num">F</span>
+          <span class="step-label">Finite Difference Method — 1D</span>
+        </summary>
+  
+        <div class="step-body">
+          <p>
+            Choose FDM 1D for spatial boundary value problems where the solution is needed at discrete points.
+          </p>
+  
+          <div class="formula-box" style="margin:.5rem 0 1rem">
+            <div class="formula-title">Typical 1D BVP</div>
+  
+            \[
+              \frac{d^2T}{dx^2}+S(x)=0
+            \]
+  
+            \[
+              T(0)=T_L,\qquad T(L)=T_R
+            \]
+  
+            <p>
+              Replace:
+            </p>
+  
+            \[
+              \frac{d^2T}{dx^2}
+              \approx
+              \frac{T_{i-1}-2T_i+T_{i+1}}{h^2}
+            \]
+  
+            <p>
+              This creates a linear algebraic system:
+            </p>
+  
+            \[
+              A\mathbf{T}=\mathbf{b}
+            \]
+          </div>
+  
+          <div class="tbl-wrap">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>Use FDM 1D When</th>
+                  <th>Reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Problem is spatial</td><td>FDM handles derivatives in \(x\)</td></tr>
+                <tr><td>Boundary values are known</td><td>Boundary values enter the RHS vector</td></tr>
+                <tr><td>The equation is linear</td><td>Produces a linear system</td></tr>
+                <tr><td>You need values at many positions</td><td>FDM gives nodal values directly</td></tr>
+              </tbody>
+            </table>
+          </div>
+  
+          <div class="eq-row">
+            Example: fin heat transfer, 1D conduction, diffusion through a slab.
+          </div>
+        </div>
+      </details>
+  
+      <details class="step">
+        <summary>
+          <span class="step-num">G</span>
+          <span class="step-label">Finite Difference Method — 2D Heat</span>
+        </summary>
+  
+        <div class="step-body">
+          <p>
+            Choose FDM 2D when the unknown depends on two spatial coordinates, usually \(x\) and \(y\).
+          </p>
+  
+          <div class="formula-box" style="margin:.5rem 0 1rem">
+            <div class="formula-title">Typical 2D Heat Equation</div>
+  
+            \[
+              \frac{\partial^2T}{\partial x^2}
+              +
+              \frac{\partial^2T}{\partial y^2}
+              =
+              -S
+            \]
+  
+            <p>
+              For equal grid spacing:
+            </p>
+  
+            \[
+              T_E+T_W+T_N+T_S-4T_P=-Sh^2
+            \]
+  
+            <p>
+              This equation is written at every interior node.
+            </p>
+          </div>
+  
+          <p>
+            FDM 2D is the correct choice for:
+          </p>
+  
+          <div class="tbl-wrap">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>Problem</th>
+                  <th>Why FDM 2D?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>2D plate heat conduction</td><td>Temperature varies in \(x\) and \(y\)</td></tr>
+                <tr><td>Poisson equation with heat generation</td><td>Source term enters RHS</td></tr>
+                <tr><td>Laplace equation</td><td>Interior nodes depend on four neighbors</td></tr>
+                <tr><td>Mixed boundary conditions</td><td>Boundaries can be inserted into equations</td></tr>
+              </tbody>
+            </table>
+          </div>
+  
+          <div class="warn-box">
+            FDM 2D can create large matrix systems. For a \(20\times20\) interior grid,
+            there are \(400\) unknowns. For large systems, iterative solvers are usually preferred.
+          </div>
+        </div>
+      </details>
+  
+      <details class="step">
+        <summary>
+          <span class="step-num">H</span>
+          <span class="step-label">Regression</span>
+        </summary>
+  
+        <div class="step-body">
+          <p>
+            Choose regression when the goal is not to solve a differential equation directly,
+            but to estimate model parameters from data.
+          </p>
+  
+          <div class="formula-box" style="margin:.5rem 0 1rem">
+            <div class="formula-title">Regression Objective</div>
+  
+            \[
+              y=f(x;\theta)
+            \]
+  
+            \[
+              r_i=y_i-f(x_i;\theta)
+            \]
+  
+            \[
+              SSE=\sum_{i=1}^{n}r_i^2
+            \]
+  
+            <p>
+              Regression finds the parameter vector \(\theta\) that minimizes \(SSE\).
+            </p>
+          </div>
+  
+          <div class="tbl-wrap">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>Situation</th>
+                  <th>Regression Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Fit a straight line</td><td>Linear regression</td></tr>
+                <tr><td>Fit \(y=a_0+a_1x+a_2x^2\)</td><td>Polynomial regression</td></tr>
+                <tr><td>Fit \(k=Ae^{-E/RT}\)</td><td>Linearized regression</td></tr>
+                <tr><td>Fit \(v=\dfrac{V_{max}S}{K_m+S}\)</td><td>Nonlinear regression</td></tr>
+                <tr><td>Estimate ODE parameters</td><td>ODE model regression</td></tr>
+              </tbody>
+            </table>
+          </div>
+  
+          <div class="info-box">
+            Use regression when your unknowns are model parameters, not state variables.
+          </div>
+        </div>
+      </details>
+  
+    </div>
+  
+    <h4 class="subsub">Quick Selection Table</h4>
+  
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead>
+          <tr>
+            <th>Given Problem</th>
+            <th>Choose</th>
+            <th>Reason</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>\(y'=f(t,y)\), simple derivatives available</td>
+            <td>Taylor Series</td>
+            <td>Efficient if \(y'',y'''\) are easy</td>
+          </tr>
+          <tr>
+            <td>\(y'=f(t,y)\), quick estimate needed</td>
+            <td>RK2</td>
+            <td>Low cost and better than Euler</td>
+          </tr>
+          <tr>
+            <td>Moderate accuracy ODE solution</td>
+            <td>RK3</td>
+            <td>Good balance of accuracy and cost</td>
+          </tr>
+          <tr>
+            <td>High-accuracy non-stiff IVP</td>
+            <td>RK4</td>
+            <td>Reliable general-purpose method</td>
+          </tr>
+          <tr>
+            <td>\(y(a)\) and \(y(b)\) both given</td>
+            <td>Shooting Method</td>
+            <td>Turns BVP into IVP with guessed slope</td>
+          </tr>
+          <tr>
+            <td>1D spatial BVP</td>
+            <td>FDM 1D</td>
+            <td>Converts derivatives into algebraic equations</td>
+          </tr>
+          <tr>
+            <td>2D steady heat problem</td>
+            <td>FDM 2D</td>
+            <td>Uses neighbor-node stencil over a grid</td>
+          </tr>
+          <tr>
+            <td>Experimental data and unknown parameters</td>
+            <td>Regression</td>
+            <td>Minimizes residual error between data and model</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <h4 class="subsub">Common Mistakes When Choosing Methods</h4>
+  
+    <div class="steps">
+      <details class="step">
+        <summary>
+          <span class="step-num">1</span>
+          <span class="step-label">Using Taylor method for complicated nonlinear models</span>
+        </summary>
+  
+        <div class="step-body">
+          <p>
+            Taylor methods require higher derivatives.
+            For complicated engineering models, these derivatives become extremely long.
+          </p>
+  
+          <div class="eq-row">
+            Better choice: RK4.
+          </div>
+        </div>
+      </details>
+  
+      <details class="step">
+        <summary>
+          <span class="step-num">2</span>
+          <span class="step-label">Using RK methods for a BVP without handling the missing boundary condition</span>
+        </summary>
+  
+        <div class="step-body">
+          <p>
+            RK methods solve initial value problems. If the problem gives conditions at two different locations,
+            first convert it using shooting or use FDM.
+          </p>
+  
+          <div class="eq-row">
+            BVP: \(y(0)=1,\;y(1)=2\) → use Shooting or FDM.
+          </div>
+        </div>
+      </details>
+  
+      <details class="step">
+        <summary>
+          <span class="step-num">3</span>
+          <span class="step-label">Using regression when the task is actually solving an equation</span>
+        </summary>
+  
+        <div class="step-body">
+          <p>
+            Regression is for fitting parameters from data.
+            It is not the correct method when you already have a fully specified ODE or PDE with known parameters.
+          </p>
+  
+          <div class="eq-row">
+            Data fitting → Regression.
+          </div>
+  
+          <div class="eq-row">
+            Known ODE with initial condition → RK method.
+          </div>
+        </div>
+      </details>
+  
+      <details class="step">
+        <summary>
+          <span class="step-num">4</span>
+          <span class="step-label">Using FDM 1D for a 2D physical field</span>
+        </summary>
+  
+        <div class="step-body">
+          <p>
+            If temperature varies in both \(x\) and \(y\), a 1D finite difference model is incomplete.
+          </p>
+  
+          \[
+            T=T(x,y)
+          \]
+  
+          <div class="eq-row">
+            Correct method: FDM 2D.
+          </div>
+        </div>
+      </details>
+    </div>
+  
+    <div class="formula-box">
+      <div class="formula-title">Final Professional Recommendation</div>
+  
+      <p>
+        A strong numerical-method choice follows this order:
+      </p>
+  
+      \[
+        \text{Problem Type}
+        \rightarrow
+        \text{Boundary/Initial Conditions}
+        \rightarrow
+        \text{Accuracy Requirement}
+        \rightarrow
+        \text{Stability}
+        \rightarrow
+        \text{Computational Cost}
+      \]
+  
+      <p>
+        In most practical engineering problems:
+      </p>
+  
+      <div class="eq-row">
+        Use <strong>RK4</strong> for accurate non-stiff ODE initial value problems.
+      </div>
+  
+      <div class="eq-row">
+        Use <strong>Shooting</strong> for ODE boundary value problems when an IVP solver is convenient.
+      </div>
+  
+      <div class="eq-row">
+        Use <strong>FDM</strong> for spatial boundary value problems and heat-transfer fields.
+      </div>
+  
+      <div class="eq-row">
+        Use <strong>Regression</strong> when estimating unknown parameters from experimental data.
+      </div>
+    </div>
+  </section>
   <section id="gaussian-elimination" class="sect">
     <div class="sect-number">01</div>
   
@@ -1311,8 +2217,1135 @@ disp(b)</code></pre>
 </div>
   </section>
 
+<!-- SECTION 02 -->
+<section id="gauss-jordan" class="sect">
+  <div class="sect-number">01.1</div>
 
+  <h2 class="sect-title">
+    Gauss-Jordan Method
+    <span class="badge badge-gold">Linear Systems</span>
+  </h2>
 
+  <p class="sect-subtitle">
+    Gauss-Jordan elimination is an extension of Gaussian elimination. Instead of stopping at upper triangular form, it continues eliminating above the pivots until the coefficient matrix becomes the identity matrix.
+  </p>
+
+  <div class="formula-box">
+    <div class="formula-title">Main Idea</div>
+
+    <p>
+      Gaussian elimination transforms the system into upper triangular form and then uses back substitution.
+      Gauss-Jordan goes further and transforms the augmented matrix directly into reduced row echelon form:
+    </p>
+
+    \[
+    [A|b]
+    \quad\Longrightarrow\quad
+    [I|x]
+    \]
+
+    <p>
+      Therefore, once the matrix becomes:
+    </p>
+
+    \[
+    \left[
+    \begin{array}{ccc|c}
+    1 & 0 & 0 & x\\
+    0 & 1 & 0 & y\\
+    0 & 0 & 1 & z
+    \end{array}
+    \right]
+    \]
+
+    <p>
+      the solution is read directly from the right-hand side.
+    </p>
+
+    <div class="info-box">
+      <strong>Difference from Gaussian elimination:</strong>
+      Gaussian elimination needs back substitution. Gauss-Jordan does not, because the final matrix directly contains the solution.
+    </div>
+  </div>
+
+  <div class="example-card">
+    <div class="example-header">
+      <span class="example-icon">🧮</span>
+      <div class="example-title">Worked Example — Solving a 3 × 3 System by Gauss-Jordan</div>
+    </div>
+
+    <div class="problem-box">
+      <p><strong>Problem:</strong> Solve the system using Gauss-Jordan elimination:</p>
+
+      \[
+      \begin{aligned}
+      2x+y-z&=8\\
+      -3x-y+2z&=-11\\
+      -2x+y+2z&=-3
+      \end{aligned}
+      \]
+
+      <p>
+        This is the same system used in Gaussian elimination, but now we will reduce the matrix all the way to identity form.
+      </p>
+    </div>
+
+    <h4 class="subsub">Step 1 — Write the Augmented Matrix</h4>
+
+    \[
+    \left[
+    \begin{array}{ccc|c}
+    2 & 1 & -1 & 8\\
+    -3 & -1 & 2 & -11\\
+    -2 & 1 & 2 & -3
+    \end{array}
+    \right]
+    \]
+
+    <div class="steps">
+
+      <details class="step" open>
+        <summary>
+          <span class="step-num">1</span>
+          <span class="step-label">Normalize the first pivot row</span>
+        </summary>
+
+        <div class="step-body">
+          <p>
+            The first pivot is \(2\). Make the pivot equal to \(1\) by dividing Row 1 by \(2\).
+          </p>
+
+          \[
+          R_1 \leftarrow \frac{1}{2}R_1
+          \]
+
+          \[
+          R_1=
+          \left[
+          1,\;0.5,\;-0.5\;|\;4
+          \right]
+          \]
+
+          <p>The matrix becomes:</p>
+
+          \[
+          \left[
+          \begin{array}{ccc|c}
+          1 & 0.5 & -0.5 & 4\\
+          -3 & -1 & 2 & -11\\
+          -2 & 1 & 2 & -3
+          \end{array}
+          \right]
+          \]
+        </div>
+      </details>
+
+      <details class="step" open>
+        <summary>
+          <span class="step-num">2</span>
+          <span class="step-label">Eliminate \(x\) from Rows 2 and 3</span>
+        </summary>
+
+        <div class="step-body">
+          <p>
+            Use Row 1 to make the entries below the first pivot equal to zero.
+          </p>
+
+          <p><strong>For Row 2:</strong></p>
+
+          \[
+          R_2 \leftarrow R_2+3R_1
+          \]
+
+          \[
+          R_2=
+          [-3,\;-1,\;2\;|\;-11]
+          +
+          3[1,\;0.5,\;-0.5\;|\;4]
+          \]
+
+          \[
+          R_2=
+          [0,\;0.5,\;0.5\;|\;1]
+          \]
+
+          <p><strong>For Row 3:</strong></p>
+
+          \[
+          R_3 \leftarrow R_3+2R_1
+          \]
+
+          \[
+          R_3=
+          [-2,\;1,\;2\;|\;-3]
+          +
+          2[1,\;0.5,\;-0.5\;|\;4]
+          \]
+
+          \[
+          R_3=
+          [0,\;2,\;1\;|\;5]
+          \]
+
+          <p>The matrix becomes:</p>
+
+          \[
+          \left[
+          \begin{array}{ccc|c}
+          1 & 0.5 & -0.5 & 4\\
+          0 & 0.5 & 0.5 & 1\\
+          0 & 2 & 1 & 5
+          \end{array}
+          \right]
+          \]
+        </div>
+      </details>
+
+      <details class="step" open>
+        <summary>
+          <span class="step-num">3</span>
+          <span class="step-label">Normalize the second pivot row</span>
+        </summary>
+
+        <div class="step-body">
+          <p>
+            The second pivot is \(0.5\). Divide Row 2 by \(0.5\), or multiply Row 2 by \(2\).
+          </p>
+
+          \[
+          R_2 \leftarrow 2R_2
+          \]
+
+          \[
+          R_2=
+          [0,\;1,\;1\;|\;2]
+          \]
+
+          <p>The matrix becomes:</p>
+
+          \[
+          \left[
+          \begin{array}{ccc|c}
+          1 & 0.5 & -0.5 & 4\\
+          0 & 1 & 1 & 2\\
+          0 & 2 & 1 & 5
+          \end{array}
+          \right]
+          \]
+        </div>
+      </details>
+
+      <details class="step" open>
+        <summary>
+          <span class="step-num">4</span>
+          <span class="step-label">Eliminate \(y\) from Row 3</span>
+        </summary>
+
+        <div class="step-body">
+          <p>
+            Row 3 has \(2\) under the second pivot. Use Row 2 to eliminate it.
+          </p>
+
+          \[
+          R_3 \leftarrow R_3-2R_2
+          \]
+
+          \[
+          R_3=
+          [0,\;2,\;1\;|\;5]
+          -
+          2[0,\;1,\;1\;|\;2]
+          \]
+
+          \[
+          R_3=
+          [0,\;0,\;-1\;|\;1]
+          \]
+
+          <p>The matrix becomes:</p>
+
+          \[
+          \left[
+          \begin{array}{ccc|c}
+          1 & 0.5 & -0.5 & 4\\
+          0 & 1 & 1 & 2\\
+          0 & 0 & -1 & 1
+          \end{array}
+          \right]
+          \]
+        </div>
+      </details>
+
+      <details class="step" open>
+        <summary>
+          <span class="step-num">5</span>
+          <span class="step-label">Normalize the third pivot row</span>
+        </summary>
+
+        <div class="step-body">
+          <p>
+            The third pivot is \(-1\). Multiply Row 3 by \(-1\).
+          </p>
+
+          \[
+          R_3 \leftarrow -R_3
+          \]
+
+          \[
+          R_3=[0,\;0,\;1\;|\;-1]
+          \]
+
+          <p>The matrix becomes:</p>
+
+          \[
+          \left[
+          \begin{array}{ccc|c}
+          1 & 0.5 & -0.5 & 4\\
+          0 & 1 & 1 & 2\\
+          0 & 0 & 1 & -1
+          \end{array}
+          \right]
+          \]
+        </div>
+      </details>
+
+      <details class="step" open>
+        <summary>
+          <span class="step-num">6</span>
+          <span class="step-label">Eliminate \(z\) from Rows 1 and 2</span>
+        </summary>
+
+        <div class="step-body">
+          <p>
+            Now eliminate all entries above the third pivot.
+          </p>
+
+          <p><strong>For Row 2:</strong></p>
+
+          \[
+          R_2 \leftarrow R_2-R_3
+          \]
+
+          \[
+          R_2=
+          [0,\;1,\;1\;|\;2]
+          -
+          [0,\;0,\;1\;|\;-1]
+          \]
+
+          \[
+          R_2=
+          [0,\;1,\;0\;|\;3]
+          \]
+
+          <p><strong>For Row 1:</strong></p>
+
+          \[
+          R_1 \leftarrow R_1+0.5R_3
+          \]
+
+          \[
+          R_1=
+          [1,\;0.5,\;-0.5\;|\;4]
+          +
+          0.5[0,\;0,\;1\;|\;-1]
+          \]
+
+          \[
+          R_1=
+          [1,\;0.5,\;0\;|\;3.5]
+          \]
+
+          <p>The matrix becomes:</p>
+
+          \[
+          \left[
+          \begin{array}{ccc|c}
+          1 & 0.5 & 0 & 3.5\\
+          0 & 1 & 0 & 3\\
+          0 & 0 & 1 & -1
+          \end{array}
+          \right]
+          \]
+        </div>
+      </details>
+
+      <details class="step" open>
+        <summary>
+          <span class="step-num">7</span>
+          <span class="step-label">Eliminate \(y\) from Row 1</span>
+        </summary>
+
+        <div class="step-body">
+          <p>
+            Row 1 still has \(0.5\) above the second pivot. Use Row 2 to eliminate it.
+          </p>
+
+          \[
+          R_1 \leftarrow R_1-0.5R_2
+          \]
+
+          \[
+          R_1=
+          [1,\;0.5,\;0\;|\;3.5]
+          -
+          0.5[0,\;1,\;0\;|\;3]
+          \]
+
+          \[
+          R_1=
+          [1,\;0,\;0\;|\;2]
+          \]
+
+          <p>The final reduced row echelon form is:</p>
+
+          \[
+          \left[
+          \begin{array}{ccc|c}
+          1 & 0 & 0 & 2\\
+          0 & 1 & 0 & 3\\
+          0 & 0 & 1 & -1
+          \end{array}
+          \right]
+          \]
+        </div>
+      </details>
+
+    </div>
+
+    <h4 class="subsub">Final Answer</h4>
+
+    <div class="formula-box">
+      <div class="formula-title">Solution from Reduced Row Echelon Form</div>
+
+      \[
+      \boxed{x=2,\qquad y=3,\qquad z=-1}
+      \]
+    </div>
+  </div>
+
+  <h4 class="subsub">MATLAB Code — Gauss-Jordan Method</h4>
+
+  <div class="formula-box matlab-panel">
+    <div class="formula-title">MATLAB Implementation with Complete Notes</div>
+
+<pre class="matlab-code"><code><span class="com">%% Gauss-Jordan Elimination Method</span>
+<span class="com">% This program solves A*x = b by reducing the augmented matrix [A | b]</span>
+<span class="com">% all the way to [I | x].</span>
+
+<span class="kw">clc</span>;
+<span class="kw">clear</span>;
+<span class="kw">close</span> <span class="kw">all</span>;
+
+<span class="com">%% Define the coefficient matrix and RHS vector</span>
+
+A = [ <span class="num">2</span>   <span class="num">1</span>  -<span class="num">1</span>;
+     -<span class="num">3</span>  -<span class="num">1</span>   <span class="num">2</span>;
+     -<span class="num">2</span>   <span class="num">1</span>   <span class="num">2</span> ];
+
+b = [ <span class="num">8</span>;
+     -<span class="num">11</span>;
+     -<span class="num">3</span> ];
+
+Aug = [A b];
+
+n = length(b);
+
+disp(<span class="str">'Initial augmented matrix:'</span>)
+disp(Aug)
+
+<span class="com">%% Gauss-Jordan elimination</span>
+
+<span class="kw">for</span> k = <span class="num">1</span>:n
+
+    <span class="com">% Partial pivoting: choose the largest pivot in the current column</span>
+    [~, maxRow] = max(abs(Aug(k:n,k)));
+    maxRow = maxRow + k - <span class="num">1</span>;
+
+    <span class="kw">if</span> maxRow ~= k
+        temp = Aug(k,:);
+        Aug(k,:) = Aug(maxRow,:);
+        Aug(maxRow,:) = temp;
+    <span class="kw">end</span>
+
+    <span class="com">% Check for zero pivot</span>
+    <span class="kw">if</span> Aug(k,k) == <span class="num">0</span>
+        error(<span class="str">'Zero pivot encountered. No unique solution.'</span>);
+    <span class="kw">end</span>
+
+    <span class="com">% Normalize pivot row so the pivot becomes 1</span>
+    Aug(k,:) = Aug(k,:) / Aug(k,k);
+
+    <span class="com">% Eliminate all other entries in the current column</span>
+    <span class="kw">for</span> i = <span class="num">1</span>:n
+        <span class="kw">if</span> i ~= k
+            factor = Aug(i,k);
+            Aug(i,:) = Aug(i,:) - factor*Aug(k,:);
+        <span class="kw">end</span>
+    <span class="kw">end</span>
+
+    fprintf(<span class="str">'Matrix after processing pivot column %d:\n'</span>, k)
+    disp(Aug)
+
+<span class="kw">end</span>
+
+<span class="com">%% Extract the solution</span>
+
+x = Aug(:,end);
+
+disp(<span class="str">'Final reduced row echelon matrix [I | x]:'</span>)
+disp(Aug)
+
+disp(<span class="str">'Solution vector:'</span>)
+disp(x)
+
+fprintf(<span class="str">'x = %.4f\n'</span>, x(<span class="num">1</span>))
+fprintf(<span class="str">'y = %.4f\n'</span>, x(<span class="num">2</span>))
+fprintf(<span class="str">'z = %.4f\n'</span>, x(<span class="num">3</span>))</code></pre>
+  </div>
+</section>
+<!-- SECTION 03 -->
+<section id="gauss-seidel" class="sect">
+  <div class="sect-number">01.2</div>
+
+  <h2 class="sect-title">
+    Gauss-Seidel Method
+    <span class="badge badge-teal">Iterative Solver</span>
+  </h2>
+
+  <p class="sect-subtitle">
+    Gauss-Seidel is an iterative method for solving systems of linear equations.
+    Instead of reducing the matrix directly like Gaussian elimination, it repeatedly
+    updates the unknowns until the values converge.
+  </p>
+
+  <h4 class="subsub">Full Method — Gauss-Seidel Iteration</h4>
+
+  <div class="formula-box">
+    <div class="formula-title">Purpose of the Method</div>
+
+    <p>
+      The Gauss-Seidel method solves a linear system:
+    </p>
+
+    \[
+      \mathbf{A}\mathbf{x}=\mathbf{b}
+    \]
+
+    <p>
+      by rearranging each equation to solve for one unknown at a time.
+      The updated value is used immediately in the next equation.
+    </p>
+
+    <div class="info-box">
+      <strong>Main idea:</strong>
+      Start with an initial guess, update each variable one by one, and repeat
+      until the solution stops changing.
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-title">General Gauss-Seidel Formula</div>
+
+    <p>
+      For a system of \(n\) equations:
+    </p>
+
+    \[
+      a_{i1}x_1+a_{i2}x_2+\cdots+a_{ii}x_i+\cdots+a_{in}x_n=b_i
+    \]
+
+    <p>
+      the Gauss-Seidel update for \(x_i\) is:
+    </p>
+
+    \[
+      x_i^{(k+1)}
+      =
+      \frac{
+      b_i
+      -
+      \sum_{j=1}^{i-1}a_{ij}x_j^{(k+1)}
+      -
+      \sum_{j=i+1}^{n}a_{ij}x_j^{(k)}
+      }
+      {a_{ii}}
+    \]
+
+    <div class="eq-row">
+      New values \(x_1^{(k+1)},x_2^{(k+1)},\ldots\) are used immediately as soon as they are available.
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <strong>Convergence condition:</strong>
+    Gauss-Seidel works best when the matrix is diagonally dominant:
+    \[
+      |a_{ii}| \ge \sum_{j\ne i}|a_{ij}|
+    \]
+    for every row. If the matrix is not diagonally dominant, the method may diverge.
+  </div>
+
+  <div class="example-card">
+    <div class="example-header">
+      <span class="example-icon">🔁</span>
+      <div class="example-title">Worked Example — Solving a 3 × 3 System</div>
+    </div>
+
+    <div class="problem-box">
+      <p><strong>Problem:</strong> Solve the system using the Gauss-Seidel method:</p>
+
+      \[
+      \begin{aligned}
+      10x-y+2z&=6\\
+      -x+11y-z&=25\\
+      2x-y+10z&=-11
+      \end{aligned}
+      \]
+
+      <p><strong>Initial guess:</strong></p>
+
+      \[
+      x^{(0)}=0,\qquad y^{(0)}=0,\qquad z^{(0)}=0
+      \]
+
+      <p>
+        Stop when the values stop changing significantly.
+      </p>
+    </div>
+
+    <h4 class="subsub">Step 1 — Check Diagonal Dominance</h4>
+
+    <div class="steps">
+      <details class="step" open>
+        <summary>
+          <span class="step-num">1</span>
+          <span class="step-label">Verify convergence condition</span>
+        </summary>
+
+        <div class="step-body">
+          <p>
+            For Row 1:
+          </p>
+
+          \[
+          |10|>|-1|+|2|
+          \]
+
+          \[
+          10>3
+          \]
+
+          <p>
+            For Row 2:
+          </p>
+
+          \[
+          |11|>|-1|+|-1|
+          \]
+
+          \[
+          11>2
+          \]
+
+          <p>
+            For Row 3:
+          </p>
+
+          \[
+          |10|>|2|+|-1|
+          \]
+
+          \[
+          10>3
+          \]
+
+          <div class="info-box">
+            The matrix is diagonally dominant, so Gauss-Seidel should converge.
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <h4 class="subsub">Step 2 — Rearrange Each Equation</h4>
+
+    <div class="formula-box" style="margin:.5rem 0 1rem">
+      <div class="formula-title">Iteration Equations</div>
+
+      <p>From Equation 1:</p>
+
+      \[
+      10x-y+2z=6
+      \]
+
+      \[
+      10x=6+y-2z
+      \]
+
+      \[
+      \boxed{x=\frac{6+y-2z}{10}}
+      \]
+
+      <p>From Equation 2:</p>
+
+      \[
+      -x+11y-z=25
+      \]
+
+      \[
+      11y=25+x+z
+      \]
+
+      \[
+      \boxed{y=\frac{25+x+z}{11}}
+      \]
+
+      <p>From Equation 3:</p>
+
+      \[
+      2x-y+10z=-11
+      \]
+
+      \[
+      10z=-11-2x+y
+      \]
+
+      \[
+      \boxed{z=\frac{-11-2x+y}{10}}
+      \]
+    </div>
+
+    <h4 class="subsub">Step 3 — Iterations</h4>
+
+    <div class="steps">
+
+      <details class="step" open>
+        <summary>
+          <span class="step-num">2</span>
+          <span class="step-label">Iteration 1</span>
+        </summary>
+
+        <div class="step-body">
+          <p>
+            Start with:
+          </p>
+
+          \[
+          x^{(0)}=0,\qquad y^{(0)}=0,\qquad z^{(0)}=0
+          \]
+
+          <p><strong>Compute \(x^{(1)}\):</strong></p>
+
+          \[
+          x^{(1)}
+          =
+          \frac{6+y^{(0)}-2z^{(0)}}{10}
+          \]
+
+          \[
+          x^{(1)}
+          =
+          \frac{6+0-2(0)}{10}
+          =
+          0.6000
+          \]
+
+          <p><strong>Compute \(y^{(1)}\) using the new \(x^{(1)}\):</strong></p>
+
+          \[
+          y^{(1)}
+          =
+          \frac{25+x^{(1)}+z^{(0)}}{11}
+          \]
+
+          \[
+          y^{(1)}
+          =
+          \frac{25+0.6000+0}{11}
+          =
+          2.3273
+          \]
+
+          <p><strong>Compute \(z^{(1)}\) using the new \(x^{(1)}\) and \(y^{(1)}\):</strong></p>
+
+          \[
+          z^{(1)}
+          =
+          \frac{-11-2x^{(1)}+y^{(1)}}{10}
+          \]
+
+          \[
+          z^{(1)}
+          =
+          \frac{-11-2(0.6000)+2.3273}{10}
+          \]
+
+          \[
+          z^{(1)}
+          =
+          \frac{-9.8727}{10}
+          =
+          -0.9873
+          \]
+
+          \[
+          \boxed{
+          x^{(1)}=0.6000,\quad y^{(1)}=2.3273,\quad z^{(1)}=-0.9873
+          }
+          \]
+        </div>
+      </details>
+
+      <details class="step" open>
+        <summary>
+          <span class="step-num">3</span>
+          <span class="step-label">Iteration 2</span>
+        </summary>
+
+        <div class="step-body">
+          \[
+          x^{(2)}
+          =
+          \frac{6+y^{(1)}-2z^{(1)}}{10}
+          \]
+
+          \[
+          x^{(2)}
+          =
+          \frac{6+2.3273-2(-0.9873)}{10}
+          \]
+
+          \[
+          x^{(2)}
+          =
+          \frac{10.3019}{10}
+          =
+          1.0302
+          \]
+
+          \[
+          y^{(2)}
+          =
+          \frac{25+x^{(2)}+z^{(1)}}{11}
+          \]
+
+          \[
+          y^{(2)}
+          =
+          \frac{25+1.0302-0.9873}{11}
+          \]
+
+          \[
+          y^{(2)}
+          =
+          2.2766
+          \]
+
+          \[
+          z^{(2)}
+          =
+          \frac{-11-2x^{(2)}+y^{(2)}}{10}
+          \]
+
+          \[
+          z^{(2)}
+          =
+          \frac{-11-2(1.0302)+2.2766}{10}
+          \]
+
+          \[
+          z^{(2)}
+          =
+          -1.0784
+          \]
+
+          \[
+          \boxed{
+          x^{(2)}=1.0302,\quad y^{(2)}=2.2766,\quad z^{(2)}=-1.0784
+          }
+          \]
+        </div>
+      </details>
+
+      <details class="step">
+        <summary>
+          <span class="step-num">4</span>
+          <span class="step-label">Iteration 3</span>
+        </summary>
+
+        <div class="step-body">
+          \[
+          x^{(3)}
+          =
+          \frac{6+2.2766-2(-1.0784)}{10}
+          \]
+
+          \[
+          x^{(3)}
+          =
+          1.0433
+          \]
+
+          \[
+          y^{(3)}
+          =
+          \frac{25+1.0433-1.0784}{11}
+          \]
+
+          \[
+          y^{(3)}
+          =
+          2.2695
+          \]
+
+          \[
+          z^{(3)}
+          =
+          \frac{-11-2(1.0433)+2.2695}{10}
+          \]
+
+          \[
+          z^{(3)}
+          =
+          -1.0817
+          \]
+
+          \[
+          \boxed{
+          x^{(3)}=1.0433,\quad y^{(3)}=2.2695,\quad z^{(3)}=-1.0817
+          }
+          \]
+        </div>
+      </details>
+
+      <details class="step">
+        <summary>
+          <span class="step-num">5</span>
+          <span class="step-label">Iteration 4</span>
+        </summary>
+
+        <div class="step-body">
+          \[
+          x^{(4)}
+          =
+          \frac{6+2.2695-2(-1.0817)}{10}
+          =
+          1.0433
+          \]
+
+          \[
+          y^{(4)}
+          =
+          \frac{25+1.0433-1.0817}{11}
+          =
+          2.2692
+          \]
+
+          \[
+          z^{(4)}
+          =
+          \frac{-11-2(1.0433)+2.2692}{10}
+          =
+          -1.0817
+          \]
+
+          \[
+          \boxed{
+          x^{(4)}=1.0433,\quad y^{(4)}=2.2692,\quad z^{(4)}=-1.0817
+          }
+          \]
+        </div>
+      </details>
+
+      <details class="step">
+        <summary>
+          <span class="step-num">6</span>
+          <span class="step-label">Iteration 5 and convergence</span>
+        </summary>
+
+        <div class="step-body">
+          \[
+          x^{(5)}=1.0433
+          \]
+
+          \[
+          y^{(5)}=2.2692
+          \]
+
+          \[
+          z^{(5)}=-1.0817
+          \]
+
+          <p>
+            The values barely change from Iteration 4 to Iteration 5, so the method has converged.
+          </p>
+
+          \[
+          \boxed{
+          x\approx1.0433,\qquad y\approx2.2692,\qquad z\approx-1.0817
+          }
+          \]
+        </div>
+      </details>
+
+    </div>
+
+    <h4 class="subsub">Convergence Table</h4>
+
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead>
+          <tr>
+            <th>Iteration</th>
+            <th>\(x\)</th>
+            <th>\(y\)</th>
+            <th>\(z\)</th>
+            <th>Maximum Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>0.0000</td><td>0.0000</td><td>0.0000</td><td>-</td></tr>
+          <tr><td>1</td><td>0.6000</td><td>2.3273</td><td>-0.9873</td><td>2.3273</td></tr>
+          <tr><td>2</td><td>1.0302</td><td>2.2766</td><td>-1.0784</td><td>0.4302</td></tr>
+          <tr><td>3</td><td>1.0433</td><td>2.2695</td><td>-1.0817</td><td>0.0132</td></tr>
+          <tr><td>4</td><td>1.0433</td><td>2.2692</td><td>-1.0817</td><td>0.0003</td></tr>
+          <tr><td>5</td><td>1.0433</td><td>2.2692</td><td>-1.0817</td><td class="exact">0.0000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 class="subsub">Verification</h4>
+
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead>
+          <tr>
+            <th>Original Equation</th>
+            <th>Substitution</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>\(10x-y+2z=6\)</td>
+            <td>\(10(1.0433)-2.2692+2(-1.0817)\)</td>
+            <td class="exact">\(6.0000\)</td>
+          </tr>
+          <tr>
+            <td>\(-x+11y-z=25\)</td>
+            <td>\(-1.0433+11(2.2692)-(-1.0817)\)</td>
+            <td class="exact">\(25.0000\)</td>
+          </tr>
+          <tr>
+            <td>\(2x-y+10z=-11\)</td>
+            <td>\(2(1.0433)-2.2692+10(-1.0817)\)</td>
+            <td class="exact">\(-11.0000\)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h4 class="subsub">MATLAB Code — Gauss-Seidel Method</h4>
+
+  <div class="formula-box matlab-panel">
+    <div class="formula-title">MATLAB Implementation with Complete Notes</div>
+
+<pre class="matlab-code"><code><span class="com">%% Gauss-Seidel Iterative Method</span>
+<span class="com">% This program solves A*x = b using the Gauss-Seidel method.</span>
+<span class="com">%</span>
+<span class="com">% Example system:</span>
+<span class="com">%     10x -  y + 2z = 6</span>
+<span class="com">%     -x + 11y -  z = 25</span>
+<span class="com">%      2x -  y +10z = -11</span>
+
+<span class="kw">clc</span>;
+<span class="kw">clear</span>;
+<span class="kw">close</span> <span class="kw">all</span>;
+
+<span class="com">%% Step 1: Define the coefficient matrix and RHS vector</span>
+
+A = [<span class="num">10</span>  -<span class="num">1</span>   <span class="num">2</span>;
+     -<span class="num">1</span>  <span class="num">11</span>  -<span class="num">1</span>;
+      <span class="num">2</span>  -<span class="num">1</span>  <span class="num">10</span>];
+
+b = [ <span class="num">6</span>;
+      <span class="num">25</span>;
+     -<span class="num">11</span>];
+
+<span class="com">%% Step 2: Initial guess</span>
+
+x = zeros(<span class="num">3</span>,<span class="num">1</span>);
+
+<span class="com">%% Step 3: Iteration settings</span>
+
+tol = <span class="num">1e-6</span>;
+maxIter = <span class="num">100</span>;
+
+history = [];
+
+<span class="com">%% Step 4: Gauss-Seidel iteration</span>
+
+<span class="kw">for</span> iter = <span class="num">1</span>:maxIter
+
+    x_old = x;
+
+    <span class="com">% Update x using the current y and z</span>
+    x(<span class="num">1</span>) = (b(<span class="num">1</span>) - A(<span class="num">1</span>,<span class="num">2</span>)*x(<span class="num">2</span>) - A(<span class="num">1</span>,<span class="num">3</span>)*x(<span class="num">3</span>)) / A(<span class="num">1</span>,<span class="num">1</span>);
+
+    <span class="com">% Update y using the newest x and current z</span>
+    x(<span class="num">2</span>) = (b(<span class="num">2</span>) - A(<span class="num">2</span>,<span class="num">1</span>)*x(<span class="num">1</span>) - A(<span class="num">2</span>,<span class="num">3</span>)*x(<span class="num">3</span>)) / A(<span class="num">2</span>,<span class="num">2</span>);
+
+    <span class="com">% Update z using the newest x and newest y</span>
+    x(<span class="num">3</span>) = (b(<span class="num">3</span>) - A(<span class="num">3</span>,<span class="num">1</span>)*x(<span class="num">1</span>) - A(<span class="num">3</span>,<span class="num">2</span>)*x(<span class="num">2</span>)) / A(<span class="num">3</span>,<span class="num">3</span>);
+
+    <span class="com">% Maximum absolute change</span>
+    err = max(abs(x - x_old));
+
+    history = [history; iter, x', err];
+
+    fprintf(<span class="str">'Iteration %d: x = %.6f, y = %.6f, z = %.6f, error = %.6e\n'</span>, ...
+        iter, x(<span class="num">1</span>), x(<span class="num">2</span>), x(<span class="num">3</span>), err)
+
+    <span class="kw">if</span> err &lt; tol
+        <span class="kw">break</span>
+    <span class="kw">end</span>
+
+<span class="kw">end</span>
+
+<span class="com">%% Step 5: Display final solution</span>
+
+fprintf(<span class="str">'\nFinal Solution:\n'</span>)
+fprintf(<span class="str">'x = %.6f\n'</span>, x(<span class="num">1</span>))
+fprintf(<span class="str">'y = %.6f\n'</span>, x(<span class="num">2</span>))
+fprintf(<span class="str">'z = %.6f\n'</span>, x(<span class="num">3</span>))
+
+<span class="com">%% Step 6: Results table</span>
+
+Results = array2table(history, ...
+    <span class="str">'VariableNames'</span>, {<span class="str">'Iteration'</span>, <span class="str">'x'</span>, <span class="str">'y'</span>, <span class="str">'z'</span>, <span class="str">'Error'</span>});
+
+disp(Results)
+
+<span class="com">%% Step 7: Verify the answer</span>
+
+disp(<span class="str">'Verification A*x ='</span>)
+disp(A*x)
+
+disp(<span class="str">'Original b ='</span>)
+disp(b)
+
+<span class="com">%% Step 8: Plot convergence</span>
+
+figure;
+semilogy(history(:,<span class="num">1</span>), history(:,<span class="num">5</span>), <span class="str">'-o'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+grid on;
+
+xlabel(<span class="str">'Iteration'</span>);
+ylabel(<span class="str">'Maximum Absolute Change'</span>);
+title(<span class="str">'Gauss-Seidel Convergence'</span>);</code></pre>
+  </div>
+</section>
 
 <!-- ════════════════════════════════════════════
      SECTION 3 — TAYLOR SERIES
@@ -5320,94 +7353,815 @@ title(<span class="str">'Surface Plot of Temperature Distribution'</span>);</cod
   </p>
 
   <div class="formula-box">
-    <div class="formula-title">Professional Definition</div>
-
+    <div class="formula-title">Advanced Definition — Regression as an Optimization Problem</div>
+  
     <p>
-      Suppose experimental data are given as:
+      Regression is not just “drawing a best-fit curve.” In numerical methods, regression is an
+      optimization problem where we estimate unknown model parameters from experimental data.
     </p>
-
+  
+    <p>
+      Suppose we have measured data:
+    </p>
+  
     \[
       (x_1,y_1),\;(x_2,y_2),\;\ldots,\;(x_n,y_n)
     \]
-
+  
     <p>
-      and a mathematical model is proposed:
+      and a proposed model:
     </p>
-
+  
     \[
       y=f(x;\theta)
     \]
-
+  
     <p>
-      where \(\theta\) is the vector of unknown parameters. Regression finds the best
-      \(\theta\) by minimizing the sum of squared residuals:
+      where \(\theta\) represents the unknown parameters. For example:
     </p>
-
+  
     \[
-      S(\theta)=\sum_{i=1}^{n}\left[y_i-f(x_i;\theta)\right]^2
+      \theta=
+      \begin{bmatrix}
+      k\\
+      C_\infty
+      \end{bmatrix}
     \]
-
+  
     <p>
-      The residual at data point \(i\) is:
+      Regression chooses \(\theta\) so that the predicted values are as close as possible
+      to the experimental values.
     </p>
-
+  
+    \[
+      y_{i,\text{pred}}=f(x_i;\theta)
+    \]
+  
+    <p>
+      The difference between experiment and prediction is called the residual:
+    </p>
+  
     \[
       r_i=y_i-y_{i,\text{pred}}
     \]
-
-    <div class="info-box">
-      <strong>Regression vs interpolation:</strong>
-      Interpolation forces the curve to pass exactly through every data point.
-      Regression does not. Regression finds the best overall trend, which is better
-      for noisy experimental engineering data.
-    </div>
+  
+    <p>
+      The vector of all residuals is:
+    </p>
+  
+    \[
+      \mathbf{r}(\theta)=
+      \begin{bmatrix}
+      r_1\\
+      r_2\\
+      \vdots\\
+      r_n
+      \end{bmatrix}
+    \]
+  
+    <p>
+      The least-squares regression problem is:
+    </p>
+  
+    \[
+      \boxed{
+      \min_{\theta}
+      S(\theta)
+      =
+      \min_{\theta}
+      \sum_{i=1}^{n}r_i^2
+      }
+    \]
+  
+    <p>
+      or, in vector form:
+    </p>
+  
+    \[
+      \boxed{
+      \min_{\theta}
+      S(\theta)
+      =
+      \min_{\theta}
+      \mathbf{r}^T\mathbf{r}
+      }
+    \]
   </div>
-
+  
   <div class="formula-box">
-    <div class="formula-title">Linear and Nonlinear Regression</div>
-
+    <div class="formula-title">Why Least Squares?</div>
+  
+    <p>
+      Squaring the residuals has three important effects:
+    </p>
+  
     <div class="formula-grid">
       <div class="formula-cell">
-        <div class="formula-cell-label">Linear least squares</div>
-
+        <div class="formula-cell-label">1. Removes sign cancellation</div>
+        <p>
+          Positive and negative residuals cannot cancel each other.
+        </p>
+  
         \[
-          \mathbf{y}=\mathbf{X}\boldsymbol{\beta}
+          (+2)^2+(-2)^2=8
         \]
-
+      </div>
+  
+      <div class="formula-cell">
+        <div class="formula-cell-label">2. Penalizes large errors</div>
+        <p>
+          A large error contributes much more strongly than a small error.
+        </p>
+  
         \[
-          \boldsymbol{\beta}
-          =
-          (\mathbf{X}^T\mathbf{X})^{-1}
-          \mathbf{X}^T\mathbf{y}
+          5^2=25
+          \qquad
+          1^2=1
         \]
-
+      </div>
+  
+      <div class="formula-cell">
+        <div class="formula-cell-label">3. Gives smooth mathematics</div>
+        <p>
+          Squared residuals are differentiable, which allows calculus-based minimization.
+        </p>
+  
+        \[
+          \frac{d}{d\theta}S(\theta)=0
+        \]
+      </div>
+  
+      <div class="formula-cell">
+        <div class="formula-cell-label">4. Works well for normal noise</div>
+        <p>
+          If experimental errors are normally distributed, least squares gives the maximum-likelihood estimate.
+        </p>
+  
+        \[
+          \varepsilon_i\sim N(0,\sigma^2)
+        \]
+      </div>
+    </div>
+  </div>
+  
+  <div class="example-card">
+    <div class="example-header">
+      <span class="example-icon">🧠</span>
+      <div class="example-title">Conceptual Map — Types of Regression</div>
+    </div>
+  
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Model Form</th>
+            <th>Parameter Behavior</th>
+            <th>Solution Method</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Linear Regression</td>
+            <td>\(y=a_0+a_1x\)</td>
+            <td>Parameters appear linearly</td>
+            <td class="exact">Direct formula</td>
+          </tr>
+          <tr>
+            <td>Polynomial Regression</td>
+            <td>\(y=a_0+a_1x+a_2x^2\)</td>
+            <td>Still linear in parameters</td>
+            <td class="exact">Matrix least squares</td>
+          </tr>
+          <tr>
+            <td>Linearized Nonlinear Regression</td>
+            <td>\(y=Ae^{kx}\Rightarrow \ln y=\ln A+kx\)</td>
+            <td>Made linear by transformation</td>
+            <td class="highlight">Linear regression after transformation</td>
+          </tr>
+          <tr>
+            <td>True Nonlinear Regression</td>
+            <td>\(C=C_\infty+(C_0-C_\infty)e^{-kt}\)</td>
+            <td>Parameters appear nonlinearly</td>
+            <td class="err">Iterative solution</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <div class="formula-box">
+    <div class="formula-title">Linear Least Squares — Matrix Form</div>
+  
+    <p>
+      For a model that is linear in the unknown parameters:
+    </p>
+  
+    \[
+      y=\beta_0+\beta_1x+\beta_2x^2+\cdots+\beta_mx^m
+    \]
+  
+    <p>
+      we can write:
+    </p>
+  
+    \[
+      \mathbf{y}=\mathbf{X}\boldsymbol{\beta}
+    \]
+  
+    <p>
+      where:
+    </p>
+  
+    \[
+    \mathbf{X}
+    =
+    \begin{bmatrix}
+    1 & x_1 & x_1^2 & \cdots & x_1^m\\
+    1 & x_2 & x_2^2 & \cdots & x_2^m\\
+    \vdots & \vdots & \vdots & \ddots & \vdots\\
+    1 & x_n & x_n^2 & \cdots & x_n^m
+    \end{bmatrix}
+    \]
+  
+    \[
+    \boldsymbol{\beta}
+    =
+    \begin{bmatrix}
+    \beta_0\\
+    \beta_1\\
+    \vdots\\
+    \beta_m
+    \end{bmatrix}
+    \]
+  
+    <p>
+      The residual vector is:
+    </p>
+  
+    \[
+      \mathbf{r}=\mathbf{y}-\mathbf{X}\boldsymbol{\beta}
+    \]
+  
+    <p>
+      The least-squares objective is:
+    </p>
+  
+    \[
+      S=
+      (\mathbf{y}-\mathbf{X}\boldsymbol{\beta})^T
+      (\mathbf{y}-\mathbf{X}\boldsymbol{\beta})
+    \]
+  
+    <p>
+      To minimize \(S\), differentiate with respect to \(\boldsymbol{\beta}\) and set equal to zero:
+    </p>
+  
+    \[
+      \frac{\partial S}{\partial \boldsymbol{\beta}}=0
+    \]
+  
+    <p>
+      This gives the normal equations:
+    </p>
+  
+    \[
+      \mathbf{X}^T\mathbf{X}\boldsymbol{\beta}
+      =
+      \mathbf{X}^T\mathbf{y}
+    \]
+  
+    <p>
+      Therefore:
+    </p>
+  
+    \[
+      \boxed{
+      \boldsymbol{\beta}
+      =
+      (\mathbf{X}^T\mathbf{X})^{-1}
+      \mathbf{X}^T\mathbf{y}
+      }
+    \]
+  
+    <div class="warn-box">
+      <strong>Numerical warning:</strong>
+      In MATLAB, do not compute the inverse explicitly for real problems.
+      Use the backslash operator:
+      \[
+        \boldsymbol{\beta}=\mathbf{X}\backslash\mathbf{y}
+      \]
+    </div>
+  </div>
+  
+  <div class="formula-box">
+    <div class="formula-title">Weighted Least Squares</div>
+  
+    <p>
+      Sometimes not all data points are equally reliable. For example, one instrument may have
+      higher uncertainty at high temperatures or low concentrations.
+    </p>
+  
+    <p>
+      If each measurement has a standard deviation \(\sigma_i\), we use weights:
+    </p>
+  
+    \[
+      w_i=\frac{1}{\sigma_i^2}
+    \]
+  
+    <p>
+      The weighted least-squares objective is:
+    </p>
+  
+    \[
+      S_w(\theta)
+      =
+      \sum_{i=1}^{n}
+      w_i
+      \left[
+      y_i-f(x_i;\theta)
+      \right]^2
+    \]
+  
+    <p>
+      In matrix form:
+    </p>
+  
+    \[
+      S_w=
+      \mathbf{r}^T\mathbf{W}\mathbf{r}
+    \]
+  
+    where:
+  
+    \[
+      \mathbf{W}
+      =
+      \begin{bmatrix}
+      w_1 & 0 & \cdots & 0\\
+      0 & w_2 & \cdots & 0\\
+      \vdots & \vdots & \ddots & \vdots\\
+      0 & 0 & \cdots & w_n
+      \end{bmatrix}
+    \]
+  
+    <div class="info-box">
+      Weighted regression gives more influence to accurate measurements and less influence to uncertain measurements.
+    </div>
+  </div>
+  
+  <div class="formula-box">
+    <div class="formula-title">Nonlinear Regression — Why Iteration Is Needed</div>
+  
+    <p>
+      In nonlinear regression, the model cannot be written as:
+    </p>
+  
+    \[
+      \mathbf{y}=\mathbf{X}\boldsymbol{\beta}
+    \]
+  
+    <p>
+      because the unknown parameters appear inside nonlinear functions.
+    </p>
+  
+    <p>
+      Examples:
+    </p>
+  
+    \[
+      y=Ae^{-kt}
+    \]
+  
+    \[
+      C(t)=C_\infty+(C_0-C_\infty)e^{-kt}
+    \]
+  
+    \[
+      r=\frac{V_{max}C}{K_m+C}
+    \]
+  
+    <p>
+      For nonlinear regression, we start with a parameter guess:
+    </p>
+  
+    \[
+      \boldsymbol{\theta}^{(0)}
+    \]
+  
+    <p>
+      Then we repeatedly update it:
+    </p>
+  
+    \[
+      \boldsymbol{\theta}^{(m+1)}
+      =
+      \boldsymbol{\theta}^{(m)}
+      +
+      \Delta\boldsymbol{\theta}
+    \]
+  
+    <p>
+      until the parameter changes and residuals become small.
+    </p>
+  </div>
+  
+  <div class="formula-box">
+    <div class="formula-title">Gauss-Newton Method for Nonlinear Regression</div>
+  
+    <p>
+      Let:
+    </p>
+  
+    \[
+      \mathbf{r}(\boldsymbol{\theta})
+      =
+      \mathbf{y}_{obs}
+      -
+      \mathbf{y}_{calc}(\boldsymbol{\theta})
+    \]
+  
+    <p>
+      Near the current guess, approximate the nonlinear model by a first-order Taylor expansion:
+    </p>
+  
+    \[
+      \mathbf{y}_{calc}(\boldsymbol{\theta}+\Delta\boldsymbol{\theta})
+      \approx
+      \mathbf{y}_{calc}(\boldsymbol{\theta})
+      +
+      \mathbf{J}\Delta\boldsymbol{\theta}
+    \]
+  
+    <p>
+      where \(\mathbf{J}\) is the Jacobian matrix:
+    </p>
+  
+    \[
+      J_{ij}
+      =
+      \frac{\partial y_{calc,i}}{\partial \theta_j}
+    \]
+  
+    <p>
+      The Gauss-Newton normal equation is:
+    </p>
+  
+    \[
+      \boxed{
+      (\mathbf{J}^T\mathbf{J})
+      \Delta\boldsymbol{\theta}
+      =
+      \mathbf{J}^T\mathbf{r}
+      }
+    \]
+  
+    <p>
+      Then update:
+    </p>
+  
+    \[
+      \boxed{
+      \boldsymbol{\theta}_{new}
+      =
+      \boldsymbol{\theta}_{old}
+      +
+      \Delta\boldsymbol{\theta}
+      }
+    \]
+  
+    <div class="warn-box">
+      <strong>Important:</strong>
+      Gauss-Newton works best when the initial guess is reasonably close to the solution.
+      If the guess is poor, the method may diverge or produce physically impossible parameters.
+    </div>
+  </div>
+  
+  <div class="formula-box">
+    <div class="formula-title">Levenberg-Marquardt Method</div>
+  
+    <p>
+      The Levenberg-Marquardt method improves Gauss-Newton by adding damping.
+      It solves:
+    </p>
+  
+    \[
+      \boxed{
+      (\mathbf{J}^T\mathbf{J}+\lambda\mathbf{I})
+      \Delta\boldsymbol{\theta}
+      =
+      \mathbf{J}^T\mathbf{r}
+      }
+    \]
+  
+    <p>
+      where \(\lambda\) is the damping parameter.
+    </p>
+  
+    <div class="formula-grid">
+      <div class="formula-cell">
+        <div class="formula-cell-label">Small \(\lambda\)</div>
+        <p>
+          Behaves like Gauss-Newton.
+        </p>
+  
+        \[
+          \lambda\rightarrow0
+        \]
+      </div>
+  
+      <div class="formula-cell">
+        <div class="formula-cell-label">Large \(\lambda\)</div>
+        <p>
+          Behaves like gradient descent.
+        </p>
+  
+        \[
+          \lambda\rightarrow\infty
+        \]
+      </div>
+    </div>
+  
+    <div class="info-box">
+      Levenberg-Marquardt is more robust than pure Gauss-Newton and is widely used
+      in engineering software for nonlinear parameter estimation.
+    </div>
+  </div>
+  
+  <div class="formula-box">
+    <div class="formula-title">Regression Quality Metrics</div>
+  
+    <p>
+      After fitting a model, we must judge whether the fit is good.
+    </p>
+  
+    <div class="formula-grid">
+      <div class="formula-cell">
+        <div class="formula-cell-label">SSE</div>
+  
+        \[
+          SSE=\sum r_i^2
+        \]
+  
         <p class="note">
-          Used when the unknown parameters appear linearly.
+          Smaller is better.
         </p>
       </div>
-
+  
       <div class="formula-cell">
-        <div class="formula-cell-label">Nonlinear least squares</div>
-
+        <div class="formula-cell-label">RMSE</div>
+  
         \[
-          \boldsymbol{\theta}_{new}
-          =
-          \boldsymbol{\theta}_{old}
-          +
-          \Delta\boldsymbol{\theta}
+          RMSE=
+          \sqrt{
+          \frac{SSE}{n-p}
+          }
         \]
-
-        \[
-          (\mathbf{J}^T\mathbf{J})\Delta\boldsymbol{\theta}
-          =
-          \mathbf{J}^T\mathbf{r}
-        \]
-
+  
         <p class="note">
-          Used when parameters appear inside exponentials, denominators, ODE solutions, or nonlinear functions.
+          Average size of prediction error.
+        </p>
+      </div>
+  
+      <div class="formula-cell">
+        <div class="formula-cell-label">Coefficient of determination</div>
+  
+        \[
+          R^2=
+          1-
+          \frac{SSE}{SST}
+        \]
+  
+        <p class="note">
+          Measures fraction of data variation explained by the model.
+        </p>
+      </div>
+  
+      <div class="formula-cell">
+        <div class="formula-cell-label">Adjusted \(R^2\)</div>
+  
+        \[
+          R^2_{adj}
+          =
+          1-
+          \frac{SSE/(n-p)}
+               {SST/(n-1)}
+        \]
+  
+        <p class="note">
+          Penalizes unnecessary parameters.
         </p>
       </div>
     </div>
+  
+    <p>
+      Here:
+    </p>
+  
+    \[
+      SST=\sum_{i=1}^{n}(y_i-\bar{y})^2
+    \]
+  
+    \[
+      p=\text{number of fitted parameters}
+    \]
+  </div>
+  
+  <div class="formula-box">
+    <div class="formula-title">Uncertainty of Estimated Parameters</div>
+  
+    <p>
+      A professional regression result should not only report parameter values.
+      It should also report how uncertain those parameters are.
+    </p>
+  
+    <p>
+      After convergence, estimate the residual variance:
+    </p>
+  
+    \[
+      s^2=\frac{SSE}{n-p}
+    \]
+  
+    <p>
+      The covariance matrix of the parameters is approximately:
+    </p>
+  
+    \[
+      \text{Cov}(\boldsymbol{\theta})
+      =
+      s^2
+      (\mathbf{J}^T\mathbf{J})^{-1}
+    \]
+  
+    <p>
+      The standard error of parameter \(\theta_j\) is:
+    </p>
+  
+    \[
+      SE(\theta_j)
+      =
+      \sqrt{
+      \text{Cov}_{jj}
+      }
+    \]
+  
+    <p>
+      An approximate 95% confidence interval is:
+    </p>
+  
+    \[
+      \theta_j
+      \pm
+      t_{0.975,n-p}
+      SE(\theta_j)
+    \]
+  
+    <div class="info-box">
+      A parameter with a very large confidence interval may not be identifiable from the available data.
+    </div>
+  </div>
+  
+  <div class="example-card">
+    <div class="example-header">
+      <span class="example-icon">🧪</span>
+      <div class="example-title">Professional Regression Workflow</div>
+    </div>
+  
+    <div class="steps">
+      <details class="step" open>
+        <summary>
+          <span class="step-num">1</span>
+          <span class="step-label">Choose a physically meaningful model</span>
+        </summary>
+        <div class="step-body">
+          <p>
+            Do not fit a random polynomial just because it matches the data.
+            In engineering, the model should come from physics, chemistry, or transport phenomena.
+          </p>
+  
+          <div class="eq-row">
+            Good: \(k=Ae^{-E/(RT)}\), because it comes from Arrhenius kinetics.
+          </div>
+  
+          <div class="eq-row">
+            Risky: \(k=a_0+a_1T+a_2T^2+a_3T^3\), unless there is a reason to use it.
+          </div>
+        </div>
+      </details>
+  
+      <details class="step">
+        <summary>
+          <span class="step-num">2</span>
+          <span class="step-label">Inspect the data before fitting</span>
+        </summary>
+        <div class="step-body">
+          <p>
+            Always plot the data first.
+            Look for outliers, curvature, measurement errors, and physically impossible values.
+          </p>
+  
+          \[
+            \text{Plot: } y_i \text{ vs } x_i
+          \]
+  
+          \[
+            \text{Plot: transformed variables if linearization is used}
+          \]
+        </div>
+      </details>
+  
+      <details class="step">
+        <summary>
+          <span class="step-num">3</span>
+          <span class="step-label">Fit the parameters</span>
+        </summary>
+        <div class="step-body">
+          <p>
+            Use direct least squares for linear-in-parameter models.
+            Use iterative nonlinear regression for nonlinear models.
+          </p>
+  
+          \[
+            \text{Linear: }
+            \boldsymbol{\beta}
+            =
+            (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}
+          \]
+  
+          \[
+            \text{Nonlinear: }
+            (\mathbf{J}^T\mathbf{J})
+            \Delta\boldsymbol{\theta}
+            =
+            \mathbf{J}^T\mathbf{r}
+          \]
+        </div>
+      </details>
+  
+      <details class="step">
+        <summary>
+          <span class="step-num">4</span>
+          <span class="step-label">Check residuals</span>
+        </summary>
+        <div class="step-body">
+          <p>
+            Residuals should look random. If residuals show a pattern, the model may be wrong.
+          </p>
+  
+          <div class="eq-row">
+            Good residual pattern: random scatter around zero.
+          </div>
+  
+          <div class="eq-row">
+            Bad residual pattern: all positive at low \(x\), all negative at high \(x\).
+          </div>
+  
+          <p>
+            A residual trend means the model is systematically biased.
+          </p>
+        </div>
+      </details>
+  
+      <details class="step">
+        <summary>
+          <span class="step-num">5</span>
+          <span class="step-label">Report the final model professionally</span>
+        </summary>
+        <div class="step-body">
+          <p>
+            A complete regression result should include:
+          </p>
+  
+          <div class="tbl-wrap">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>What to Report</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Model</td><td>Final fitted equation</td></tr>
+                <tr><td>Parameters</td><td>Estimated values</td></tr>
+                <tr><td>Error</td><td>SSE, RMSE, or residual table</td></tr>
+                <tr><td>Goodness of fit</td><td>\(R^2\) or adjusted \(R^2\)</td></tr>
+                <tr><td>Uncertainty</td><td>Standard errors or confidence intervals</td></tr>
+                <tr><td>Diagnostics</td><td>Residual plots and physical interpretation</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+  
+  <div class="warn-box">
+    <strong>Advanced warning:</strong>
+    A high \(R^2\) does not automatically mean the model is physically correct.
+    A model can fit data well but still extrapolate poorly or violate conservation laws.
+    Always combine regression with engineering judgment.
   </div>
 
   <!-- EXAMPLE 1 -->
@@ -10031,6 +12785,4134 @@ title(<span class="str">'Gauss-Newton Convergence'</span>);</code></pre>
   
     </div>
   </details>
+
+  <!-- P11 -->
+<details class="prob">
+  <summary><span class="prob-num">P11</span>&ensp;<strong>Coupled RK4 System</strong> — Non-Isothermal CSTR Startup</summary>
+
+  <div class="prob-body">
+    <p>
+      An exothermic first-order reaction \(A \rightarrow B\) takes place in a continuously stirred tank reactor.
+      The concentration and temperature change together during startup:
+    </p>
+
+    \[
+      \frac{dC_A}{dt}
+      =
+      \frac{C_{Af}-C_A}{\tau}
+      -
+      k(T)C_A
+    \]
+
+    \[
+      \frac{dT}{dt}
+      =
+      \frac{T_f-T}{\tau}
+      +
+      18k(T)C_A
+      -
+      0.4(T-T_c)
+    \]
+
+    \[
+      k(T)=0.6e^{0.03(T-300)}
+    \]
+
+    <p>
+      Given
+      \(C_{Af}=2.0\;mol/L\), \(\tau=3\;min\), \(T_f=300\;K\),
+      \(T_c=290\;K\), \(C_A(0)=1.2\;mol/L\), and \(T(0)=295\;K\),
+      use <strong>RK4 for a coupled system</strong> with \(h=0.25\;min\)
+      to estimate \(C_A(1.0)\) and \(T(1.0)\).
+    </p>
+
+    <details class="ans">
+      <summary>▶ Reveal Detailed Answer</summary>
+
+      <div class="ans-body">
+
+        <h4>Given</h4>
+
+        \[
+        C_{Af}=2.0,\qquad \tau=3,\qquad T_f=300,\qquad T_c=290
+        \]
+
+        \[
+        C_A(0)=1.2,\qquad T(0)=295,\qquad h=0.25
+        \]
+
+        <p>Define the state vector:</p>
+
+        \[
+        \mathbf{U}
+        =
+        \begin{bmatrix}
+        C_A\\
+        T
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{U}'
+        =
+        \mathbf{f}(t,\mathbf{U})
+        =
+        \begin{bmatrix}
+        \dfrac{2-C_A}{3}-k(T)C_A\\[8pt]
+        \dfrac{300-T}{3}+18k(T)C_A-0.4(T-290)
+        \end{bmatrix}
+        \]
+
+        \[
+        k(T)=0.6e^{0.03(T-300)}
+        \]
+
+        <h4>Vector RK4 Formula</h4>
+
+        \[
+        \mathbf{k}_1=\mathbf{f}(t_n,\mathbf{U}_n)
+        \]
+
+        \[
+        \mathbf{k}_2=\mathbf{f}\left(t_n+\frac h2,\mathbf{U}_n+\frac h2\mathbf{k}_1\right)
+        \]
+
+        \[
+        \mathbf{k}_3=\mathbf{f}\left(t_n+\frac h2,\mathbf{U}_n+\frac h2\mathbf{k}_2\right)
+        \]
+
+        \[
+        \mathbf{k}_4=\mathbf{f}\left(t_n+h,\mathbf{U}_n+h\mathbf{k}_3\right)
+        \]
+
+        \[
+        \mathbf{U}_{n+1}
+        =
+        \mathbf{U}_n
+        +
+        \frac h6
+        \left(
+        \mathbf{k}_1+2\mathbf{k}_2+2\mathbf{k}_3+\mathbf{k}_4
+        \right)
+        \]
+
+        <h4>Step 1: \(t=0 \rightarrow 0.25\)</h4>
+
+        \[
+        \mathbf{U}_0=
+        \begin{bmatrix}
+        1.2000\\
+        295.0000
+        \end{bmatrix}
+        \]
+
+        <p>First compute the temperature-dependent rate constant:</p>
+
+        \[
+        k(295)=0.6e^{0.03(295-300)}
+        =
+        0.5164
+        \]
+
+        \[
+        \mathbf{k}_1
+        =
+        \begin{bmatrix}
+        -0.353043\\
+        10.821442
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{U}_0+\frac{h}{2}\mathbf{k}_1
+        =
+        \begin{bmatrix}
+        1.155870\\
+        296.352680
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{k}_2
+        =
+        \begin{bmatrix}
+        -0.340264\\
+        9.864242
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{U}_0+\frac{h}{2}\mathbf{k}_2
+        =
+        \begin{bmatrix}
+        1.157467\\
+        296.233030
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{k}_3
+        =
+        \begin{bmatrix}
+        -0.339425\\
+        9.927301
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{U}_0+h\mathbf{k}_3
+        =
+        \begin{bmatrix}
+        1.115144\\
+        297.481825
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{k}_4
+        =
+        \begin{bmatrix}
+        -0.325450\\
+        9.013897
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{U}_1
+        =
+        \mathbf{U}_0
+        +
+        \frac{0.25}{6}
+        \left[
+        \mathbf{k}_1+2\mathbf{k}_2+2\mathbf{k}_3+\mathbf{k}_4
+        \right]
+        \]
+
+        \[
+        \mathbf{U}_1
+        =
+        \begin{bmatrix}
+        1.115089\\
+        297.475768
+        \end{bmatrix}
+        \]
+
+        <h4>Step 2: \(t=0.25 \rightarrow 0.50\)</h4>
+
+        \[
+        \mathbf{U}_1=
+        \begin{bmatrix}
+        1.115089\\
+        297.475768
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{k}_1=
+        \begin{bmatrix}
+        -0.325288\\
+        9.015760
+        \end{bmatrix},
+        \qquad
+        \mathbf{k}_2=
+        \begin{bmatrix}
+        -0.309668\\
+        8.152124
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{k}_3=
+        \begin{bmatrix}
+        -0.309440\\
+        8.215466
+        \end{bmatrix},
+        \qquad
+        \mathbf{k}_4=
+        \begin{bmatrix}
+        -0.293156\\
+        7.395366
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{U}_2
+        =
+        \begin{bmatrix}
+        1.037728\\
+        299.523530
+        \end{bmatrix}
+        \]
+
+        <h4>Step 3: \(t=0.50 \rightarrow 0.75\)</h4>
+
+        \[
+        \mathbf{U}_2=
+        \begin{bmatrix}
+        1.037728\\
+        299.523530
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{k}_1=
+        \begin{bmatrix}
+        -0.293043\\
+        7.397810
+        \end{bmatrix},
+        \qquad
+        \mathbf{k}_2=
+        \begin{bmatrix}
+        -0.275823\\
+        6.629508
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{k}_3=
+        \begin{bmatrix}
+        -0.276094\\
+        6.691902
+        \end{bmatrix},
+        \qquad
+        \mathbf{k}_4=
+        \begin{bmatrix}
+        -0.258699\\
+        5.966925
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{U}_3
+        =
+        \begin{bmatrix}
+        0.968745\\
+        301.190512
+        \end{bmatrix}
+        \]
+
+        <h4>Step 4: \(t=0.75 \rightarrow 1.00\)</h4>
+
+        \[
+        \mathbf{U}_3=
+        \begin{bmatrix}
+        0.968745\\
+        301.190512
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{k}_1=
+        \begin{bmatrix}
+        -0.258630\\
+        5.969832
+        \end{bmatrix},
+        \qquad
+        \mathbf{k}_2=
+        \begin{bmatrix}
+        -0.240934\\
+        5.298034
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{k}_3=
+        \begin{bmatrix}
+        -0.241576\\
+        5.357903
+        \end{bmatrix},
+        \qquad
+        \mathbf{k}_4=
+        \begin{bmatrix}
+        -0.224104\\
+        4.728447
+        \end{bmatrix}
+        \]
+
+        \[
+        \mathbf{U}_4
+        =
+        \begin{bmatrix}
+        0.908422\\
+        302.524268
+        \end{bmatrix}
+        \]
+
+        <h4>Final Answer</h4>
+
+        \[
+        \boxed{
+        C_A(1.0)=0.9084\;mol/L
+        }
+        \]
+
+        \[
+        \boxed{
+        T(1.0)=302.5243\;K
+        }
+        \]
+
+        <p>
+          The concentration decreases because reactant \(A\) is consumed, while the reactor temperature rises because the exothermic heat-release term initially dominates the cooling term.
+        </p>
+
+      </div>
+    </details>
+
+    <details class="ans">
+      <summary>▶ MATLAB Code</summary>
+
+      <div class="ans-body">
+        <h4 class="subsub">MATLAB Code — P11 Coupled RK4 Non-Isothermal CSTR</h4>
+
+        <div class="formula-box matlab-panel">
+          <div class="formula-title">Non-Isothermal CSTR Startup — Coupled RK4</div>
+
+          <pre class="matlab-code"><code><span class="com">%% P11 — Coupled RK4 System: Non-Isothermal CSTR Startup</span>
+
+<span class="kw">clc</span>;
+<span class="kw">clear</span>;
+<span class="kw">close</span> <span class="kw">all</span>;
+
+<span class="com">% Problem data</span>
+CAf = <span class="num">2.0</span>;      <span class="com">% mol/L</span>
+tau = <span class="num">3.0</span>;      <span class="com">% min</span>
+Tf  = <span class="num">300</span>;      <span class="com">% K</span>
+Tc  = <span class="num">290</span>;      <span class="com">% K</span>
+
+h  = <span class="num">0.25</span>;
+t0 = <span class="num">0</span>;
+tf = <span class="num">1.0</span>;
+
+CA0 = <span class="num">1.2</span>;
+T0  = <span class="num">295</span>;
+
+t = t0:h:tf;
+N = length(t);
+
+U = zeros(<span class="num">2</span>,N);
+U(:,<span class="num">1</span>) = [CA0; T0];
+
+<span class="com">% U(1) = CA, U(2) = T</span>
+rate_constant = @(T) <span class="num">0.6</span>*exp(<span class="num">0.03</span>*(T - <span class="num">300</span>));
+
+f = @(t,U) [ ...
+    (CAf - U(<span class="num">1</span>))/tau - rate_constant(U(<span class="num">2</span>))*U(<span class="num">1</span>); ...
+    (Tf - U(<span class="num">2</span>))/tau + <span class="num">18</span>*rate_constant(U(<span class="num">2</span>))*U(<span class="num">1</span>) - <span class="num">0.4</span>*(U(<span class="num">2</span>) - Tc) ...
+    ];
+
+k1_store = zeros(<span class="num">2</span>,N-<span class="num">1</span>);
+k2_store = zeros(<span class="num">2</span>,N-<span class="num">1</span>);
+k3_store = zeros(<span class="num">2</span>,N-<span class="num">1</span>);
+k4_store = zeros(<span class="num">2</span>,N-<span class="num">1</span>);
+
+<span class="kw">for</span> n = <span class="num">1</span>:N-<span class="num">1</span>
+
+    k1 = f(t(n), U(:,n));
+
+    k2 = f(t(n) + h/<span class="num">2</span>, U(:,n) + (h/<span class="num">2</span>)*k1);
+
+    k3 = f(t(n) + h/<span class="num">2</span>, U(:,n) + (h/<span class="num">2</span>)*k2);
+
+    k4 = f(t(n) + h, U(:,n) + h*k3);
+
+    U(:,n+<span class="num">1</span>) = U(:,n) + (h/<span class="num">6</span>)*(k1 + <span class="num">2</span>*k2 + <span class="num">2</span>*k3 + k4);
+
+    k1_store(:,n) = k1;
+    k2_store(:,n) = k2;
+    k3_store(:,n) = k3;
+    k4_store(:,n) = k4;
+
+<span class="kw">end</span>
+
+CA = U(<span class="num">1</span>,:)';
+Temp = U(<span class="num">2</span>,:)';
+
+Results = table(t', CA, Temp, ...
+    <span class="str">'VariableNames'</span>, {<span class="str">'Time_min'</span>, <span class="str">'CA_mol_L'</span>, <span class="str">'Temperature_K'</span>});
+
+disp(Results)
+
+fprintf(<span class="str">'CA(1.0) = %.6f mol/L\n'</span>, CA(end));
+fprintf(<span class="str">'T(1.0)  = %.6f K\n'</span>, Temp(end));
+
+figure;
+plot(t,CA,<span class="str">'-o'</span>,<span class="str">'LineWidth'</span>,<span class="num">2</span>);
+grid on;
+xlabel(<span class="str">'Time (min)'</span>);
+ylabel(<span class="str">'C_A (mol/L)'</span>);
+title(<span class="str">'Non-Isothermal CSTR Concentration Profile'</span>);
+
+figure;
+plot(t,Temp,<span class="str">'-s'</span>,<span class="str">'LineWidth'</span>,<span class="num">2</span>);
+grid on;
+xlabel(<span class="str">'Time (min)'</span>);
+ylabel(<span class="str">'Temperature (K)'</span>);
+title(<span class="str">'Non-Isothermal CSTR Temperature Profile'</span>);</code></pre>
+        </div>
+      </div>
+    </details>
+  </div>
+</details>
+
+<!-- P12 -->
+<details class="prob">
+  <summary><span class="prob-num">P12</span>&ensp;<strong>2D FDM + Gauss-Seidel</strong> — Reactor Wall with Heat Generation</summary>
+
+  <div class="prob-body">
+    <p>
+      A square reactor wall section has steady two-dimensional conduction with uniform internal heat generation.
+      The governing equation is
+    </p>
+
+    \[
+      \frac{\partial^2T}{\partial x^2}
+      +
+      \frac{\partial^2T}{\partial y^2}
+      +
+      \frac{\dot q}{k}
+      =
+      0
+    \]
+
+    <p>
+      Use a uniform grid with \(\Delta x=\Delta y=0.1\;m\).
+      There are \(3\times3\) interior nodes. The boundary temperatures are:
+    </p>
+
+    \[
+      T_L=120^\circ C,\qquad T_R=60^\circ C,\qquad
+      T_B=80^\circ C,\qquad T_T=100^\circ C
+    \]
+
+    <p>
+      The heat generation term gives
+      \(\left(\dot q/k\right)h^2=4^\circ C\).
+      Starting with all interior nodes equal to \(90^\circ C\), perform
+      <strong>Gauss-Seidel iteration</strong> until the nodal values are essentially converged.
+    </p>
+    <!-- P12 Diagram -->
+<div class="grid-diagram" style="display:flex;justify-content:center;margin:1rem 0;">
+  <svg viewBox="0 0 430 360" width="430" height="360" xmlns="http://www.w3.org/2000/svg" style="font-family:monospace">
+    <!-- grid -->
+    <g stroke="#334155" stroke-width="1.5">
+      <line x1="70" y1="50" x2="370" y2="50"/>
+      <line x1="70" y1="125" x2="370" y2="125"/>
+      <line x1="70" y1="200" x2="370" y2="200"/>
+      <line x1="70" y1="275" x2="370" y2="275"/>
+      <line x1="70" y1="325" x2="370" y2="325"/>
+
+      <line x1="70" y1="50" x2="70" y2="325"/>
+      <line x1="145" y1="50" x2="145" y2="325"/>
+      <line x1="220" y1="50" x2="220" y2="325"/>
+      <line x1="295" y1="50" x2="295" y2="325"/>
+      <line x1="370" y1="50" x2="370" y2="325"/>
+    </g>
+
+    <!-- boundary labels -->
+    <text x="220" y="30" text-anchor="middle" fill="#f59e0b" font-size="13">Top: 100°C</text>
+    <text x="220" y="350" text-anchor="middle" fill="#38bdf8" font-size="13">Bottom: 80°C</text>
+    <text x="35" y="190" text-anchor="middle" fill="#22c55e" font-size="13" transform="rotate(-90 35 190)">Left: 120°C</text>
+    <text x="405" y="190" text-anchor="middle" fill="#fb7185" font-size="13" transform="rotate(90 405 190)">Right: 60°C</text>
+
+    <!-- interior nodes -->
+    <g fill="#0f172a" stroke="#14b8a6" stroke-width="2">
+      <circle cx="145" cy="275" r="18"/>
+      <circle cx="220" cy="275" r="18"/>
+      <circle cx="295" cy="275" r="18"/>
+
+      <circle cx="145" cy="200" r="18"/>
+      <circle cx="220" cy="200" r="18"/>
+      <circle cx="295" cy="200" r="18"/>
+
+      <circle cx="145" cy="125" r="18"/>
+      <circle cx="220" cy="125" r="18"/>
+      <circle cx="295" cy="125" r="18"/>
+    </g>
+
+    <!-- node labels -->
+    <g fill="#ccfbf1" font-size="13" font-weight="bold" text-anchor="middle">
+      <text x="145" y="280">T₁₁</text>
+      <text x="220" y="280">T₂₁</text>
+      <text x="295" y="280">T₃₁</text>
+
+      <text x="145" y="205">T₁₂</text>
+      <text x="220" y="205">T₂₂</text>
+      <text x="295" y="205">T₃₂</text>
+
+      <text x="145" y="130">T₁₃</text>
+      <text x="220" y="130">T₂₃</text>
+      <text x="295" y="130">T₃₃</text>
+    </g>
+
+    <!-- equation notes -->
+    <text x="220" y="188" text-anchor="middle" fill="#94a3b8" font-size="12">∇²T + q̇/k = 0</text>
+    <text x="220" y="315" text-anchor="middle" fill="#94a3b8" font-size="11">h = 0.1 m, 9 interior nodes, (q̇/k)h² = 4°C</text>
+  </svg>
+</div>
+    <details class="ans">
+      <summary>▶ Reveal Detailed Answer</summary>
+
+      <div class="ans-body">
+
+        <h4>Given</h4>
+
+        \[
+        \Delta x=\Delta y=h=0.1
+        \]
+
+        \[
+        T_L=120,\qquad T_R=60,\qquad T_B=80,\qquad T_T=100
+        \]
+
+        \[
+        \left(\frac{\dot q}{k}\right)h^2=4
+        \]
+
+        <p>For a square grid with equal spacing:</p>
+
+        \[
+        \frac{T_E-2T_P+T_W}{h^2}
+        +
+        \frac{T_N-2T_P+T_S}{h^2}
+        +
+        \frac{\dot q}{k}
+        =
+        0
+        \]
+
+        <p>Multiply by \(h^2\):</p>
+
+        \[
+        T_E+T_W+T_N+T_S-4T_P+
+        \left(\frac{\dot q}{k}\right)h^2
+        =
+        0
+        \]
+
+        \[
+        T_P
+        =
+        \frac{T_E+T_W+T_N+T_S+4}{4}
+        \]
+
+        <h4>Node Numbering</h4>
+
+        <p>Let \(T_{ij}\) denote the interior node at column \(i\) and row \(j\), where \(i=1,2,3\) from left to right and \(j=1,2,3\) from bottom to top.</p>
+
+        \[
+        \begin{matrix}
+        T_{13} & T_{23} & T_{33}\\
+        T_{12} & T_{22} & T_{32}\\
+        T_{11} & T_{21} & T_{31}
+        \end{matrix}
+        \]
+
+        <h4>Finite-Difference Equations</h4>
+
+        \[
+        T_{11}=\frac{120+T_{21}+80+T_{12}+4}{4}
+        \]
+
+        \[
+        T_{21}=\frac{T_{11}+T_{31}+80+T_{22}+4}{4}
+        \]
+
+        \[
+        T_{31}=\frac{T_{21}+60+80+T_{32}+4}{4}
+        \]
+
+        \[
+        T_{12}=\frac{120+T_{22}+T_{11}+T_{13}+4}{4}
+        \]
+
+        \[
+        T_{22}=\frac{T_{12}+T_{32}+T_{21}+T_{23}+4}{4}
+        \]
+
+        \[
+        T_{32}=\frac{T_{22}+60+T_{31}+T_{33}+4}{4}
+        \]
+
+        \[
+        T_{13}=\frac{120+T_{23}+T_{12}+100+4}{4}
+        \]
+
+        \[
+        T_{23}=\frac{T_{13}+T_{33}+T_{22}+100+4}{4}
+        \]
+
+        \[
+        T_{33}=\frac{T_{23}+60+T_{32}+100+4}{4}
+        \]
+
+        <h4>Initial Guess</h4>
+
+        \[
+        T_{ij}^{(0)}=90^\circ C
+        \qquad
+        \text{for all interior nodes}
+        \]
+
+        <h4>Iteration 1</h4>
+
+        <p>Using Gauss-Seidel, each new value is used immediately in the next calculation.</p>
+
+        \[
+        T_{11}^{(1)}
+        =
+        \frac{120+90+80+90+4}{4}
+        =
+        96.0000
+        \]
+
+        \[
+        T_{21}^{(1)}
+        =
+        \frac{96.0000+90+80+90+4}{4}
+        =
+        90.0000
+        \]
+
+        \[
+        T_{31}^{(1)}
+        =
+        \frac{90.0000+60+80+90+4}{4}
+        =
+        81.0000
+        \]
+
+        \[
+        T_{12}^{(1)}
+        =
+        \frac{120+90+96.0000+90+4}{4}
+        =
+        100.0000
+        \]
+
+        \[
+        T_{22}^{(1)}
+        =
+        \frac{100.0000+90+90.0000+90+4}{4}
+        =
+        93.5000
+        \]
+
+        \[
+        T_{32}^{(1)}
+        =
+        \frac{93.5000+60+81.0000+90+4}{4}
+        =
+        82.1250
+        \]
+
+        \[
+        T_{13}^{(1)}
+        =
+        \frac{120+90+100.0000+100+4}{4}
+        =
+        103.5000
+        \]
+
+        \[
+        T_{23}^{(1)}
+        =
+        \frac{103.5000+90+93.5000+100+4}{4}
+        =
+        97.7500
+        \]
+
+        \[
+        T_{33}^{(1)}
+        =
+        \frac{97.7500+60+82.1250+100+4}{4}
+        =
+        85.9688
+        \]
+
+        <h4>Gauss-Seidel Iteration Table</h4>
+
+        <p>Each matrix is shown from top row to bottom row.</p>
+
+        \[
+        \text{Iteration 1:}
+        \quad
+        \begin{bmatrix}
+        103.5000 & 97.7500 & 85.9688\\
+        100.0000 & 93.5000 & 82.1250\\
+        96.0000 & 90.0000 & 81.0000
+        \end{bmatrix}
+        \]
+
+        \[
+        \text{Iteration 2:}
+        \quad
+        \begin{bmatrix}
+        106.6562 & 97.7812 & 85.6523\\
+        104.8750 & 94.5000 & 80.8281\\
+        98.5000 & 89.2500 & 78.8438
+        \end{bmatrix}
+        \]
+
+        \[
+        \text{Iteration 3:}
+        \quad
+        \begin{bmatrix}
+        106.9883 & 97.7852 & 85.6128\\
+        106.1719 & 94.5000 & 80.6660\\
+        99.5312 & 89.2188 & 78.5117
+        \end{bmatrix}
+        \]
+
+        \[
+        \text{Iteration 4:}
+        \quad
+        \begin{bmatrix}
+        107.0298 & 97.7856 & 85.6078\\
+        106.3340 & 94.5000 & 80.6458\\
+        99.8477 & 89.2148 & 78.4702
+        \end{bmatrix}
+        \]
+
+        \[
+        \text{Iteration 5:}
+        \quad
+        \begin{bmatrix}
+        107.0350 & 97.7857 & 85.6072\\
+        106.3542 & 94.5000 & 80.6432\\
+        99.8872 & 89.2144 & 78.4650
+        \end{bmatrix}
+        \]
+
+        <h4>Converged Temperature Field</h4>
+
+        \[
+        \begin{bmatrix}
+        T_{13} & T_{23} & T_{33}\\
+        T_{12} & T_{22} & T_{32}\\
+        T_{11} & T_{21} & T_{31}
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+        107.0357 & 97.7857 & 85.6071\\
+        106.3571 & 94.5000 & 80.6429\\
+        99.8929 & 89.2143 & 78.4643
+        \end{bmatrix}
+        \]
+
+        <h4>Final Answer</h4>
+
+        \[
+        \boxed{
+        T_{11}=99.8929,\quad T_{21}=89.2143,\quad T_{31}=78.4643
+        }
+        \]
+
+        \[
+        \boxed{
+        T_{12}=106.3571,\quad T_{22}=94.5000,\quad T_{32}=80.6429
+        }
+        \]
+
+        \[
+        \boxed{
+        T_{13}=107.0357,\quad T_{23}=97.7857,\quad T_{33}=85.6071
+        }
+        \]
+
+        <p>
+          The highest interior temperature occurs near the left and upper boundaries because those boundaries are hotter,
+          and the internal heat generation adds heat throughout the wall.
+        </p>
+
+      </div>
+    </details>
+
+    <details class="ans">
+      <summary>▶ MATLAB Code</summary>
+
+      <div class="ans-body">
+        <h4 class="subsub">MATLAB Code — P12 2D FDM with Gauss-Seidel</h4>
+
+        <div class="formula-box matlab-panel">
+          <div class="formula-title">2D Reactor Wall Heat Generation — FDM + Gauss-Seidel</div>
+
+          <pre class="matlab-code"><code><span class="com">%% P12 — 2D FDM + Gauss-Seidel: Reactor Wall with Heat Generation</span>
+
+<span class="kw">clc</span>;
+<span class="kw">clear</span>;
+<span class="kw">close</span> <span class="kw">all</span>;
+
+<span class="com">% Boundary temperatures, deg C</span>
+TL = <span class="num">120</span>;
+TR = <span class="num">60</span>;
+TB = <span class="num">80</span>;
+TT = <span class="num">100</span>;
+
+<span class="com">% Heat generation term: (qdot/k)*h^2</span>
+Q = <span class="num">4</span>;
+
+<span class="com">% Number of interior nodes in x and y directions</span>
+Nx = <span class="num">3</span>;
+Ny = <span class="num">3</span>;
+
+<span class="com">% Initial guess</span>
+T = <span class="num">90</span>*ones(Ny,Nx);
+
+tol = <span class="num">1e-6</span>;
+maxIter = <span class="num">100</span>;
+
+Error = zeros(maxIter,<span class="num">1</span>);
+
+<span class="kw">for</span> iter = <span class="num">1</span>:maxIter
+
+    Told = T;
+
+    <span class="kw">for</span> j = <span class="num">1</span>:Ny
+        <span class="kw">for</span> i = <span class="num">1</span>:Nx
+
+            <span class="com">% West neighbor</span>
+            <span class="kw">if</span> i == <span class="num">1</span>
+                TW = TL;
+            <span class="kw">else</span>
+                TW = T(j,i-<span class="num">1</span>);
+            <span class="kw">end</span>
+
+            <span class="com">% East neighbor</span>
+            <span class="kw">if</span> i == Nx
+                TE = TR;
+            <span class="kw">else</span>
+                TE = T(j,i+<span class="num">1</span>);
+            <span class="kw">end</span>
+
+            <span class="com">% South neighbor</span>
+            <span class="kw">if</span> j == <span class="num">1</span>
+                TS = TB;
+            <span class="kw">else</span>
+                TS = T(j-<span class="num">1</span>,i);
+            <span class="kw">end</span>
+
+            <span class="com">% North neighbor</span>
+            <span class="kw">if</span> j == Ny
+                TN = TT;
+            <span class="kw">else</span>
+                TN = T(j+<span class="num">1</span>,i);
+            <span class="kw">end</span>
+
+            <span class="com">% Gauss-Seidel update</span>
+            T(j,i) = (TW + TE + TS + TN + Q)/<span class="num">4</span>;
+
+        <span class="kw">end</span>
+    <span class="kw">end</span>
+
+    Error(iter) = max(max(abs(T - Told)));
+
+    <span class="kw">if</span> Error(iter) &lt; tol
+        Error = Error(<span class="num">1</span>:iter);
+        <span class="kw">break</span>;
+    <span class="kw">end</span>
+
+<span class="kw">end</span>
+
+<span class="com">% Display matrix from top row to bottom row</span>
+T_display = flipud(T);
+
+disp(<span class="str">'Converged interior temperature matrix, top row to bottom row:'</span>)
+disp(T_display)
+
+fprintf(<span class="str">'Number of iterations = %d\n'</span>, iter);
+fprintf(<span class="str">'Maximum final error = %.6e\n'</span>, Error(end));
+
+<span class="com">% Build coordinate grid for plotting</span>
+x = <span class="num">1</span>:Nx;
+y = <span class="num">1</span>:Ny;
+
+figure;
+surf(x,y,T);
+grid on;
+xlabel(<span class="str">'Interior x-index'</span>);
+ylabel(<span class="str">'Interior y-index'</span>);
+zlabel(<span class="str">'Temperature (deg C)'</span>);
+title(<span class="str">'2D FDM Temperature Field with Heat Generation'</span>);
+
+figure;
+contourf(x,y,T,<span class="num">20</span>);
+colorbar;
+xlabel(<span class="str">'Interior x-index'</span>);
+ylabel(<span class="str">'Interior y-index'</span>);
+title(<span class="str">'2D Reactor Wall Temperature Contours'</span>);</code></pre>
+        </div>
+      </div>
+    </details>
+  </div>
+</details>
+
+
+
+<!-- P13 -->
+<details class="prob">
+  <summary><span class="prob-num">P13</span>&ensp;<strong>2D FDM + Gauss-Jordan</strong> — Advanced Anisotropic Catalytic Reactor Wall</summary>
+
+  <div class="prob-body">
+    <p>
+      A thin catalytic reactor wall has anisotropic conduction, internal heat generation, and distributed coolant heat removal. The steady-state temperature field is governed by
+    </p>
+
+    \[
+      k_x\frac{\partial^2 T}{\partial x^2}
+      +k_y\frac{\partial^2 T}{\partial y^2}
+      -U_v(T-T_c)+q'''=0
+    \]
+
+    <p>where</p>
+
+    \[
+      k_x=12\;\frac{W}{m\cdot K},\qquad
+      k_y=4\;\frac{W}{m\cdot K},\qquad
+      U_v=60\;\frac{W}{m^3\cdot K}
+    \]
+
+    \[
+      T_c=300\;K,
+      \qquad
+      q'''=12000\;\frac{W}{m^3}
+    \]
+
+    <p>The square wall has dimensions</p>
+
+    \[
+      0\le x\le 0.30\;m,
+      \qquad
+      0\le y\le 0.30\;m
+    \]
+
+    <p>with boundary temperatures</p>
+
+    \[
+      T(0,y)=380\;K,
+      \qquad
+      T(0.30,y)=320\;K
+    \]
+
+    \[
+      T(x,0)=350\;K,
+      \qquad
+      T(x,0.30)=300\;K
+    \]
+
+    <p>
+      Use a uniform grid with \(\Delta x=\Delta y=0.075\;m\), giving <strong>nine interior unknown temperatures</strong>. Set up the complete 2D FDM system and solve it using <strong>Gauss-Jordan elimination</strong>.
+    </p>
+    
+    <!-- P13 Diagram -->
+<div class="grid-diagram" style="display:flex;justify-content:center;margin:1rem 0;">
+  <svg viewBox="0 0 430 360" width="430" height="360" xmlns="http://www.w3.org/2000/svg" style="font-family:monospace">
+    <!-- grid -->
+    <g stroke="#334155" stroke-width="1.5">
+      <line x1="70" y1="50" x2="370" y2="50"/>
+      <line x1="70" y1="125" x2="370" y2="125"/>
+      <line x1="70" y1="200" x2="370" y2="200"/>
+      <line x1="70" y1="275" x2="370" y2="275"/>
+      <line x1="70" y1="325" x2="370" y2="325"/>
+
+      <line x1="70" y1="50" x2="70" y2="325"/>
+      <line x1="145" y1="50" x2="145" y2="325"/>
+      <line x1="220" y1="50" x2="220" y2="325"/>
+      <line x1="295" y1="50" x2="295" y2="325"/>
+      <line x1="370" y1="50" x2="370" y2="325"/>
+    </g>
+
+    <!-- boundary labels -->
+    <text x="220" y="30" text-anchor="middle" fill="#f59e0b" font-size="13">Top: 300 K</text>
+    <text x="220" y="350" text-anchor="middle" fill="#38bdf8" font-size="13">Bottom: 350 K</text>
+    <text x="35" y="190" text-anchor="middle" fill="#22c55e" font-size="13" transform="rotate(-90 35 190)">Left: 380 K</text>
+    <text x="405" y="190" text-anchor="middle" fill="#fb7185" font-size="13" transform="rotate(90 405 190)">Right: 320 K</text>
+
+    <!-- interior nodes -->
+    <g fill="#0f172a" stroke="#14b8a6" stroke-width="2">
+      <circle cx="145" cy="275" r="18"/>
+      <circle cx="220" cy="275" r="18"/>
+      <circle cx="295" cy="275" r="18"/>
+
+      <circle cx="145" cy="200" r="18"/>
+      <circle cx="220" cy="200" r="18"/>
+      <circle cx="295" cy="200" r="18"/>
+
+      <circle cx="145" cy="125" r="18"/> 
+      <circle cx="220" cy="125" r="18"/>
+      <circle cx="295" cy="125" r="18"/>
+    </g>
+
+    <!-- node labels -->
+    <g fill="#ccfbf1" font-size="13" font-weight="bold" text-anchor="middle">
+      <text x="145" y="280">T₁₁</text>
+      <text x="220" y="280">T₂₁</text>
+      <text x="295" y="280">T₃₁</text>
+
+      <text x="145" y="205">T₁₂</text>
+      <text x="220" y="205">T₂₂</text>
+      <text x="295" y="205">T₃₂</text>
+
+      <text x="145" y="130">T₁₃</text>
+      <text x="220" y="130">T₂₃</text>
+      <text x="295" y="130">T₃₃</text>
+    </g>
+
+    <!-- equation notes -->
+    <text x="220" y="188" text-anchor="middle" fill="#94a3b8" font-size="12">kₓTₓₓ + kᵧTᵧᵧ − Uᵥ(T−Tᶜ) + q''' = 0</text>
+    <text x="220" y="315" text-anchor="middle" fill="#94a3b8" font-size="11">h = 0.075 m, 9 interior nodes, kₓ/kᵧ = 3</text>
+  </svg>
+</div>
+    <details class="ans">
+      <summary>▶ Reveal Detailed Answer</summary>
+
+      <div class="ans-body">
+        <h4>Step 1: Physical Model</h4>
+
+        \[
+          k_x\frac{\partial^2T}{\partial x^2}
+          +k_y\frac{\partial^2T}{\partial y^2}
+          -U_v(T-T_c)+q'''=0
+        \]
+
+        <p>The central-difference approximations are</p>
+
+        \[
+        \frac{\partial^2T}{\partial x^2}
+        \approx
+        \frac{T_E-2T_P+T_W}{\Delta x^2}
+        \]
+
+        \[
+        \frac{\partial^2T}{\partial y^2}
+        \approx
+        \frac{T_N-2T_P+T_S}{\Delta y^2}
+        \]
+
+        <p>Substitute into the PDE:</p>
+
+        \[
+        k_x\frac{T_E-2T_P+T_W}{\Delta x^2}
+        +k_y\frac{T_N-2T_P+T_S}{\Delta y^2}
+        -U_v(T_P-T_c)+q'''=0
+        \]
+
+        <h4>Step 2: Define FDM Coefficients</h4>
+
+        \[
+          \Delta x=\Delta y=0.075
+        \]
+
+        \[
+          \Delta x^2=\Delta y^2=0.005625
+        \]
+
+        \[
+          a_x=\frac{k_x}{\Delta x^2}
+          =\frac{12}{0.005625}=2133.3333
+        \]
+
+        \[
+          a_y=\frac{k_y}{\Delta y^2}
+          =\frac{4}{0.005625}=711.1111
+        \]
+
+        <p>The unscaled node equation is</p>
+
+        \[
+        (2a_x+2a_y+U_v)T_P
+        -a_xT_W-a_xT_E-a_yT_S-a_yT_N
+        =U_vT_c+q'''
+        \]
+
+        \[
+        U_vT_c+q'''=60(300)+12000=30000
+        \]
+
+        <p>Divide the full equation by \(a_y=711.1111\) to make the algebra cleaner:</p>
+
+        \[
+          r=\frac{a_x}{a_y}=3
+        \]
+
+        \[
+          \lambda=\frac{U_v}{a_y}=\frac{60}{711.1111}=0.084375
+        \]
+
+        \[
+          Q=\frac{U_vT_c+q'''}{a_y}
+          =\frac{30000}{711.1111}=42.1875
+        \]
+
+        \[
+          D=2r+2+\lambda
+          =2(3)+2+0.084375
+          =8.084375
+        \]
+
+        <p>Therefore, every interior node satisfies</p>
+
+        \[
+        \boxed{
+        8.084375T_P-3T_W-3T_E-T_S-T_N=42.1875
+        }
+        \]
+
+        <h4>Step 3: Grid and Unknown Numbering</h4>
+
+        <p>There are 3 interior nodes in each direction:</p>
+
+        \[
+        x=0.075,\;0.150,\;0.225
+        \]
+
+        \[
+        y=0.075,\;0.150,\;0.225
+        \]
+
+        <p>Use the unknown vector</p>
+
+        \[
+        \mathbf{T}=
+        \begin{bmatrix}
+        T_{11}\\T_{21}\\T_{31}\\
+        T_{12}\\T_{22}\\T_{32}\\
+        T_{13}\\T_{23}\\T_{33}
+        \end{bmatrix}
+        \]
+
+        <p>where \(T_{ij}\) means the node at x-index \(i\) and y-index \(j\). The index \(j=1\) is the bottom interior row.</p>
+
+        <h4>Step 4: Write the Nine FDM Equations</h4>
+
+        <p>Boundary values are moved to the right-hand side.</p>
+
+        <h5>Bottom-left node \(T_{11}\)</h5>
+
+        \[
+        8.084375T_{11}-3T_{21}-T_{12}
+        =42.1875+3(380)+350
+        \]
+
+        \[
+        8.084375T_{11}-3T_{21}-T_{12}=1532.1875
+        \]
+
+        <h5>Bottom-middle node \(T_{21}\)</h5>
+
+        \[
+        -3T_{11}+8.084375T_{21}-3T_{31}-T_{22}
+        =42.1875+350
+        \]
+
+        \[
+        -3T_{11}+8.084375T_{21}-3T_{31}-T_{22}=392.1875
+        \]
+
+        <h5>Bottom-right node \(T_{31}\)</h5>
+
+        \[
+        -3T_{21}+8.084375T_{31}-T_{32}
+        =42.1875+3(320)+350
+        \]
+
+        \[
+        -3T_{21}+8.084375T_{31}-T_{32}=1352.1875
+        \]
+
+        <h5>Middle-left node \(T_{12}\)</h5>
+
+        \[
+        -T_{11}+8.084375T_{12}-3T_{22}-T_{13}
+        =42.1875+3(380)
+        \]
+
+        \[
+        -T_{11}+8.084375T_{12}-3T_{22}-T_{13}=1182.1875
+        \]
+
+        <h5>Center node \(T_{22}\)</h5>
+
+        \[
+        -T_{21}-3T_{12}+8.084375T_{22}-3T_{32}-T_{23}
+        =42.1875
+        \]
+
+        <h5>Middle-right node \(T_{32}\)</h5>
+
+        \[
+        -T_{31}-3T_{22}+8.084375T_{32}-T_{33}
+        =42.1875+3(320)
+        \]
+
+        \[
+        -T_{31}-3T_{22}+8.084375T_{32}-T_{33}=1002.1875
+        \]
+
+        <h5>Top-left node \(T_{13}\)</h5>
+
+        \[
+        -T_{12}+8.084375T_{13}-3T_{23}
+        =42.1875+3(380)+300
+        \]
+
+        \[
+        -T_{12}+8.084375T_{13}-3T_{23}=1482.1875
+        \]
+
+        <h5>Top-middle node \(T_{23}\)</h5>
+
+        \[
+        -T_{22}-3T_{13}+8.084375T_{23}-3T_{33}
+        =42.1875+300
+        \]
+
+        \[
+        -T_{22}-3T_{13}+8.084375T_{23}-3T_{33}=342.1875
+        \]
+
+        <h5>Top-right node \(T_{33}\)</h5>
+
+        \[
+        -T_{32}-3T_{23}+8.084375T_{33}
+        =42.1875+3(320)+300
+        \]
+
+        \[
+        -T_{32}-3T_{23}+8.084375T_{33}=1302.1875
+        \]
+
+        <h4>Step 5: Matrix Form</h4>
+
+        \[
+        \begin{bmatrix}
+        8.084375&-3&0&-1&0&0&0&0&0\\
+        -3&8.084375&-3&0&-1&0&0&0&0\\
+        0&-3&8.084375&0&0&-1&0&0&0\\
+        -1&0&0&8.084375&-3&0&-1&0&0\\
+        0&-1&0&-3&8.084375&-3&0&-1&0\\
+        0&0&-1&0&-3&8.084375&0&0&-1\\
+        0&0&0&-1&0&0&8.084375&-3&0\\
+        0&0&0&0&-1&0&-3&8.084375&-3\\
+        0&0&0&0&0&-1&0&-3&8.084375
+        \end{bmatrix}
+        \begin{bmatrix}
+        T_{11}\\T_{21}\\T_{31}\\T_{12}\\T_{22}\\T_{32}\\T_{13}\\T_{23}\\T_{33}
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+        1532.1875\\392.1875\\1352.1875\\1182.1875\\42.1875\\1002.1875\\1482.1875\\342.1875\\1302.1875
+        \end{bmatrix}
+        \]
+
+        <h4>Step 6: Gauss-Jordan Elimination</h4>
+
+        <p>Start with the augmented matrix</p>
+
+        \[
+        [A|b]
+        \]
+
+        <p>For pivot column \(k\), use</p>
+
+        \[
+        R_k\leftarrow \frac{R_k}{a_{kk}}
+        \]
+
+        <p>then eliminate the pivot column from every other row:</p>
+
+        \[
+        R_i\leftarrow R_i-a_{ik}R_k,
+        \qquad i\ne k
+        \]
+
+        <p>After applying the operation for all nine pivot columns, the augmented matrix becomes</p>
+
+        \[
+        \left[
+        \begin{array}{ccccccccc|c}
+        1&0&0&0&0&0&0&0&0&366.2940\\
+        0&1&0&0&0&0&0&0&0&354.3388\\
+        0&0&1&0&0&0&0&0&0&340.4850\\
+        0&0&0&1&0&0&0&0&0&366.0545\\
+        0&0&0&0&1&0&0&0&0&352.0830\\
+        0&0&0&0&0&1&0&0&0&337.4044\\
+        0&0&0&0&0&0&1&0&0&354.5911\\
+        0&0&0&0&0&0&0&1&0&339.4684\\
+        0&0&0&0&0&0&0&0&1&328.7820
+        \end{array}
+        \right]
+        \]
+
+        <h4>Step 7: Interior Temperature Results</h4>
+
+        \[
+        T_{11}=366.2940\;K
+        \]
+
+        \[
+        T_{21}=354.3388\;K
+        \]
+
+        \[
+        T_{31}=340.4850\;K
+        \]
+
+        \[
+        T_{12}=366.0545\;K
+        \]
+
+        \[
+        T_{22}=352.0830\;K
+        \]
+
+        \[
+        T_{32}=337.4044\;K
+        \]
+
+        \[
+        T_{13}=354.5911\;K
+        \]
+
+        \[
+        T_{23}=339.4684\;K
+        \]
+
+        \[
+        T_{33}=328.7820\;K
+        \]
+
+        <p>Written as a 2D interior temperature matrix from <strong>top row to bottom row</strong>:</p>
+
+        \[
+        \boxed{
+        T_{interior}=
+        \begin{bmatrix}
+        354.5911&339.4684&328.7820\\
+        366.0545&352.0830&337.4044\\
+        366.2940&354.3388&340.4850
+        \end{bmatrix}K
+        }
+        \]
+
+        <h4>Engineering Interpretation</h4>
+
+        <p>
+          The hottest interior region is near the left and bottom boundaries because those surfaces are held at higher temperatures. The right and top sides are cooler, so temperature decreases toward the upper-right corner. The anisotropic conductivity makes x-direction coupling three times stronger than y-direction coupling, which is why temperatures smooth more strongly from left to right than from bottom to top.
+        </p>
+      </div>
+    </details>
+
+    <details class="ans">
+      <summary>▶ MATLAB Code</summary>
+
+      <div class="ans-body">
+        <h4 class="subsub">MATLAB Code — P13 2D FDM with Gauss-Jordan Elimination</h4>
+
+        <div class="formula-box matlab-panel">
+          <div class="formula-title">Advanced 2D FDM Reactor Wall — Explicit Gauss-Jordan Solver</div>
+
+          <pre class="matlab-code"><code>%% P13 — Advanced 2D FDM with Gauss-Jordan Elimination
+
+clc;
+clear;
+close all;
+
+%% Problem data
+kx = 12;              % W/(m K)
+ky = 4;               % W/(m K)
+Uv = 60;              % W/(m^3 K)
+Tc = 300;             % K
+qgen = 12000;         % W/m^3
+
+Lx = 0.30;            % m
+Ly = 0.30;            % m
+
+TL = 380;             % left boundary, K
+TR = 320;             % right boundary, K
+TB = 350;             % bottom boundary, K
+TT = 300;             % top boundary, K
+
+Nx = 3;               % number of interior nodes in x
+Ny = 3;               % number of interior nodes in y
+
+N = Nx*Ny;            % total unknowns
+
+dx = Lx/(Nx + 1);
+dy = Ly/(Ny + 1);
+
+%% FDM coefficients
+ax = kx/dx^2;
+ay = ky/dy^2;
+D  = 2*ax + 2*ay + Uv;
+rhs0 = Uv*Tc + qgen;
+
+A = zeros(N,N);
+b = zeros(N,1);
+
+%% Node mapping:
+% p = (j-1)*Nx + i
+% i = 1,2,3 from left to right
+% j = 1,2,3 from bottom to top
+
+for j = 1:Ny
+    for i = 1:Nx
+
+        p = (j-1)*Nx + i;
+
+        A(p,p) = D;
+        b(p) = rhs0;
+
+        % West neighbor
+        if i == 1
+            b(p) = b(p) + ax*TL;
+        else
+            pW = (j-1)*Nx + (i-1);
+            A(p,pW) = -ax;
+        end
+
+        % East neighbor
+        if i == Nx
+            b(p) = b(p) + ax*TR;
+        else
+            pE = (j-1)*Nx + (i+1);
+            A(p,pE) = -ax;
+        end
+
+        % South neighbor
+        if j == 1
+            b(p) = b(p) + ay*TB;
+        else
+            pS = (j-2)*Nx + i;
+            A(p,pS) = -ay;
+        end
+
+        % North neighbor
+        if j == Ny
+            b(p) = b(p) + ay*TT;
+        else
+            pN = j*Nx + i;
+            A(p,pN) = -ay;
+        end
+
+    end
+end
+
+%% Scale the system for cleaner Gauss-Jordan arithmetic
+As = A/ay;
+bs = b/ay;
+Aug = [As bs];
+
+fprintf('Scaled coefficient matrix [A]:\n')
+disp(As)
+
+fprintf('Scaled right-hand side [b]:\n')
+disp(bs)
+
+%% Gauss-Jordan elimination with partial pivoting
+for k = 1:N
+
+    % Partial pivoting
+    [~, pivotRow] = max(abs(Aug(k:N,k)));
+    pivotRow = pivotRow + k - 1;
+
+    if pivotRow ~= k
+        temp = Aug(k,:);
+        Aug(k,:) = Aug(pivotRow,:);
+        Aug(pivotRow,:) = temp;
+    end
+
+    % Normalize pivot row
+    pivot = Aug(k,k);
+
+    if abs(pivot) &lt; 1e-12
+        error('Zero or near-zero pivot detected. System cannot be solved safely.');
+    end
+
+    Aug(k,:) = Aug(k,:)/pivot;
+
+    % Eliminate pivot column from every other row
+    for i = 1:N
+        if i ~= k
+            factor = Aug(i,k);
+            Aug(i,:) = Aug(i,:) - factor*Aug(k,:);
+        end
+    end
+
+    fprintf('\nAugmented matrix after pivot column %d:\n', k)
+    disp(Aug)
+
+end
+
+%% Extract solution
+Tvec = Aug(:,end);
+
+% Convert vector to 2D matrix.
+% Tmat row 1 is bottom interior row.
+Tmat = reshape(Tvec,Nx,Ny)';
+TtopToBottom = flipud(Tmat);
+
+Residual = As*Tvec - bs;
+
+fprintf('\nFinal reduced row echelon form [I | T]:\n')
+disp(Aug)
+
+fprintf('\nInterior temperatures, vector order:\n')
+disp(Tvec)
+
+fprintf('\nInterior temperature matrix, top row to bottom row:\n')
+disp(TtopToBottom)
+
+fprintf('\nMaximum absolute residual = %.6e\n', max(abs(Residual)))
+
+%% Plot interior temperature field
+xInterior = dx:dx:(Lx-dx);
+yInterior = dy:dy:(Ly-dy);
+
+[Xgrid,Ygrid] = meshgrid(xInterior,yInterior);
+
+figure;
+surf(Xgrid,Ygrid,Tmat);
+grid on;
+xlabel('x (m)');
+ylabel('y (m)');
+zlabel('Temperature (K)');
+title('P13: 2D FDM Interior Temperature Field');
+
+figure;
+contourf(Xgrid,Ygrid,Tmat,20);
+colorbar;
+xlabel('x (m)');
+ylabel('y (m)');
+title('P13: 2D FDM Temperature Contours');</code></pre>
+        </div>
+      </div>
+    </details>
+  </div>
+</details>
+<!-- P14 -->
+<details class="prob">
+  <summary><span class="prob-num">P14</span>&ensp;<strong>Regression</strong> — Quadratic Least-Squares Fit with Gauss-Jordan</summary>
+
+  <div class="prob-body">
+    <p>
+      Experimental adsorption data were collected for a solute on an activated carbon surface.
+      The equilibrium loading \(q\) changes nonlinearly with concentration \(C\).
+    </p>
+
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead>
+          <tr>
+            <th>\(C\) (mol/L)</th>
+            <th>\(q\) (mol/kg)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>0</td><td>2.1</td></tr>
+          <tr><td>1</td><td>3.9</td></tr>
+          <tr><td>2</td><td>7.2</td></tr>
+          <tr><td>3</td><td>11.9</td></tr>
+          <tr><td>4</td><td>18.1</td></tr>
+          <tr><td>5</td><td>25.8</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      Fit the quadratic regression model:
+    </p>
+
+    \[
+      q=a_0+a_1C+a_2C^2
+    \]
+
+    <p>
+      Use the least-squares normal equations and solve the matrix using
+      <strong>Gauss-Jordan elimination</strong>.
+    </p>
+
+    <details class="ans">
+      <summary>▶ Reveal Detailed Answer</summary>
+
+      <div class="ans-body">
+
+        <h4>Step 1 — Regression Model</h4>
+
+        \[
+          q=a_0+a_1C+a_2C^2
+        \]
+
+        <p>
+          The unknown regression coefficients are:
+        </p>
+
+        \[
+          a_0,\qquad a_1,\qquad a_2
+        \]
+
+        <p>
+          Since there are 6 data points and only 3 unknown coefficients,
+          the curve will not necessarily pass through every data point.
+          Instead, we minimize:
+        </p>
+
+        \[
+          SSE=\sum_{i=1}^{6}
+          \left(q_i-a_0-a_1C_i-a_2C_i^2\right)^2
+        \]
+
+        <hr>
+
+        <h4>Step 2 — Build the Least-Squares Table</h4>
+
+        <p>
+          For quadratic regression, the normal equations require:
+        </p>
+
+        \[
+          \sum C,\quad
+          \sum C^2,\quad
+          \sum C^3,\quad
+          \sum C^4,\quad
+          \sum q,\quad
+          \sum Cq,\quad
+          \sum C^2q
+        \]
+
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead>
+              <tr>
+                <th>\(C\)</th>
+                <th>\(q\)</th>
+                <th>\(C^2\)</th>
+                <th>\(C^3\)</th>
+                <th>\(C^4\)</th>
+                <th>\(Cq\)</th>
+                <th>\(C^2q\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0</td><td>2.1</td><td>0</td><td>0</td><td>0</td><td>0.0</td><td>0.0</td></tr>
+              <tr><td>1</td><td>3.9</td><td>1</td><td>1</td><td>1</td><td>3.9</td><td>3.9</td></tr>
+              <tr><td>2</td><td>7.2</td><td>4</td><td>8</td><td>16</td><td>14.4</td><td>28.8</td></tr>
+              <tr><td>3</td><td>11.9</td><td>9</td><td>27</td><td>81</td><td>35.7</td><td>107.1</td></tr>
+              <tr><td>4</td><td>18.1</td><td>16</td><td>64</td><td>256</td><td>72.4</td><td>289.6</td></tr>
+              <tr><td>5</td><td>25.8</td><td>25</td><td>125</td><td>625</td><td>129.0</td><td>645.0</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Now sum each column:
+        </p>
+
+        \[
+          n=6
+        \]
+
+        \[
+          \sum C=15
+        \]
+
+        \[
+          \sum C^2=55
+        \]
+
+        \[
+          \sum C^3=225
+        \]
+
+        \[
+          \sum C^4=979
+        \]
+
+        \[
+          \sum q=69.0
+        \]
+
+        \[
+          \sum Cq=255.4
+        \]
+
+        \[
+          \sum C^2q=1074.4
+        \]
+
+        <hr>
+
+        <h4>Step 3 — Write the Normal Equations</h4>
+
+        <p>
+          For:
+        </p>
+
+        \[
+          q=a_0+a_1C+a_2C^2
+        \]
+
+        <p>
+          the normal equations are:
+        </p>
+
+        \[
+        \begin{aligned}
+        na_0+a_1\sum C+a_2\sum C^2&=\sum q\\
+        a_0\sum C+a_1\sum C^2+a_2\sum C^3&=\sum Cq\\
+        a_0\sum C^2+a_1\sum C^3+a_2\sum C^4&=\sum C^2q
+        \end{aligned}
+        \]
+
+        <p>
+          Substitute the summations:
+        </p>
+
+        \[
+        \begin{aligned}
+        6a_0+15a_1+55a_2&=69.0\\
+        15a_0+55a_1+225a_2&=255.4\\
+        55a_0+225a_1+979a_2&=1074.4
+        \end{aligned}
+        \]
+
+        <p>
+          Matrix form:
+        </p>
+
+        \[
+        \begin{bmatrix}
+        6&15&55\\
+        15&55&225\\
+        55&225&979
+        \end{bmatrix}
+        \begin{bmatrix}
+        a_0\\
+        a_1\\
+        a_2
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+        69.0\\
+        255.4\\
+        1074.4
+        \end{bmatrix}
+        \]
+
+        <hr>
+
+        <h4>Step 4 — Gauss-Jordan Setup</h4>
+
+        \[
+        \left[
+        \begin{array}{ccc|c}
+        6&15&55&69.0\\
+        15&55&225&255.4\\
+        55&225&979&1074.4
+        \end{array}
+        \right]
+        \]
+
+        <p>
+          Goal:
+        </p>
+
+        \[
+          [A|b]\rightarrow[I|a]
+        \]
+
+        <hr>
+
+        <h4>Step 5 — Pivot Column 1</h4>
+
+        <p>
+          Normalize Row 1:
+        </p>
+
+        \[
+        R_1\leftarrow \frac{1}{6}R_1
+        \]
+
+        \[
+        R_1=
+        [1,\;2.5,\;9.166667\;|\;11.5]
+        \]
+
+        <p>
+          Eliminate \(a_0\) from Row 2:
+        </p>
+
+        \[
+        R_2\leftarrow R_2-15R_1
+        \]
+
+        \[
+        R_2=
+        [15,\;55,\;225\;|\;255.4]
+        -
+        15[1,\;2.5,\;9.166667\;|\;11.5]
+        \]
+
+        \[
+        R_2=
+        [0,\;17.5,\;87.5\;|\;82.9]
+        \]
+
+        <p>
+          Eliminate \(a_0\) from Row 3:
+        </p>
+
+        \[
+        R_3\leftarrow R_3-55R_1
+        \]
+
+        \[
+        R_3=
+        [55,\;225,\;979\;|\;1074.4]
+        -
+        55[1,\;2.5,\;9.166667\;|\;11.5]
+        \]
+
+        \[
+        R_3=
+        [0,\;87.5,\;474.8333\;|\;441.9]
+        \]
+
+        <p>
+          Matrix after Column 1:
+        </p>
+
+        \[
+        \left[
+        \begin{array}{ccc|c}
+        1&2.5&9.166667&11.5\\
+        0&17.5&87.5&82.9\\
+        0&87.5&474.8333&441.9
+        \end{array}
+        \right]
+        \]
+
+        <hr>
+
+        <h4>Step 6 — Pivot Column 2</h4>
+
+        <p>
+          Normalize Row 2:
+        </p>
+
+        \[
+        R_2\leftarrow \frac{1}{17.5}R_2
+        \]
+
+        \[
+        R_2=[0,\;1,\;5\;|\;4.737143]
+        \]
+
+        <p>
+          Eliminate \(a_1\) from Row 1:
+        </p>
+
+        \[
+        R_1\leftarrow R_1-2.5R_2
+        \]
+
+        \[
+        R_1=
+        [1,\;2.5,\;9.166667\;|\;11.5]
+        -
+        2.5[0,\;1,\;5\;|\;4.737143]
+        \]
+
+        \[
+        R_1=[1,\;0,\;-3.333333\;|\;-0.342857]
+        \]
+
+        <p>
+          Eliminate \(a_1\) from Row 3:
+        </p>
+
+        \[
+        R_3\leftarrow R_3-87.5R_2
+        \]
+
+        \[
+        R_3=
+        [0,\;87.5,\;474.8333\;|\;441.9]
+        -
+        87.5[0,\;1,\;5\;|\;4.737143]
+        \]
+
+        \[
+        R_3=[0,\;0,\;37.333333\;|\;27.4]
+        \]
+
+        <p>
+          Matrix after Column 2:
+        </p>
+
+        \[
+        \left[
+        \begin{array}{ccc|c}
+        1&0&-3.333333&-0.342857\\
+        0&1&5&4.737143\\
+        0&0&37.333333&27.4
+        \end{array}
+        \right]
+        \]
+
+        <hr>
+
+        <h4>Step 7 — Pivot Column 3</h4>
+
+        <p>
+          Normalize Row 3:
+        </p>
+
+        \[
+        R_3\leftarrow \frac{1}{37.333333}R_3
+        \]
+
+        \[
+        R_3=[0,\;0,\;1\;|\;0.733929]
+        \]
+
+        <p>
+          Therefore:
+        </p>
+
+        \[
+          a_2=0.733929
+        \]
+
+        <p>
+          Eliminate \(a_2\) from Row 1:
+        </p>
+
+        \[
+        R_1\leftarrow R_1+3.333333R_3
+        \]
+
+        \[
+        R_1=
+        [1,\;0,\;-3.333333\;|\;-0.342857]
+        +
+        3.333333[0,\;0,\;1\;|\;0.733929]
+        \]
+
+        \[
+        R_1=[1,\;0,\;0\;|\;2.103571]
+        \]
+
+        <p>
+          Eliminate \(a_2\) from Row 2:
+        </p>
+
+        \[
+        R_2\leftarrow R_2-5R_3
+        \]
+
+        \[
+        R_2=
+        [0,\;1,\;5\;|\;4.737143]
+        -
+        5[0,\;0,\;1\;|\;0.733929]
+        \]
+
+        \[
+        R_2=[0,\;1,\;0\;|\;1.067500]
+        \]
+
+        <hr>
+
+        <h4>Step 8 — Final Reduced Matrix</h4>
+
+        \[
+        \left[
+        \begin{array}{ccc|c}
+        1&0&0&2.103571\\
+        0&1&0&1.067500\\
+        0&0&1&0.733929
+        \end{array}
+        \right]
+        \]
+
+        <h4>Step 9 — Final Regression Model</h4>
+
+        \[
+          a_0=2.103571
+        \]
+
+        \[
+          a_1=1.067500
+        \]
+
+        \[
+          a_2=0.733929
+        \]
+
+        \[
+        \boxed{
+        q=2.103571+1.067500C+0.733929C^2
+        }
+        \]
+
+        <hr>
+
+        <h4>Step 10 — Residual Check</h4>
+
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead>
+              <tr>
+                <th>\(C\)</th>
+                <th>Measured \(q\)</th>
+                <th>Predicted \(q\)</th>
+                <th>Residual</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0</td><td>2.1000</td><td>2.1036</td><td class="err">-0.0036</td></tr>
+              <tr><td>1</td><td>3.9000</td><td>3.9050</td><td class="err">-0.0050</td></tr>
+              <tr><td>2</td><td>7.2000</td><td>7.1743</td><td class="exact">0.0257</td></tr>
+              <tr><td>3</td><td>11.9000</td><td>11.9114</td><td class="err">-0.0114</td></tr>
+              <tr><td>4</td><td>18.1000</td><td>18.1164</td><td class="err">-0.0164</td></tr>
+              <tr><td>5</td><td>25.8000</td><td>25.7893</td><td class="exact">0.0107</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        \[
+          SSE=0.001214
+        \]
+
+        \[
+          R^2=0.999997
+        \]
+
+        <div class="info-box">
+          The quadratic model fits the adsorption data extremely well because the residuals are very small
+          and \(R^2\) is almost 1.
+        </div>
+
+      </div>
+    </details>
+
+    <details class="ans">
+      <summary>▶ MATLAB Code</summary>
+
+      <div class="ans-body">
+        <h4 class="subsub">MATLAB Code — P13 Quadratic Regression with Gauss-Jordan</h4>
+
+        <div class="formula-box matlab-panel">
+          <div class="formula-title">Quadratic Least-Squares Regression</div>
+
+<pre class="matlab-code"><code><span class="com">%% P13 — Quadratic Regression using Gauss-Jordan Elimination</span>
+<span class="com">% Model:</span>
+<span class="com">%     q = a0 + a1*C + a2*C^2</span>
+<span class="com">%</span>
+<span class="com">% The normal equations are solved manually using Gauss-Jordan elimination.</span>
+
+<span class="kw">clc</span>;
+<span class="kw">clear</span>;
+<span class="kw">close</span> <span class="kw">all</span>;
+
+<span class="com">%% Experimental data</span>
+
+C = [<span class="num">0</span>; <span class="num">1</span>; <span class="num">2</span>; <span class="num">3</span>; <span class="num">4</span>; <span class="num">5</span>];
+q = [<span class="num">2.1</span>; <span class="num">3.9</span>; <span class="num">7.2</span>; <span class="num">11.9</span>; <span class="num">18.1</span>; <span class="num">25.8</span>];
+
+<span class="com">%% Build normal equation matrix</span>
+
+n = length(C);
+
+Sx   = sum(C);
+Sx2  = sum(C.^<span class="num">2</span>);
+Sx3  = sum(C.^<span class="num">3</span>);
+Sx4  = sum(C.^<span class="num">4</span>);
+
+Sy   = sum(q);
+Sxy  = sum(C.*q);
+Sx2y = sum((C.^<span class="num">2</span>).*q);
+
+A = [n,   Sx,  Sx2;
+     Sx,  Sx2, Sx3;
+     Sx2, Sx3, Sx4];
+
+b = [Sy; Sxy; Sx2y];
+
+<span class="com">%% Gauss-Jordan elimination</span>
+
+Aug = [A b];
+
+m = length(b);
+
+<span class="kw">for</span> k = <span class="num">1</span>:m
+
+    <span class="com">% Normalize pivot row</span>
+    Aug(k,:) = Aug(k,:) / Aug(k,k);
+
+    <span class="com">% Eliminate pivot variable from all other rows</span>
+    <span class="kw">for</span> i = <span class="num">1</span>:m
+        <span class="kw">if</span> i ~= k
+            factor = Aug(i,k);
+            Aug(i,:) = Aug(i,:) - factor*Aug(k,:);
+        <span class="kw">end</span>
+    <span class="kw">end</span>
+
+    fprintf(<span class="str">'Matrix after pivot column %d:\n'</span>, k)
+    disp(Aug)
+
+<span class="kw">end</span>
+
+coeff = Aug(:,end);
+
+a0 = coeff(<span class="num">1</span>);
+a1 = coeff(<span class="num">2</span>);
+a2 = coeff(<span class="num">3</span>);
+
+<span class="com">%% Predictions and errors</span>
+
+q_pred = a0 + a1*C + a2*C.^<span class="num">2</span>;
+
+residual = q - q_pred;
+
+SSE = sum(residual.^<span class="num">2</span>);
+SST = sum((q - mean(q)).^<span class="num">2</span>);
+R2 = <span class="num">1</span> - SSE/SST;
+
+Results = table(C, q, q_pred, residual, ...
+    <span class="str">'VariableNames'</span>, {<span class="str">'C'</span>, <span class="str">'q_measured'</span>, <span class="str">'q_predicted'</span>, <span class="str">'Residual'</span>});
+
+disp(<span class="str">'Quadratic Regression Results:'</span>)
+disp(Results)
+
+fprintf(<span class="str">'a0 = %.6f\n'</span>, a0)
+fprintf(<span class="str">'a1 = %.6f\n'</span>, a1)
+fprintf(<span class="str">'a2 = %.6f\n'</span>, a2)
+fprintf(<span class="str">'SSE = %.6e\n'</span>, SSE)
+fprintf(<span class="str">'R2 = %.6f\n'</span>, R2)
+
+<span class="com">%% Plot result</span>
+
+Cfine = linspace(min(C), max(C), <span class="num">200</span>)';
+qfine = a0 + a1*Cfine + a2*Cfine.^<span class="num">2</span>;
+
+figure;
+plot(C, q, <span class="str">'o'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+hold on;
+plot(Cfine, qfine, <span class="str">'-'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+grid on;
+
+xlabel(<span class="str">'Concentration C'</span>);
+ylabel(<span class="str">'Adsorption loading q'</span>);
+title(<span class="str">'Quadratic Least-Squares Regression'</span>);
+legend(<span class="str">'Experimental Data'</span>, <span class="str">'Quadratic Fit'</span>, <span class="str">'Location'</span>, <span class="str">'best'</span>);</code></pre>
+
+        </div>
+      </div>
+    </details>
+  </div>
+</details>
+<!-- P15 -->
+<details class="prob">
+  <summary><span class="prob-num">P15</span>&ensp;<strong>Nonlinear Regression</strong> — Michaelis-Menten Parameter Estimation</summary>
+
+  <div class="prob-body">
+    <p>
+      An enzyme-catalyzed reaction follows Michaelis-Menten kinetics:
+    </p>
+
+    \[
+      v=\frac{V_{max}S}{K_m+S}
+    \]
+
+    <p>
+      Experimental reaction-rate data are:
+    </p>
+
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead>
+          <tr>
+            <th>\(S\) (mol/L)</th>
+            <th>\(v_{obs}\) (mol/L·min)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>0.5</td><td>1.12</td></tr>
+          <tr><td>1.0</td><td>1.90</td></tr>
+          <tr><td>2.0</td><td>3.05</td></tr>
+          <tr><td>4.0</td><td>4.25</td></tr>
+          <tr><td>6.0</td><td>4.85</td></tr>
+          <tr><td>8.0</td><td>5.21</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      Use <strong>nonlinear least-squares regression</strong> with the
+      <strong>Gauss-Newton method</strong> to estimate \(V_{max}\) and \(K_m\).
+    </p>
+
+    <p>
+      Initial guess:
+    </p>
+
+    \[
+      V_{max}^{(0)}=5.0000,
+      \qquad
+      K_m^{(0)}=1.0000
+    \]
+
+    <details class="ans">
+      <summary>▶ Reveal Detailed Answer</summary>
+
+      <div class="ans-body">
+
+        <h4>Step 1 — Define the Nonlinear Model</h4>
+
+        \[
+          v_{calc}
+          =
+          \frac{V_{max}S}{K_m+S}
+        \]
+
+        <p>
+          The residual for each data point is:
+        </p>
+
+        \[
+          r_i=v_{obs,i}-v_{calc,i}
+        \]
+
+        <p>
+          The objective is:
+        </p>
+
+        \[
+          SSE=\sum_{i=1}^{n}r_i^2
+        \]
+
+        <hr>
+
+        <h4>Step 2 — Derivatives for Gauss-Newton</h4>
+
+        <p>
+          The Gauss-Newton method needs the sensitivity of the calculated rate
+          with respect to each unknown parameter.
+        </p>
+
+        \[
+          v=\frac{V_{max}S}{K_m+S}
+        \]
+
+        <p>
+          Derivative with respect to \(V_{max}\):
+        </p>
+
+        \[
+          \frac{\partial v}{\partial V_{max}}
+          =
+          \frac{S}{K_m+S}
+        \]
+
+        <p>
+          Derivative with respect to \(K_m\):
+        </p>
+
+        \[
+          \frac{\partial v}{\partial K_m}
+          =
+          -\frac{V_{max}S}{(K_m+S)^2}
+        \]
+
+        <p>
+          The Jacobian matrix is:
+        </p>
+
+        \[
+        J=
+        \begin{bmatrix}
+        \dfrac{\partial v_1}{\partial V_{max}} &
+        \dfrac{\partial v_1}{\partial K_m}\\
+        \dfrac{\partial v_2}{\partial V_{max}} &
+        \dfrac{\partial v_2}{\partial K_m}\\
+        \vdots & \vdots\\
+        \dfrac{\partial v_n}{\partial V_{max}} &
+        \dfrac{\partial v_n}{\partial K_m}
+        \end{bmatrix}
+        \]
+
+        <p>
+          The Gauss-Newton correction is found from:
+        </p>
+
+        \[
+          (J^TJ)\Delta\theta=J^Tr
+        \]
+
+        where:
+
+        \[
+          \Delta\theta=
+          \begin{bmatrix}
+          \Delta V_{max}\\
+          \Delta K_m
+          \end{bmatrix}
+        \]
+
+        <p>
+          Then:
+        </p>
+
+        \[
+          \theta_{new}=\theta_{old}+\Delta\theta
+        \]
+
+        <hr>
+
+        <h4>Iteration 0 — Use \(V_{max}=5.0000,\;K_m=1.0000\)</h4>
+
+        <p>
+          The model becomes:
+        </p>
+
+        \[
+          v_{calc}=\frac{5S}{1+S}
+        \]
+
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead>
+              <tr>
+                <th>\(S\)</th>
+                <th>\(v_{obs}\)</th>
+                <th>\(v_{calc}\)</th>
+                <th>\(r\)</th>
+                <th>\(\partial v/\partial V_{max}\)</th>
+                <th>\(\partial v/\partial K_m\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0.5</td><td>1.12</td><td>1.6667</td><td>-0.5467</td><td>0.3333</td><td>-1.1111</td></tr>
+              <tr><td>1.0</td><td>1.90</td><td>2.5000</td><td>-0.6000</td><td>0.5000</td><td>-1.2500</td></tr>
+              <tr><td>2.0</td><td>3.05</td><td>3.3333</td><td>-0.2833</td><td>0.6667</td><td>-1.1111</td></tr>
+              <tr><td>4.0</td><td>4.25</td><td>4.0000</td><td>0.2500</td><td>0.8000</td><td>-0.8000</td></tr>
+              <tr><td>6.0</td><td>4.85</td><td>4.2857</td><td>0.5643</td><td>0.8571</td><td>-0.6122</td></tr>
+              <tr><td>8.0</td><td>5.21</td><td>4.4444</td><td>0.7656</td><td>0.8889</td><td>-0.4938</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        \[
+          SSE^{(0)}=1.706116
+        \]
+
+        <p>
+          Form the normal equations:
+        </p>
+
+        \[
+        J^TJ=
+        \begin{bmatrix}
+        2.9704 & -3.3398\\
+        -3.3398 & 5.2903
+        \end{bmatrix}
+        \]
+
+        \[
+        J^Tr=
+        \begin{bmatrix}
+        0.6931\\
+        0.7487
+        \end{bmatrix}
+        \]
+
+        <p>
+          Solve:
+        </p>
+
+        \[
+        \begin{bmatrix}
+        2.9704 & -3.3398\\
+        -3.3398 & 5.2903
+        \end{bmatrix}
+        \begin{bmatrix}
+        \Delta V_{max}\\
+        \Delta K_m
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+        0.6931\\
+        0.7487
+        \end{bmatrix}
+        \]
+
+        \[
+          \Delta V_{max}=1.3525
+        \]
+
+        \[
+          \Delta K_m=0.9954
+        \]
+
+        <p>
+          Update:
+        </p>
+
+        \[
+          V_{max}^{(1)}=5.0000+1.3525=6.3525
+        \]
+
+        \[
+          K_m^{(1)}=1.0000+0.9954=1.9954
+        \]
+
+        <hr>
+
+        <h4>Iteration 1 — Use \(V_{max}=6.3525,\;K_m=1.9954\)</h4>
+
+        \[
+          v_{calc}=
+          \frac{6.3525S}{1.9954+S}
+        \]
+
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead>
+              <tr>
+                <th>\(S\)</th>
+                <th>\(v_{obs}\)</th>
+                <th>\(v_{calc}\)</th>
+                <th>\(r\)</th>
+                <th>\(\partial v/\partial V_{max}\)</th>
+                <th>\(\partial v/\partial K_m\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0.5</td><td>1.12</td><td>1.2729</td><td>-0.1529</td><td>0.2004</td><td>-0.5101</td></tr>
+              <tr><td>1.0</td><td>1.90</td><td>2.1208</td><td>-0.2208</td><td>0.3338</td><td>-0.7080</td></tr>
+              <tr><td>2.0</td><td>3.05</td><td>3.1799</td><td>-0.1299</td><td>0.5006</td><td>-0.7959</td></tr>
+              <tr><td>4.0</td><td>4.25</td><td>4.2383</td><td>0.0117</td><td>0.6672</td><td>-0.7069</td></tr>
+              <tr><td>6.0</td><td>4.85</td><td>4.7671</td><td>0.0829</td><td>0.7504</td><td>-0.5962</td></tr>
+              <tr><td>8.0</td><td>5.21</td><td>5.0844</td><td>0.1256</td><td>0.8004</td><td>-0.5087</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        \[
+          SSE^{(1)}=0.111779
+        \]
+
+        <p>
+          The error dropped sharply from \(1.706116\) to \(0.111779\).
+        </p>
+
+        \[
+        J^TJ=
+        \begin{bmatrix}
+        2.0511 & -2.0632\\
+        -2.0632 & 2.5089
+        \end{bmatrix}
+        \]
+
+        \[
+        J^Tr=
+        \begin{bmatrix}
+        0.0012\\
+        0.2161
+        \end{bmatrix}
+        \]
+
+        <p>
+          Solving the correction system gives:
+        </p>
+
+        \[
+          \Delta V_{max}=0.5048
+        \]
+
+        \[
+          \Delta K_m=0.5012
+        \]
+
+        <p>
+          Update:
+        </p>
+
+        \[
+          V_{max}^{(2)}=6.3525+0.5048=6.8573
+        \]
+
+        \[
+          K_m^{(2)}=1.9954+0.5012=2.4966
+        \]
+
+        <hr>
+
+        <h4>Iteration 2 — Use \(V_{max}=6.8573,\;K_m=2.4966\)</h4>
+
+        \[
+          v_{calc}
+          =
+          \frac{6.8573S}{2.4966+S}
+        \]
+
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead>
+              <tr>
+                <th>\(S\)</th>
+                <th>\(v_{obs}\)</th>
+                <th>\(v_{calc}\)</th>
+                <th>\(r\)</th>
+                <th>\(\partial v/\partial V_{max}\)</th>
+                <th>\(\partial v/\partial K_m\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0.5</td><td>1.12</td><td>1.1442</td><td>-0.0242</td><td>0.1669</td><td>-0.3818</td></tr>
+              <tr><td>1.0</td><td>1.90</td><td>1.9611</td><td>-0.0611</td><td>0.2860</td><td>-0.5609</td></tr>
+              <tr><td>2.0</td><td>3.05</td><td>3.0500</td><td>0.0000</td><td>0.4448</td><td>-0.6783</td></tr>
+              <tr><td>4.0</td><td>4.25</td><td>4.2221</td><td>0.0279</td><td>0.6157</td><td>-0.6499</td></tr>
+              <tr><td>6.0</td><td>4.85</td><td>4.8424</td><td>0.0076</td><td>0.7062</td><td>-0.5699</td></tr>
+              <tr><td>8.0</td><td>5.21</td><td>5.2263</td><td>-0.0163</td><td>0.7622</td><td>-0.4979</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        \[
+          SSE^{(2)}=0.005425
+        \]
+
+        \[
+        J^TJ=
+        \begin{bmatrix}
+        1.7661 & -1.7079\\
+        -1.7079 & 1.9155
+        \end{bmatrix}
+        \]
+
+        \[
+        J^Tr=
+        \begin{bmatrix}
+        -0.0113\\
+        0.0291
+        \end{bmatrix}
+        \]
+
+        <p>
+          Solving gives:
+        </p>
+
+        \[
+          \Delta V_{max}=0.0601
+        \]
+
+        \[
+          \Delta K_m=0.0688
+        \]
+
+        <p>
+          Update:
+        </p>
+
+        \[
+          V_{max}^{(3)}=6.8573+0.0601=6.9174
+        \]
+
+        \[
+          K_m^{(3)}=2.4966+0.0688=2.5654
+        \]
+
+        <hr>
+
+        <h4>Iteration 3 — Use \(V_{max}=6.9174,\;K_m=2.5654\)</h4>
+
+        \[
+          v_{calc}
+          =
+          \frac{6.9174S}{2.5654+S}
+        \]
+
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead>
+              <tr>
+                <th>\(S\)</th>
+                <th>\(v_{obs}\)</th>
+                <th>\(v_{calc}\)</th>
+                <th>\(r\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0.5</td><td>1.12</td><td>1.1283</td><td>-0.0083</td></tr>
+              <tr><td>1.0</td><td>1.90</td><td>1.9402</td><td>-0.0402</td></tr>
+              <tr><td>2.0</td><td>3.05</td><td>3.0304</td><td>0.0196</td></tr>
+              <tr><td>4.0</td><td>4.25</td><td>4.2145</td><td>0.0355</td></tr>
+              <tr><td>6.0</td><td>4.85</td><td>4.8456</td><td>0.0044</td></tr>
+              <tr><td>8.0</td><td>5.21</td><td>5.2378</td><td>-0.0278</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        \[
+          SSE^{(3)}=0.004121
+        \]
+
+        <p>
+          New correction:
+        </p>
+
+        \[
+          \Delta V_{max}=0.000014
+        \]
+
+        \[
+          \Delta K_m=0.000184
+        \]
+
+        <p>
+          Updated parameters:
+        </p>
+
+        \[
+          V_{max}^{(4)}=6.9174
+        \]
+
+        \[
+          K_m^{(4)}=2.5656
+        \]
+
+        <hr>
+
+        <h4>Iteration 4 — Convergence Check</h4>
+
+        <p>
+          With:
+        </p>
+
+        \[
+          V_{max}=6.91738,
+          \qquad
+          K_m=2.56556
+        \]
+
+        <p>
+          the next correction is approximately:
+        </p>
+
+        \[
+          \Delta V_{max}\approx -0.000002
+        \]
+
+        \[
+          \Delta K_m\approx -0.000003
+        \]
+
+        <p>
+          Since both corrections are extremely small, the regression has converged.
+        </p>
+
+        <h4>Convergence Table</h4>
+
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead>
+              <tr>
+                <th>Iteration</th>
+                <th>\(V_{max}\)</th>
+                <th>\(K_m\)</th>
+                <th>SSE</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0</td><td>5.0000</td><td>1.0000</td><td>1.706116</td><td>Initial guess</td></tr>
+              <tr><td>1</td><td>6.3525</td><td>1.9954</td><td>0.111779</td><td>Large improvement</td></tr>
+              <tr><td>2</td><td>6.8573</td><td>2.4966</td><td>0.005425</td><td>Near solution</td></tr>
+              <tr><td>3</td><td>6.9174</td><td>2.5654</td><td>0.004121</td><td>Almost converged</td></tr>
+              <tr><td>4</td><td>6.9174</td><td>2.5656</td><td>0.004121</td><td class="exact">Converged</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Final Regression Model</h4>
+
+        \[
+          \boxed{V_{max}=6.9174}
+        \]
+
+        \[
+          \boxed{K_m=2.5656}
+        \]
+
+        \[
+          \boxed{
+          v=\frac{6.9174S}{2.5656+S}
+          }
+        \]
+
+        <h4>Final Residual Table</h4>
+
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead>
+              <tr>
+                <th>\(S\)</th>
+                <th>\(v_{obs}\)</th>
+                <th>\(v_{calc}\)</th>
+                <th>Residual</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0.5</td><td>1.1200</td><td>1.1282</td><td class="err">-0.0082</td></tr>
+              <tr><td>1.0</td><td>1.9000</td><td>1.9401</td><td class="err">-0.0401</td></tr>
+              <tr><td>2.0</td><td>3.0500</td><td>3.0302</td><td class="exact">0.0198</td></tr>
+              <tr><td>4.0</td><td>4.2500</td><td>4.2143</td><td class="exact">0.0357</td></tr>
+              <tr><td>6.0</td><td>4.8500</td><td>4.8455</td><td class="exact">0.0045</td></tr>
+              <tr><td>8.0</td><td>5.2100</td><td>5.2377</td><td class="err">-0.0277</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        \[
+          SSE=0.004121
+        \]
+
+        \[
+          RMSE=\sqrt{\frac{SSE}{n-p}}
+          =
+          \sqrt{\frac{0.004121}{6-2}}
+          =
+          0.03210
+        \]
+
+      </div>
+    </details>
+
+    <details class="ans">
+      <summary>▶ MATLAB Code</summary>
+
+      <div class="ans-body">
+        <h4 class="subsub">MATLAB Code — P14 Nonlinear Regression with Gauss-Newton</h4>
+
+        <div class="formula-box matlab-panel">
+          <div class="formula-title">Michaelis-Menten Parameter Estimation</div>
+
+<pre class="matlab-code"><code><span class="com">%% P14 — Nonlinear Regression using Gauss-Newton Method</span>
+<span class="com">% Model:</span>
+<span class="com">%     v = Vmax*S/(Km + S)</span>
+<span class="com">%</span>
+<span class="com">% Unknown parameters:</span>
+<span class="com">%     Vmax and Km</span>
+<span class="com">%</span>
+<span class="com">% Gauss-Newton equation:</span>
+<span class="com">%     (J'*J)*delta = J'*r</span>
+
+<span class="kw">clc</span>;
+<span class="kw">clear</span>;
+<span class="kw">close</span> <span class="kw">all</span>;
+
+<span class="com">%% Experimental data</span>
+
+S = [<span class="num">0.5</span>; <span class="num">1</span>; <span class="num">2</span>; <span class="num">4</span>; <span class="num">6</span>; <span class="num">8</span>];
+
+vobs = [<span class="num">1.12</span>; <span class="num">1.90</span>; <span class="num">3.05</span>; <span class="num">4.25</span>; <span class="num">4.85</span>; <span class="num">5.21</span>];
+
+<span class="com">%% Initial guesses</span>
+
+Vmax = <span class="num">5.0</span>;
+Km = <span class="num">1.0</span>;
+
+tol = <span class="num">1e-6</span>;
+maxIter = <span class="num">20</span>;
+
+history = [];
+
+<span class="com">%% Gauss-Newton iteration</span>
+
+<span class="kw">for</span> iter = <span class="num">0</span>:maxIter
+
+    <span class="com">% Model prediction</span>
+    vcalc = Vmax*S./(Km + S);
+
+    <span class="com">% Residual vector</span>
+    r = vobs - vcalc;
+
+    <span class="com">% Sum of squared errors</span>
+    SSE = sum(r.^<span class="num">2</span>);
+
+    <span class="com">% Jacobian matrix</span>
+    dVmax = S./(Km + S);
+    dKm = -Vmax*S./(Km + S).^<span class="num">2</span>;
+
+    J = [dVmax, dKm];
+
+    <span class="com">% Solve the Gauss-Newton normal equations</span>
+    delta = (J'*J)\(J'*r);
+
+    dV = delta(<span class="num">1</span>);
+    dK = delta(<span class="num">2</span>);
+
+    history = [history; iter, Vmax, Km, SSE, dV, dK];
+
+    fprintf(<span class="str">'Iteration %d\n'</span>, iter)
+    fprintf(<span class="str">'Vmax = %.8f, Km = %.8f, SSE = %.8e\n'</span>, Vmax, Km, SSE)
+    fprintf(<span class="str">'dVmax = %.8e, dKm = %.8e\n\n'</span>, dV, dK)
+
+    <span class="com">% Stop if corrections are very small</span>
+    <span class="kw">if</span> max(abs(delta)) &lt; tol
+        <span class="kw">break</span>
+    <span class="kw">end</span>
+
+    <span class="com">% Update parameters</span>
+    Vmax = Vmax + dV;
+    Km = Km + dK;
+
+<span class="kw">end</span>
+
+<span class="com">%% Final predictions</span>
+
+vfit = Vmax*S./(Km + S);
+residual = vobs - vfit;
+
+SSE_final = sum(residual.^<span class="num">2</span>);
+RMSE = sqrt(SSE_final/(length(S)-<span class="num">2</span>));
+
+Results = table(S, vobs, vfit, residual, ...
+    <span class="str">'VariableNames'</span>, {<span class="str">'S'</span>, <span class="str">'v_observed'</span>, <span class="str">'v_calculated'</span>, <span class="str">'Residual'</span>});
+
+disp(<span class="str">'Final Regression Table:'</span>)
+disp(Results)
+
+Convergence = array2table(history, ...
+    <span class="str">'VariableNames'</span>, ...
+    {<span class="str">'Iteration'</span>, <span class="str">'Vmax'</span>, <span class="str">'Km'</span>, <span class="str">'SSE'</span>, <span class="str">'Delta_Vmax'</span>, <span class="str">'Delta_Km'</span>});
+
+disp(<span class="str">'Gauss-Newton Convergence History:'</span>)
+disp(Convergence)
+
+fprintf(<span class="str">'Final Vmax = %.6f\n'</span>, Vmax)
+fprintf(<span class="str">'Final Km = %.6f\n'</span>, Km)
+fprintf(<span class="str">'Final SSE = %.6e\n'</span>, SSE_final)
+fprintf(<span class="str">'Final RMSE = %.6f\n'</span>, RMSE)
+
+<span class="com">%% Plot fitted curve</span>
+
+Sfine = linspace(min(S), max(S), <span class="num">200</span>)';
+vfine = Vmax*Sfine./(Km + Sfine);
+
+figure;
+plot(S, vobs, <span class="str">'o'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+hold on;
+plot(Sfine, vfine, <span class="str">'-'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+grid on;
+
+xlabel(<span class="str">'Substrate concentration S'</span>);
+ylabel(<span class="str">'Reaction rate v'</span>);
+title(<span class="str">'Michaelis-Menten Nonlinear Regression'</span>);
+legend(<span class="str">'Experimental Data'</span>, <span class="str">'Gauss-Newton Fit'</span>, <span class="str">'Location'</span>, <span class="str">'best'</span>);
+
+<span class="com">%% Plot SSE convergence</span>
+
+figure;
+semilogy(history(:,<span class="num">1</span>), history(:,<span class="num">4</span>), <span class="str">'-o'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+grid on;
+
+xlabel(<span class="str">'Iteration'</span>);
+ylabel(<span class="str">'SSE'</span>);
+title(<span class="str">'Gauss-Newton SSE Convergence'</span>);</code></pre>
+
+        </div>
+      </div>
+    </details>
+  </div>
+</details>
+<!-- P16 -->
+<details class="prob">
+  <summary><span class="prob-num">P16</span>&ensp;<strong>Coupled ODE System</strong> — Batch Reactor \(A \rightarrow B \rightarrow C\)</summary>
+
+  <div class="prob-body">
+    <p>
+      A batch reactor contains a consecutive reaction system. Species \(A\) converts to desired intermediate \(B\),
+      while \(B\) also undergoes nonlinear disappearance to final product \(C\).
+    </p>
+
+    \[
+      A \rightarrow B \rightarrow C
+    \]
+
+    <p>The governing ODE system is:</p>
+
+    \[
+      \frac{dC_A}{dt}=-0.8C_A
+    \]
+
+    \[
+      \frac{dC_B}{dt}=0.8C_A-0.3C_B-0.15C_B^2
+    \]
+
+    <p>Initial conditions:</p>
+
+    \[
+      C_A(0)=2.0,\qquad C_B(0)=0
+    \]
+
+    <p>
+      Use <strong>RK4</strong> with:
+    </p>
+
+    \[
+      h=0.2
+    \]
+
+    <p>
+      Find \(C_A(1.0)\) and \(C_B(1.0)\).
+    </p>
+
+    <details class="ans">
+      <summary>▶ Reveal Detailed Hand-Writing Answer</summary>
+
+      <div class="ans-body">
+
+        <h4>Step 1 — Define the Vector Form</h4>
+
+        \[
+          \mathbf{Y}
+          =
+          \begin{bmatrix}
+          C_A\\
+          C_B
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{Y}'
+          =
+          \mathbf{f}(t,\mathbf{Y})
+          =
+          \begin{bmatrix}
+          -0.8C_A\\
+          0.8C_A-0.3C_B-0.15C_B^2
+          \end{bmatrix}
+        \]
+
+        <p>
+          Classical RK4 for a system is:
+        </p>
+
+        \[
+          \mathbf{k}_1=\mathbf{f}(t_n,\mathbf{Y}_n)
+        \]
+
+        \[
+          \mathbf{k}_2=\mathbf{f}\left(t_n+\frac{h}{2},
+          \mathbf{Y}_n+\frac{h}{2}\mathbf{k}_1\right)
+        \]
+
+        \[
+          \mathbf{k}_3=\mathbf{f}\left(t_n+\frac{h}{2},
+          \mathbf{Y}_n+\frac{h}{2}\mathbf{k}_2\right)
+        \]
+
+        \[
+          \mathbf{k}_4=\mathbf{f}\left(t_n+h,
+          \mathbf{Y}_n+h\mathbf{k}_3\right)
+        \]
+
+        \[
+          \mathbf{Y}_{n+1}
+          =
+          \mathbf{Y}_n+
+          \frac{h}{6}
+          \left(
+          \mathbf{k}_1+2\mathbf{k}_2+2\mathbf{k}_3+\mathbf{k}_4
+          \right)
+        \]
+
+        <hr>
+
+        <h4>Step 2 — First RK4 Step: \(t=0 \rightarrow 0.2\)</h4>
+
+        \[
+          C_A^0=2.0000,\qquad C_B^0=0.0000
+        \]
+
+        <p><strong>Compute \(\mathbf{k}_1\):</strong></p>
+
+        \[
+          k_{1,A}=-0.8(2.0000)=-1.6000
+        \]
+
+        \[
+          k_{1,B}=0.8(2.0000)-0.3(0)-0.15(0)^2=1.6000
+        \]
+
+        \[
+          \mathbf{k}_1=
+          \begin{bmatrix}
+          -1.6000\\
+          1.6000
+          \end{bmatrix}
+        \]
+
+        <p><strong>Compute \(\mathbf{k}_2\):</strong></p>
+
+        \[
+          C_A=2.0000+\frac{0.2}{2}(-1.6000)=1.8400
+        \]
+
+        \[
+          C_B=0+\frac{0.2}{2}(1.6000)=0.1600
+        \]
+
+        \[
+          k_{2,A}=-0.8(1.8400)=-1.4720
+        \]
+
+        \[
+          k_{2,B}=0.8(1.8400)-0.3(0.1600)-0.15(0.1600)^2
+        \]
+
+        \[
+          k_{2,B}=1.4720-0.0480-0.00384=1.42016
+        \]
+
+        \[
+          \mathbf{k}_2=
+          \begin{bmatrix}
+          -1.4720\\
+          1.42016
+          \end{bmatrix}
+        \]
+
+        <p><strong>Compute \(\mathbf{k}_3\):</strong></p>
+
+        \[
+          C_A=2.0000+\frac{0.2}{2}(-1.4720)=1.8528
+        \]
+
+        \[
+          C_B=0+\frac{0.2}{2}(1.42016)=0.142016
+        \]
+
+        \[
+          k_{3,A}=-0.8(1.8528)=-1.48224
+        \]
+
+        \[
+          k_{3,B}=0.8(1.8528)-0.3(0.142016)-0.15(0.142016)^2
+        \]
+
+        \[
+          k_{3,B}=1.48224-0.042605-0.003025=1.43661
+        \]
+
+        \[
+          \mathbf{k}_3=
+          \begin{bmatrix}
+          -1.48224\\
+          1.43661
+          \end{bmatrix}
+        \]
+
+        <p><strong>Compute \(\mathbf{k}_4\):</strong></p>
+
+        \[
+          C_A=2.0000+0.2(-1.48224)=1.703552
+        \]
+
+        \[
+          C_B=0+0.2(1.43661)=0.287322
+        \]
+
+        \[
+          k_{4,A}=-0.8(1.703552)=-1.36284
+        \]
+
+        \[
+          k_{4,B}=0.8(1.703552)-0.3(0.287322)-0.15(0.287322)^2
+        \]
+
+        \[
+          k_{4,B}=1.362842-0.086197-0.012383=1.26426
+        \]
+
+        \[
+          \mathbf{k}_4=
+          \begin{bmatrix}
+          -1.36284\\
+          1.26426
+          \end{bmatrix}
+        \]
+
+        <p><strong>Update:</strong></p>
+
+        \[
+          C_A^1
+          =
+          2+\frac{0.2}{6}
+          [-1.6000+2(-1.4720)+2(-1.48224)-1.36284]
+        \]
+
+        \[
+          C_A^1=1.70429
+        \]
+
+        \[
+          C_B^1
+          =
+          0+\frac{0.2}{6}
+          [1.6000+2(1.42016)+2(1.43661)+1.26426]
+        \]
+
+        \[
+          C_B^1=0.28593
+        \]
+
+        \[
+          \boxed{
+          C_A(0.2)=1.70429,\qquad C_B(0.2)=0.28593
+          }
+        \]
+
+        <hr>
+
+        <h4>Step 3 — Second RK4 Step: \(t=0.2 \rightarrow 0.4\)</h4>
+
+        \[
+          C_A^1=1.70429,\qquad C_B^1=0.28593
+        \]
+
+        \[
+          \mathbf{k}_1=
+          \begin{bmatrix}
+          -1.36343\\
+          1.26539
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_2=
+          \begin{bmatrix}
+          -1.25436\\
+          1.10510
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_3=
+          \begin{bmatrix}
+          -1.26308\\
+          1.12058
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_4=
+          \begin{bmatrix}
+          -1.16134\\
+          0.96930
+          \end{bmatrix}
+        \]
+
+        \[
+          C_A^2
+          =
+          1.70429+\frac{0.2}{6}
+          [-1.36343+2(-1.25436)+2(-1.26308)-1.16134]
+        \]
+
+        \[
+          C_A^2=1.45230
+        \]
+
+        \[
+          C_B^2
+          =
+          0.28593+\frac{0.2}{6}
+          [1.26539+2(1.10510)+2(1.12058)+0.96930]
+        \]
+
+        \[
+          C_B^2=0.50879
+        \]
+
+        <hr>
+
+        <h4>Step 4 — Third RK4 Step: \(t=0.4 \rightarrow 0.6\)</h4>
+
+        \[
+          C_A^2=1.45230,\qquad C_B^2=0.50879
+        \]
+
+        \[
+          \mathbf{k}_1=
+          \begin{bmatrix}
+          -1.16184\\
+          0.97037
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_2=
+          \begin{bmatrix}
+          -1.06889\\
+          0.83209
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_3=
+          \begin{bmatrix}
+          -1.07633\\
+          0.84616
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_4=
+          \begin{bmatrix}
+          -0.98963\\
+          0.71726
+          \end{bmatrix}
+        \]
+
+        \[
+          C_A^3
+          =
+          1.45230+\frac{0.2}{6}
+          [-1.16184+2(-1.06889)+2(-1.07633)-0.98963]
+        \]
+
+        \[
+          C_A^3=1.23757
+        \]
+
+        \[
+          C_B^3
+          =
+          0.50879+\frac{0.2}{6}
+          [0.97037+2(0.83209)+2(0.84616)+0.71726]
+        \]
+
+        \[
+          C_B^3=0.67693
+        \]
+
+        <hr>
+
+        <h4>Step 5 — Fourth RK4 Step: \(t=0.6 \rightarrow 0.8\)</h4>
+
+        \[
+          C_A^3=1.23757,\qquad C_B^3=0.67693
+        \]
+
+        \[
+          \mathbf{k}_1=
+          \begin{bmatrix}
+          -0.99006\\
+          0.71824
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_2=
+          \begin{bmatrix}
+          -0.91085\\
+          0.60213
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_3=
+          \begin{bmatrix}
+          -0.91719\\
+          0.61454
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_4=
+          \begin{bmatrix}
+          -0.84331\\
+          0.50739
+          \end{bmatrix}
+        \]
+
+        \[
+          C_A^4=1.05459
+        \]
+
+        \[
+          C_B^4=0.79890
+        \]
+
+        <hr>
+
+        <h4>Step 6 — Fifth RK4 Step: \(t=0.8 \rightarrow 1.0\)</h4>
+
+        \[
+          C_A^4=1.05459,\qquad C_B^4=0.79890
+        \]
+
+        \[
+          \mathbf{k}_1=
+          \begin{bmatrix}
+          -0.84367\\
+          0.50827
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_2=
+          \begin{bmatrix}
+          -0.77618\\
+          0.41296
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_3=
+          \begin{bmatrix}
+          -0.78158\\
+          0.42363
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_4=
+          \begin{bmatrix}
+          -0.71862\\
+          0.33641
+          \end{bmatrix}
+        \]
+
+        \[
+          C_A^5
+          =
+          1.05459+\frac{0.2}{6}
+          [-0.84367+2(-0.77618)+2(-0.78158)-0.71862]
+        \]
+
+        \[
+          C_A^5=0.89866
+        \]
+
+        \[
+          C_B^5
+          =
+          0.79890+\frac{0.2}{6}
+          [0.50827+2(0.41296)+2(0.42363)+0.33641]
+        \]
+
+        \[
+          C_B^5=0.88283
+        \]
+
+        <hr>
+
+        <h4>Final Answer</h4>
+
+        \[
+          \boxed{
+          C_A(1.0)=0.89866
+          }
+        \]
+
+        \[
+          \boxed{
+          C_B(1.0)=0.88283
+          }
+        \]
+
+        <h4>Summary Table</h4>
+
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>\(C_A\)</th>
+                <th>\(C_B\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0.0</td><td>2.00000</td><td>0.00000</td></tr>
+              <tr><td>0.2</td><td>1.70429</td><td>0.28593</td></tr>
+              <tr><td>0.4</td><td>1.45230</td><td>0.50879</td></tr>
+              <tr><td>0.6</td><td>1.23757</td><td>0.67693</td></tr>
+              <tr><td>0.8</td><td>1.05459</td><td>0.79890</td></tr>
+              <tr><td>1.0</td><td class="exact">0.89866</td><td class="exact">0.88283</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </details>
+
+    <details class="ans">
+      <summary>▶ MATLAB Code</summary>
+
+      <div class="ans-body">
+        <h4 class="subsub">MATLAB Code — P16 Coupled RK4 Reactor System</h4>
+
+        <div class="formula-box matlab-panel">
+          <div class="formula-title">Batch Reactor \(A \rightarrow B \rightarrow C\)</div>
+
+<pre class="matlab-code"><code><span class="com">%% P16 — Coupled ODE System using RK4</span>
+<span class="com">% Reaction system:</span>
+<span class="com">%     A -> B -> C</span>
+<span class="com">%</span>
+<span class="com">% ODEs:</span>
+<span class="com">%     dCA/dt = -0.8*CA</span>
+<span class="com">%     dCB/dt =  0.8*CA - 0.3*CB - 0.15*CB^2</span>
+
+<span class="kw">clc</span>;
+<span class="kw">clear</span>;
+<span class="kw">close</span> <span class="kw">all</span>;
+
+h = <span class="num">0.2</span>;
+t0 = <span class="num">0</span>;
+tf = <span class="num">1.0</span>;
+
+t = t0:h:tf;
+N = length(t);
+
+Y = zeros(<span class="num">2</span>,N);
+
+<span class="com">% Initial conditions</span>
+Y(:,<span class="num">1</span>) = [<span class="num">2.0</span>; <span class="num">0.0</span>];
+
+<span class="com">% Function vector</span>
+f = @(t,Y) [ ...
+    -<span class="num">0.8</span>*Y(<span class="num">1</span>); ...
+     <span class="num">0.8</span>*Y(<span class="num">1</span>) - <span class="num">0.3</span>*Y(<span class="num">2</span>) - <span class="num">0.15</span>*Y(<span class="num">2</span>)^<span class="num">2</span> ];
+
+<span class="com">% Storage for slopes</span>
+K1 = zeros(<span class="num">2</span>,N-<span class="num">1</span>);
+K2 = zeros(<span class="num">2</span>,N-<span class="num">1</span>);
+K3 = zeros(<span class="num">2</span>,N-<span class="num">1</span>);
+K4 = zeros(<span class="num">2</span>,N-<span class="num">1</span>);
+
+<span class="kw">for</span> n = <span class="num">1</span>:N-<span class="num">1</span>
+
+    K1(:,n) = f(t(n), Y(:,n));
+
+    K2(:,n) = f(t(n)+h/<span class="num">2</span>, Y(:,n)+(h/<span class="num">2</span>)*K1(:,n));
+
+    K3(:,n) = f(t(n)+h/<span class="num">2</span>, Y(:,n)+(h/<span class="num">2</span>)*K2(:,n));
+
+    K4(:,n) = f(t(n)+h, Y(:,n)+h*K3(:,n));
+
+    Y(:,n+<span class="num">1</span>) = Y(:,n) + (h/<span class="num">6</span>)*(K1(:,n)+<span class="num">2</span>*K2(:,n)+<span class="num">2</span>*K3(:,n)+K4(:,n));
+
+<span class="kw">end</span>
+
+CA = Y(<span class="num">1</span>,:)';
+CB = Y(<span class="num">2</span>,:)';
+
+Results = table(t', CA, CB, ...
+    <span class="str">'VariableNames'</span>, {<span class="str">'Time'</span>, <span class="str">'CA'</span>, <span class="str">'CB'</span>});
+
+disp(Results)
+
+fprintf(<span class="str">'CA(1.0) = %.6f\n'</span>, CA(end))
+fprintf(<span class="str">'CB(1.0) = %.6f\n'</span>, CB(end))
+
+figure;
+plot(t, CA, <span class="str">'-o'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+hold on;
+plot(t, CB, <span class="str">'-s'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+grid on;
+
+xlabel(<span class="str">'Time'</span>);
+ylabel(<span class="str">'Concentration'</span>);
+title(<span class="str">'Coupled Batch Reactor ODE System using RK4'</span>);
+legend(<span class="str">'C_A'</span>, <span class="str">'C_B'</span>, <span class="str">'Location'</span>, <span class="str">'best'</span>);</code></pre>
+
+        </div>
+      </div>
+    </details>
+  </div>
+</details>
+
+<!-- P17 -->
+<details class="prob">
+  <summary><span class="prob-num">P17</span>&ensp;<strong>Non-Isothermal ODE System</strong> — CSTR Start-Up with Heat Generation</summary>
+
+  <div class="prob-body">
+    <p>
+      A non-isothermal CSTR is started from an initial concentration and temperature.
+      The concentration changes due to inlet flow and second-order reaction.
+      The temperature changes due to inlet flow, heat generation, and cooling.
+    </p>
+
+    <p>The coupled ODE model is:</p>
+
+    \[
+      \frac{dC_A}{dt}=3-C_A-0.25C_A^2
+    \]
+
+    \[
+      \frac{dT}{dt}=440-1.4T+3C_A^2
+    \]
+
+    <p>Initial conditions:</p>
+
+    \[
+      C_A(0)=1.0,\qquad T(0)=300
+    \]
+
+    <p>
+      Use <strong>RK4</strong> with:
+    </p>
+
+    \[
+      h=0.2
+    \]
+
+    <p>
+      Find \(C_A(1.0)\) and \(T(1.0)\).
+    </p>
+
+    <details class="ans">
+      <summary>▶ Reveal Detailed Hand-Writing Answer</summary>
+
+      <div class="ans-body">
+
+        <h4>Step 1 — Define the Vector Form</h4>
+
+        \[
+          \mathbf{Y}
+          =
+          \begin{bmatrix}
+          C_A\\
+          T
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{Y}'
+          =
+          \mathbf{f}(t,\mathbf{Y})
+          =
+          \begin{bmatrix}
+          3-C_A-0.25C_A^2\\
+          440-1.4T+3C_A^2
+          \end{bmatrix}
+        \]
+
+        <p>
+          Notice that this is a <strong>coupled nonlinear system</strong>:
+          concentration affects temperature through the term \(3C_A^2\).
+        </p>
+
+        <hr>
+
+        <h4>Step 2 — First RK4 Step: \(t=0 \rightarrow 0.2\)</h4>
+
+        \[
+          C_A^0=1.0000,\qquad T^0=300.0000
+        \]
+
+        <p><strong>Compute \(\mathbf{k}_1\):</strong></p>
+
+        \[
+          k_{1,C}=3-1-0.25(1)^2=1.7500
+        \]
+
+        \[
+          k_{1,T}=440-1.4(300)+3(1)^2
+        \]
+
+        \[
+          k_{1,T}=440-420+3=23.0000
+        \]
+
+        \[
+          \mathbf{k}_1=
+          \begin{bmatrix}
+          1.7500\\
+          23.0000
+          \end{bmatrix}
+        \]
+
+        <p><strong>Compute \(\mathbf{k}_2\):</strong></p>
+
+        \[
+          C_A=1+\frac{0.2}{2}(1.7500)=1.1750
+        \]
+
+        \[
+          T=300+\frac{0.2}{2}(23.0000)=302.3000
+        \]
+
+        \[
+          k_{2,C}=3-1.1750-0.25(1.1750)^2
+        \]
+
+        \[
+          k_{2,C}=1.47984
+        \]
+
+        \[
+          k_{2,T}=440-1.4(302.3000)+3(1.1750)^2
+        \]
+
+        \[
+          k_{2,T}=20.92188
+        \]
+
+        \[
+          \mathbf{k}_2=
+          \begin{bmatrix}
+          1.47984\\
+          20.92188
+          \end{bmatrix}
+        \]
+
+        <p><strong>Compute \(\mathbf{k}_3\):</strong></p>
+
+        \[
+          C_A=1+\frac{0.2}{2}(1.47984)=1.14798
+        \]
+
+        \[
+          T=300+\frac{0.2}{2}(20.92188)=302.09219
+        \]
+
+        \[
+          k_{3,C}=3-1.14798-0.25(1.14798)^2=1.52255
+        \]
+
+        \[
+          k_{3,T}=440-1.4(302.09219)+3(1.14798)^2=21.02454
+        \]
+
+        \[
+          \mathbf{k}_3=
+          \begin{bmatrix}
+          1.52255\\
+          21.02454
+          \end{bmatrix}
+        \]
+
+        <p><strong>Compute \(\mathbf{k}_4\):</strong></p>
+
+        \[
+          C_A=1+0.2(1.52255)=1.30451
+        \]
+
+        \[
+          T=300+0.2(21.02454)=304.20491
+        \]
+
+        \[
+          k_{4,C}=3-1.30451-0.25(1.30451)^2=1.27005
+        \]
+
+        \[
+          k_{4,T}=440-1.4(304.20491)+3(1.30451)^2=19.21837
+        \]
+
+        \[
+          \mathbf{k}_4=
+          \begin{bmatrix}
+          1.27005\\
+          19.21837
+          \end{bmatrix}
+        \]
+
+        <p><strong>Update:</strong></p>
+
+        \[
+          C_A^1
+          =
+          1+\frac{0.2}{6}
+          [1.7500+2(1.47984)+2(1.52255)+1.27005]
+        \]
+
+        \[
+          C_A^1=1.30083
+        \]
+
+        \[
+          T^1
+          =
+          300+\frac{0.2}{6}
+          [23.0000+2(20.92188)+2(21.02454)+19.21837]
+        \]
+
+        \[
+          T^1=304.20371
+        \]
+
+        \[
+          \boxed{
+          C_A(0.2)=1.30083,\qquad T(0.2)=304.20371
+          }
+        \]
+
+        <hr>
+
+        <h4>Step 3 — Second RK4 Step: \(t=0.2 \rightarrow 0.4\)</h4>
+
+        \[
+          C_A^1=1.30083,\qquad T^1=304.20371
+        \]
+
+        \[
+          \mathbf{k}_1=
+          \begin{bmatrix}
+          1.27613\\
+          19.19127
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_2=
+          \begin{bmatrix}
+          1.06145\\
+          17.54937
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_3=
+          \begin{bmatrix}
+          1.09813\\
+          17.59662
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_4=
+          \begin{bmatrix}
+          0.90160\\
+          16.12311
+          \end{bmatrix}
+        \]
+
+        \[
+          C_A^2
+          =
+          1.30083+\frac{0.2}{6}
+          [1.27613+2(1.06145)+2(1.09813)+0.90160]
+        \]
+
+        \[
+          C_A^2=1.51739
+        \]
+
+        \[
+          T^2
+          =
+          304.20371+\frac{0.2}{6}
+          [19.19127+2(17.54937)+2(17.59662)+16.12311]
+        \]
+
+        \[
+          T^2=307.72392
+        \]
+
+        <hr>
+
+        <h4>Step 4 — Third RK4 Step: \(t=0.4 \rightarrow 0.6\)</h4>
+
+        \[
+          C_A^2=1.51739,\qquad T^2=307.72392
+        \]
+
+        \[
+          \mathbf{k}_1=
+          \begin{bmatrix}
+          0.90699\\
+          16.09394
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_2=
+          \begin{bmatrix}
+          0.74542\\
+          14.69122
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_3=
+          \begin{bmatrix}
+          0.77450\\
+          14.73250
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_4=
+          \begin{bmatrix}
+          0.62857\\
+          13.45110
+          \end{bmatrix}
+        \]
+
+        \[
+          C_A^3=1.66990
+        \]
+
+        \[
+          T^3=310.67033
+        \]
+
+        <hr>
+
+        <h4>Step 5 — Fourth RK4 Step: \(t=0.6 \rightarrow 0.8\)</h4>
+
+        \[
+          C_A^3=1.66990,\qquad T^3=310.67033
+        \]
+
+        \[
+          \mathbf{k}_1=
+          \begin{bmatrix}
+          0.63295\\
+          13.42728
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_2=
+          \begin{bmatrix}
+          0.51580\\
+          12.19366
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_3=
+          \begin{bmatrix}
+          0.53764\\
+          12.24495
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_4=
+          \begin{bmatrix}
+          0.43275\\
+          11.11074
+          \end{bmatrix}
+        \]
+
+        \[
+          C_A^4=1.77566
+        \]
+
+        \[
+          T^4=313.11751
+        \]
+
+        <hr>
+
+        <h4>Step 6 — Fifth RK4 Step: \(t=0.8 \rightarrow 1.0\)</h4>
+
+        \[
+          C_A^4=1.77566,\qquad T^4=313.11751
+        \]
+
+        \[
+          \mathbf{k}_1=
+          \begin{bmatrix}
+          0.43610\\
+          11.09437
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_2=
+          \begin{bmatrix}
+          0.35330\\
+          10.01148
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_3=
+          \begin{bmatrix}
+          0.36909\\
+          10.07291
+          \end{bmatrix}
+        \]
+
+        \[
+          \mathbf{k}_4=
+          \begin{bmatrix}
+          0.29538\\
+          9.07676
+          \end{bmatrix}
+        \]
+
+        \[
+          C_A^5
+          =
+          1.77566+
+          \frac{0.2}{6}
+          [0.43610+2(0.35330)+2(0.36909)+0.29538]
+        \]
+
+        \[
+          C_A^5=1.84820
+        \]
+
+        \[
+          T^5
+          =
+          313.11751+
+          \frac{0.2}{6}
+          [11.09437+2(10.01148)+2(10.07291)+9.07676]
+        \]
+
+        \[
+          T^5=315.12884
+        \]
+
+        <hr>
+
+        <h4>Final Answer</h4>
+
+        \[
+          \boxed{
+          C_A(1.0)=1.84820
+          }
+        \]
+
+        \[
+          \boxed{
+          T(1.0)=315.12884
+          }
+        \]
+
+        <h4>Summary Table</h4>
+
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>\(C_A\)</th>
+                <th>\(T\)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>0.0</td><td>1.00000</td><td>300.00000</td></tr>
+              <tr><td>0.2</td><td>1.30083</td><td>304.20371</td></tr>
+              <tr><td>0.4</td><td>1.51739</td><td>307.72392</td></tr>
+              <tr><td>0.6</td><td>1.66990</td><td>310.67033</td></tr>
+              <tr><td>0.8</td><td>1.77566</td><td>313.11751</td></tr>
+              <tr><td>1.0</td><td class="exact">1.84820</td><td class="exact">315.12884</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box">
+          The concentration increases because the inlet concentration term \(3-C_A\) initially dominates.
+          The temperature also increases because heat generation \(3C_A^2\) adds energy to the reactor.
+        </div>
+
+      </div>
+    </details>
+
+    <details class="ans">
+      <summary>▶ MATLAB Code</summary>
+
+      <div class="ans-body">
+        <h4 class="subsub">MATLAB Code — P17 Non-Isothermal CSTR RK4 System</h4>
+
+        <div class="formula-box matlab-panel">
+          <div class="formula-title">Coupled Concentration-Temperature ODE System</div>
+
+<pre class="matlab-code"><code><span class="com">%% P17 — Non-Isothermal CSTR Start-Up using RK4</span>
+<span class="com">% Coupled ODE system:</span>
+<span class="com">%     dCA/dt = 3 - CA - 0.25*CA^2</span>
+<span class="com">%     dT/dt  = 440 - 1.4*T + 3*CA^2</span>
+
+<span class="kw">clc</span>;
+<span class="kw">clear</span>;
+<span class="kw">close</span> <span class="kw">all</span>;
+
+h = <span class="num">0.2</span>;
+t0 = <span class="num">0</span>;
+tf = <span class="num">1.0</span>;
+
+t = t0:h:tf;
+N = length(t);
+
+Y = zeros(<span class="num">2</span>,N);
+
+<span class="com">% Initial conditions:</span>
+<span class="com">% Y(1,:) = CA</span>
+<span class="com">% Y(2,:) = T</span>
+
+Y(:,<span class="num">1</span>) = [<span class="num">1.0</span>; <span class="num">300.0</span>];
+
+<span class="com">% ODE function vector</span>
+
+f = @(t,Y) [ ...
+    <span class="num">3</span> - Y(<span class="num">1</span>) - <span class="num">0.25</span>*Y(<span class="num">1</span>)^<span class="num">2</span>; ...
+    <span class="num">440</span> - <span class="num">1.4</span>*Y(<span class="num">2</span>) + <span class="num">3</span>*Y(<span class="num">1</span>)^<span class="num">2</span> ];
+
+<span class="com">% Storage for RK4 slopes</span>
+
+K1 = zeros(<span class="num">2</span>,N-<span class="num">1</span>);
+K2 = zeros(<span class="num">2</span>,N-<span class="num">1</span>);
+K3 = zeros(<span class="num">2</span>,N-<span class="num">1</span>);
+K4 = zeros(<span class="num">2</span>,N-<span class="num">1</span>);
+
+<span class="kw">for</span> n = <span class="num">1</span>:N-<span class="num">1</span>
+
+    K1(:,n) = f(t(n), Y(:,n));
+
+    K2(:,n) = f(t(n)+h/<span class="num">2</span>, Y(:,n)+(h/<span class="num">2</span>)*K1(:,n));
+
+    K3(:,n) = f(t(n)+h/<span class="num">2</span>, Y(:,n)+(h/<span class="num">2</span>)*K2(:,n));
+
+    K4(:,n) = f(t(n)+h, Y(:,n)+h*K3(:,n));
+
+    Y(:,n+<span class="num">1</span>) = Y(:,n) + (h/<span class="num">6</span>)*(K1(:,n)+<span class="num">2</span>*K2(:,n)+<span class="num">2</span>*K3(:,n)+K4(:,n));
+
+<span class="kw">end</span>
+
+CA = Y(<span class="num">1</span>,:)';
+Temp = Y(<span class="num">2</span>,:)';
+
+Results = table(t', CA, Temp, ...
+    <span class="str">'VariableNames'</span>, {<span class="str">'Time'</span>, <span class="str">'CA'</span>, <span class="str">'Temperature'</span>});
+
+disp(Results)
+
+fprintf(<span class="str">'CA(1.0) = %.6f\n'</span>, CA(end))
+fprintf(<span class="str">'T(1.0)  = %.6f\n'</span>, Temp(end))
+
+figure;
+plot(t, CA, <span class="str">'-o'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+grid on;
+xlabel(<span class="str">'Time'</span>);
+ylabel(<span class="str">'C_A'</span>);
+title(<span class="str">'Concentration Response in Non-Isothermal CSTR'</span>);
+
+figure;
+plot(t, Temp, <span class="str">'-s'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+grid on;
+xlabel(<span class="str">'Time'</span>);
+ylabel(<span class="str">'Temperature'</span>);
+title(<span class="str">'Temperature Response in Non-Isothermal CSTR'</span>);</code></pre>
+
+        </div>
+      </div>
+    </details>
+  </div>
+</details>
 </section>
 
 
