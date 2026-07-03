@@ -3,16 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Numerical Methods for PDEs — ChemE Lecture</title>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600&family=DM+Mono:ital,wght@0,400;0,500&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
-
 <style>
 :root{
   --bg:#0b0f1a;--surface:#131929;--surface2:#1a2240;--surface3:#1f2a52;
@@ -23,713 +18,113 @@
   --mono:'DM Mono',monospace;--serif:'Crimson Pro',Georgia,serif;--sans:'DM Sans',sans-serif;
   --sidebar:252px;
 }
-
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:var(--sans);
-  font-size:15px;
-  line-height:1.7;
-  display:flex;
-  min-height:100vh;
-  overflow-x:hidden;
-}
-
-/* ── PROGRESS BAR ── */
-#progress{
-  position:fixed;
-  top:0;
-  left:0;
-  height:3px;
-  background:linear-gradient(90deg,var(--gold),var(--teal));
-  z-index:999;
-  transition:width .1s;
-}
-
-/* ── SIDEBAR ── */
-.sidebar{
-  width:var(--sidebar);
-  min-height:100vh;
-  position:sticky;
-  top:0;
-  height:100vh;
-  overflow-y:auto;
-  background:var(--surface);
-  border-right:1px solid var(--border);
-  display:flex;
-  flex-direction:column;
-  flex-shrink:0;
-  z-index:100;
-}
-
-.sidebar::-webkit-scrollbar{width:4px}
-.sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
-
-.sb-header{
-  padding:1.5rem 1.25rem 1rem;
-  border-bottom:1px solid var(--border);
-}
-
-.sb-title{
-  font-family:var(--serif);
-  font-size:1.05rem;
-  font-weight:700;
-  color:var(--gold);
-  line-height:1.2;
-}
-
-.sb-sub{
-  font-size:0.72rem;
-  color:var(--muted);
-  margin-top:.25rem;
-  font-family:var(--mono);
-}
-
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.7;display:flex;min-height:100vh;overflow-x:hidden}
+#progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--teal));z-index:999;transition:width .1s}
+.sidebar{width:var(--sidebar);min-height:100vh;position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;z-index:100}
+.sidebar::-webkit-scrollbar{width:4px}.sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+.sb-header{padding:1.5rem 1.25rem 1rem;border-bottom:1px solid var(--border)}
+.sb-title{font-family:var(--serif);font-size:1.05rem;font-weight:700;color:var(--gold);line-height:1.2}
+.sb-sub{font-size:0.72rem;color:var(--muted);margin-top:.25rem;font-family:var(--mono)}
 .sb-nav{padding:.75rem 0}
-
-.nav-item{
-  display:flex;
-  align-items:center;
-  gap:.6rem;
-  padding:.5rem 1.25rem;
-  cursor:pointer;
-  border-left:3px solid transparent;
-  transition:all .15s;
-  font-size:.82rem;
-  color:var(--muted);
-  text-decoration:none;
-}
-
-.nav-item:hover{
-  color:var(--text);
-  background:var(--surface2);
-  border-left-color:var(--border2);
-}
-
-.nav-item.active{
-  color:var(--gold);
-  background:var(--surface2);
-  border-left-color:var(--gold);
-}
-
-.nav-icon{
-  font-size:.9rem;
-  width:1.1rem;
-  text-align:center;
-  flex-shrink:0;
-}
-
+.nav-item{display:flex;align-items:center;gap:.6rem;padding:.5rem 1.25rem;cursor:pointer;border-left:3px solid transparent;transition:all .15s;font-size:.82rem;color:var(--muted);text-decoration:none}
+.nav-item:hover{color:var(--text);background:var(--surface2);border-left-color:var(--border2)}
+.nav-item.active{color:var(--gold);background:var(--surface2);border-left-color:var(--gold)}
+.nav-icon{font-size:.9rem;width:1.1rem;text-align:center;flex-shrink:0}
 .nav-label{line-height:1.2}
-
-.sb-footer{
-  margin-top:auto;
-  padding:1rem 1.25rem;
-  border-top:1px solid var(--border);
-  font-size:.72rem;
-  color:var(--faint);
-  font-family:var(--mono);
-}
-
-/* ── MAIN CONTENT ── */
-.main{
-  flex:1;
-  padding:3rem 3.5rem;
-  max-width:calc(100% - var(--sidebar));
-  overflow-x:hidden;
-}
-
-/* ── SECTIONS ── */
-.sect{
-  max-width:860px;
-  margin:0 auto 7rem;
-  scroll-margin-top:2rem;
-}
-
-.sect-number{
-  font-family:var(--mono);
-  font-size:4.5rem;
-  font-weight:700;
-  color:var(--faint);
-  line-height:1;
-  margin-bottom:.25rem;
-  letter-spacing:-2px;
-}
-
-.sect-title{
-  font-family:var(--serif);
-  font-size:2.4rem;
-  font-weight:700;
-  color:var(--text);
-  line-height:1.1;
-  margin-bottom:.4rem;
-}
-
-.sect-subtitle{
-  color:var(--muted);
-  font-size:.92rem;
-  margin-bottom:2rem;
-  padding-bottom:1.5rem;
-  border-bottom:1px solid var(--border);
-}
-
-.badge{
-  display:inline-block;
-  padding:.15em .55em;
-  border-radius:4px;
-  font-family:var(--mono);
-  font-size:.7rem;
-  font-weight:500;
-  letter-spacing:.03em;
-  vertical-align:middle;
-  margin-left:.4rem;
-}
-
-.badge-gold{
-  background:rgba(240,160,32,.15);
-  color:var(--gold);
-  border:1px solid rgba(240,160,32,.3);
-}
-
-.badge-teal{
-  background:rgba(30,216,200,.1);
-  color:var(--teal);
-  border:1px solid rgba(30,216,200,.25);
-}
-
-.badge-red{
-  background:rgba(255,107,107,.1);
-  color:var(--error);
-  border:1px solid rgba(255,107,107,.25);
-}
-
-/* ── FORMULA BOX ── */
-.formula-box{
-  background:var(--surface);
-  border-left:3px solid var(--gold);
-  border-radius:0 8px 8px 0;
-  padding:1.25rem 1.5rem;
-  margin:1.5rem 0;
-  position:relative;
-  overflow:hidden;
-}
-
-.formula-box::before{
-  content:'';
-  position:absolute;
-  top:0;
-  right:0;
-  width:120px;
-  height:100%;
-  background:radial-gradient(ellipse at right,rgba(240,160,32,.04) 0%,transparent 70%);
-}
-
-.formula-title{
-  font-family:var(--mono);
-  font-size:.72rem;
-  color:var(--gold);
-  text-transform:uppercase;
-  letter-spacing:.08em;
-  margin-bottom:.6rem;
-}
-
+.sb-footer{margin-top:auto;padding:1rem 1.25rem;border-top:1px solid var(--border);font-size:.72rem;color:var(--faint);font-family:var(--mono)}
+.main{flex:1;padding:3rem 3.5rem;max-width:calc(100% - var(--sidebar));overflow-x:hidden}
+.sect{max-width:860px;margin:0 auto 7rem;scroll-margin-top:2rem}
+.sect-number{font-family:var(--mono);font-size:4.5rem;font-weight:700;color:var(--faint);line-height:1;margin-bottom:.25rem;letter-spacing:-2px}
+.sect-title{font-family:var(--serif);font-size:2.4rem;font-weight:700;color:var(--text);line-height:1.1;margin-bottom:.4rem}
+.sect-subtitle{color:var(--muted);font-size:.92rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.badge{display:inline-block;padding:.15em .55em;border-radius:4px;font-family:var(--mono);font-size:.7rem;font-weight:500;letter-spacing:.03em;vertical-align:middle;margin-left:.4rem}
+.badge-gold{background:rgba(240,160,32,.15);color:var(--gold);border:1px solid rgba(240,160,32,.3)}
+.badge-teal{background:rgba(30,216,200,.1);color:var(--teal);border:1px solid rgba(30,216,200,.25)}
+.badge-red{background:rgba(255,107,107,.1);color:var(--error);border:1px solid rgba(255,107,107,.25)}
+.formula-box{background:var(--surface);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:1.25rem 1.5rem;margin:1.5rem 0;position:relative;overflow:hidden}
+.formula-box::before{content:'';position:absolute;top:0;right:0;width:120px;height:100%;background:radial-gradient(ellipse at right,rgba(240,160,32,.04) 0%,transparent 70%)}
+.formula-title{font-family:var(--mono);font-size:.72rem;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.6rem}
 .formula-box .katex-display{margin:.4rem 0!important}
-
-.formula-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1rem;
-  margin-top:.5rem;
-}
-
-.formula-cell{
-  background:var(--surface2);
-  padding:.75rem 1rem;
-  border-radius:6px;
-  border:1px solid var(--border);
-}
-
-.formula-cell-label{
-  font-size:.7rem;
-  color:var(--muted);
-  font-family:var(--mono);
-  margin-bottom:.25rem;
-  text-transform:uppercase;
-  letter-spacing:.06em;
-}
-
-/* ── EXAMPLE CARD ── */
-.example-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:1.5rem;
-  margin:1.5rem 0;
-}
-
-.example-header{
-  display:flex;
-  align-items:center;
-  gap:.75rem;
-  margin-bottom:1.25rem;
-  padding-bottom:1rem;
-  border-bottom:1px solid var(--border);
-}
-
+.formula-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.5rem}
+.formula-cell{background:var(--surface2);padding:.75rem 1rem;border-radius:6px;border:1px solid var(--border)}
+.formula-cell-label{font-size:.7rem;color:var(--muted);font-family:var(--mono);margin-bottom:.25rem;text-transform:uppercase;letter-spacing:.06em}
+.example-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin:1.5rem 0}
+.example-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
 .example-icon{font-size:1.3rem}
-
-.example-title{
-  font-family:var(--serif);
-  font-size:1.35rem;
-  font-weight:600;
-  color:var(--text);
-}
-
-.problem-box{
-  background:var(--surface2);
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:1rem 1.25rem;
-  margin:.75rem 0 1.25rem;
-  font-size:.92rem;
-}
-
+.example-title{font-family:var(--serif);font-size:1.35rem;font-weight:600;color:var(--text)}
+.problem-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;margin:.75rem 0 1.25rem;font-size:.92rem}
 .problem-box p+p{margin-top:.4rem}
-
-/* ── STEPS ── */
 .steps{margin:1rem 0}
-
-details.step{
-  border:1px solid var(--border);
-  border-radius:8px;
-  margin:.5rem 0;
-  overflow:hidden;
-  transition:border-color .15s;
-}
-
+details.step{border:1px solid var(--border);border-radius:8px;margin:.5rem 0;overflow:hidden;transition:border-color .15s}
 details.step:hover{border-color:var(--border2)}
 details.step[open]{border-color:var(--border2)}
-
-details.step summary{
-  padding:.85rem 1.1rem;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:.85rem;
-  background:var(--surface2);
-  list-style:none;
-  user-select:none;
-  font-size:.88rem;
-  color:var(--text);
-}
-
+details.step summary{padding:.85rem 1.1rem;cursor:pointer;display:flex;align-items:center;gap:.85rem;background:var(--surface2);list-style:none;user-select:none;font-size:.88rem;color:var(--text)}
 details.step summary::-webkit-details-marker{display:none}
-
-details.step[open] summary{
-  background:var(--surface3);
-  border-bottom:1px solid var(--border);
-}
-
-.step-num{
-  background:var(--gold);
-  color:var(--bg);
-  width:1.5rem;
-  height:1.5rem;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:var(--mono);
-  font-size:.72rem;
-  font-weight:700;
-  flex-shrink:0;
-}
-
+details.step[open] summary{background:var(--surface3);border-bottom:1px solid var(--border)}
+.step-num{background:var(--gold);color:var(--bg);width:1.5rem;height:1.5rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.72rem;font-weight:700;flex-shrink:0}
 .step-label{font-weight:500}
-
-.step-body{
-  padding:1rem 1.25rem;
-  font-size:.9rem;
-  line-height:1.8;
-}
-
+.step-body{padding:1rem 1.25rem;font-size:.9rem;line-height:1.8}
 .step-body p+p{margin-top:.5rem}
 .step-body .katex-display{margin:.6rem 0!important}
-
-.eq-row{
-  background:var(--surface2);
-  border-radius:6px;
-  padding:.5rem 1rem;
-  margin:.4rem 0;
-  font-size:.88rem;
-}
-
-/* ── TABLES ── */
-.tbl-wrap{
-  overflow-x:auto;
-  margin:1.5rem 0;
-}
-
-table.dtbl{
-  width:100%;
-  border-collapse:collapse;
-  font-size:.85rem;
-  font-family:var(--mono);
-}
-
-table.dtbl th{
-  background:var(--surface3);
-  color:var(--gold);
-  padding:.6rem .85rem;
-  text-align:center;
-  font-size:.75rem;
-  text-transform:uppercase;
-  letter-spacing:.06em;
-  font-weight:500;
-  border-bottom:2px solid var(--gold);
-  white-space:nowrap;
-}
-
-table.dtbl td{
-  padding:.55rem .85rem;
-  text-align:center;
-  border-bottom:1px solid var(--border);
-}
-
+.eq-row{background:var(--surface2);border-radius:6px;padding:.5rem 1rem;margin:.4rem 0;font-size:.88rem}
+.tbl-wrap{overflow-x:auto;margin:1.5rem 0}
+table.dtbl{width:100%;border-collapse:collapse;font-size:.85rem;font-family:var(--mono)}
+table.dtbl th{background:var(--surface3);color:var(--gold);padding:.6rem .85rem;text-align:center;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;font-weight:500;border-bottom:2px solid var(--gold);white-space:nowrap}
+table.dtbl td{padding:.55rem .85rem;text-align:center;border-bottom:1px solid var(--border)}
 table.dtbl tr:last-child td{border-bottom:none}
 table.dtbl tr:hover td{background:var(--surface2)}
-td.exact{color:var(--success)}
-td.err{color:var(--error)}
-td.highlight{color:var(--gold);font-weight:500}
+td.exact{color:var(--success)}td.err{color:var(--error)}td.highlight{color:var(--gold);font-weight:500}
 table.dtbl th:first-child,table.dtbl td:first-child{text-align:left}
-
-/* ── COMPARISON TABLE ── */
-.comp-table{
-  border-collapse:collapse;
-  width:100%;
-  font-size:.82rem;
-}
-
-.comp-table th{
-  background:var(--surface3);
-  padding:.7rem 1rem;
-  text-align:left;
-  font-size:.72rem;
-  text-transform:uppercase;
-  letter-spacing:.07em;
-  color:var(--gold);
-  font-weight:500;
-  border-bottom:2px solid var(--gold);
-}
-
-.comp-table td{
-  padding:.65rem 1rem;
-  border-bottom:1px solid var(--border);
-  vertical-align:middle;
-}
-
+.comp-table{border-collapse:collapse;width:100%;font-size:.82rem}
+.comp-table th{background:var(--surface3);padding:.7rem 1rem;text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--gold);font-weight:500;border-bottom:2px solid var(--gold)}
+.comp-table td{padding:.65rem 1rem;border-bottom:1px solid var(--border);vertical-align:middle}
 .comp-table tr:hover td{background:var(--surface2)}
-
-.order-pill{
-  display:inline-block;
-  padding:.1em .5em;
-  border-radius:3px;
-  font-family:var(--mono);
-  font-size:.78rem;
-}
-
+.order-pill{display:inline-block;padding:.1em .5em;border-radius:3px;font-family:var(--mono);font-size:.78rem}
 .o1{background:rgba(255,107,107,.12);color:var(--error)}
 .o2{background:rgba(251,191,36,.12);color:var(--warn)}
 .o3{background:rgba(96,165,250,.12);color:#60a5fa}
 .o4{background:rgba(62,232,168,.12);color:var(--success)}
-
-/* ── PRACTICE ── */
-details.prob{
-  border:1px solid var(--border);
-  border-radius:10px;
-  margin:1.25rem 0;
-  overflow:hidden;
-}
-
-details.prob summary{
-  padding:1rem 1.25rem;
-  cursor:pointer;
-  background:var(--surface2);
-  list-style:none;
-  font-size:.9rem;
-  display:flex;
-  align-items:center;
-  gap:.75rem;
-}
-
+details.prob{border:1px solid var(--border);border-radius:10px;margin:1.25rem 0;overflow:hidden}
+details.prob summary{padding:1rem 1.25rem;cursor:pointer;background:var(--surface2);list-style:none;font-size:.9rem;display:flex;align-items:center;gap:.75rem}
 details.prob summary::-webkit-details-marker{display:none}
 details.prob[open] summary{border-bottom:1px solid var(--border);background:var(--surface3)}
-
 .prob-body{padding:1.25rem 1.5rem}
-
-.prob-num{
-  background:var(--surface3);
-  border:1px solid var(--border2);
-  color:var(--gold);
-  padding:.15em .5em;
-  border-radius:4px;
-  font-family:var(--mono);
-  font-size:.75rem;
-  font-weight:700;
-  flex-shrink:0;
-}
-
-details.ans{
-  margin-top:1rem;
-  border:1px solid rgba(62,232,168,.25);
-  border-radius:8px;
-  overflow:hidden;
-}
-
-details.ans summary{
-  padding:.65rem 1rem;
-  cursor:pointer;
-  background:rgba(62,232,168,.06);
-  list-style:none;
-  color:var(--success);
-  font-size:.82rem;
-  font-family:var(--mono);
-}
-
+.prob-num{background:var(--surface3);border:1px solid var(--border2);color:var(--gold);padding:.15em .5em;border-radius:4px;font-family:var(--mono);font-size:.75rem;font-weight:700;flex-shrink:0}
+details.ans{margin-top:1rem;border:1px solid rgba(62,232,168,.25);border-radius:8px;overflow:hidden}
+details.ans summary{padding:.65rem 1rem;cursor:pointer;background:rgba(62,232,168,.06);list-style:none;color:var(--success);font-size:.82rem;font-family:var(--mono)}
 details.ans summary::-webkit-details-marker{display:none}
-
-details.ans .ans-body{
-  padding:.85rem 1.1rem;
-  font-size:.88rem;
-  line-height:1.8;
-}
-
-/* ── MISC ── */
-.info-box{
-  background:rgba(30,216,200,.06);
-  border:1px solid rgba(30,216,200,.2);
-  border-radius:8px;
-  padding:1rem 1.25rem;
-  margin:1rem 0;
-  font-size:.88rem;
-}
-
-.warn-box{
-  background:rgba(251,191,36,.06);
-  border:1px solid rgba(251,191,36,.2);
-  border-radius:8px;
-  padding:1rem 1.25rem;
-  margin:1rem 0;
-  font-size:.88rem;
-}
-
-.error-box{
-  background:rgba(255,107,107,.06);
-  border:1px solid rgba(255,107,107,.2);
-  border-radius:8px;
-  padding:1rem 1.25rem;
-  margin:1rem 0;
-  font-size:.88rem;
-}
-
-.two-col{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:1rem;
-  margin:1rem 0;
-}
-
-h3.sub{
-  font-family:var(--serif);
-  font-size:1.25rem;
-  font-weight:600;
-  color:var(--text);
-  margin:1.75rem 0 .75rem;
-}
-
-h4.subsub{
-  font-family:var(--sans);
-  font-size:.88rem;
-  font-weight:600;
-  color:var(--gold);
-  text-transform:uppercase;
-  letter-spacing:.07em;
-  margin:1.25rem 0 .5rem;
-}
-
+details.ans .ans-body{padding:.85rem 1.1rem;font-size:.88rem;line-height:1.8}
+.info-box{background:rgba(30,216,200,.06);border:1px solid rgba(30,216,200,.2);border-radius:8px;padding:1rem 1.25rem;margin:1rem 0;font-size:.88rem}
+.warn-box{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);border-radius:8px;padding:1rem 1.25rem;margin:1rem 0;font-size:.88rem}
+.error-box{background:rgba(255,107,107,.06);border:1px solid rgba(255,107,107,.2);border-radius:8px;padding:1rem 1.25rem;margin:1rem 0;font-size:.88rem}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+h3.sub{font-family:var(--serif);font-size:1.25rem;font-weight:600;color:var(--text);margin:1.75rem 0 .75rem}
+h4.subsub{font-family:var(--sans);font-size:.88rem;font-weight:600;color:var(--gold);text-transform:uppercase;letter-spacing:.07em;margin:1.25rem 0 .5rem}
 p{margin-bottom:.5rem}
-
-.note{
-  font-size:.83rem;
-  color:var(--muted);
-  font-style:italic;
-}
-
-.katex-display{
-  overflow-x:auto;
-  overflow-y:hidden;
-}
-
-/* ── SVG GRID ── */
-.grid-diagram{
-  background:var(--surface2);
-  border-radius:8px;
-  padding:1.25rem;
-  display:flex;
-  justify-content:center;
-  margin:1rem 0;
-}
-
-/* ── HERO ── */
-.hero{
-  max-width:860px;
-  margin:0 auto 5rem;
-  padding:3rem 0 2rem;
-}
-
-.hero-tag{
-  font-family:var(--mono);
-  font-size:.75rem;
-  color:var(--teal);
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  margin-bottom:1rem;
-}
-
-.hero-title{
-  font-family:var(--serif);
-  font-size:3.2rem;
-  font-weight:700;
-  line-height:1.1;
-  margin-bottom:1rem;
-  color:var(--text);
-}
-
+.note{font-size:.83rem;color:var(--muted);font-style:italic}
+.katex-display{overflow-x:auto;overflow-y:hidden}
+.grid-diagram{background:var(--surface2);border-radius:8px;padding:1.25rem;display:flex;justify-content:center;margin:1rem 0}
+.hero{max-width:860px;margin:0 auto 5rem;padding:3rem 0 2rem}
+.hero-tag{font-family:var(--mono);font-size:.75rem;color:var(--teal);letter-spacing:.12em;text-transform:uppercase;margin-bottom:1rem}
+.hero-title{font-family:var(--serif);font-size:3.2rem;font-weight:700;line-height:1.1;margin-bottom:1rem;color:var(--text)}
 .hero-title span{color:var(--gold)}
-
-.hero-desc{
-  color:var(--muted);
-  font-size:1rem;
-  max-width:540px;
-  line-height:1.7;
-  margin-bottom:2rem;
-}
-
-.hero-chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:.5rem;
-}
-
-.chip{
-  padding:.3em .8em;
-  background:var(--surface2);
-  border:1px solid var(--border);
-  border-radius:100px;
-  font-size:.78rem;
-  color:var(--muted);
-  font-family:var(--mono);
-  text-decoration:none;
-}
-
-a.chip:hover{
-  color:var(--gold);
-  border-color:var(--gold);
-}
-
-/* ── CODE / MATLAB ── */
-.code-box {
-  background: #020617;
-  color: #d1fae5;
-  border: 1px solid rgba(20,184,166,.35);
-  border-radius: 16px;
-  padding: 1rem 1.2rem;
-  overflow-x: auto;
-  font-family: "Fira Code", Consolas, Monaco, monospace;
-  font-size: .92rem;
-  line-height: 1.65;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
-}
-
-.code-box code {white-space: pre;}
-
-.matlab-panel {
-  background:
-    linear-gradient(135deg, rgba(0, 97, 160, .18), rgba(15, 23, 42, .88)),
-    rgba(15, 23, 42, .9);
-  border: 1px solid rgba(56, 189, 248, .28);
-}
-
-.matlab-code {
-  position: relative;
-  margin: 1rem 0 0;
-  padding: 3.2rem 1.2rem 1.2rem;
-  overflow-x: auto;
-  border-radius: 18px;
-  background:
-    linear-gradient(#f8fafc, #eef2ff);
-  border: 1px solid rgba(148, 163, 184, .55);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.85),
-    0 16px 35px rgba(0,0,0,.25);
-  color: #111827;
-  font-family: Consolas, Monaco, "Courier New", monospace;
-  font-size: .92rem;
-  line-height: 1.65;
-}
-
-.matlab-code::before {
-  content: "MATLAB Editor";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 2.35rem;
-  display: flex;
-  align-items: center;
-  padding-left: 1rem;
-  border-bottom: 1px solid rgba(148, 163, 184, .45);
-  background: linear-gradient(#e0e7ff, #c7d2fe);
-  color: #1e3a8a;
-  font-family: Inter, system-ui, sans-serif;
-  font-weight: 800;
-  letter-spacing: .03em;
-}
-
-.matlab-code::after {
-  content: "";
-  position: absolute;
-  top: .72rem;
-  right: 1rem;
-  width: .72rem;
-  height: .72rem;
-  border-radius: 50%;
-  background: #ef4444;
-  box-shadow:
-    -1.1rem 0 #f59e0b,
-    -2.2rem 0 #22c55e;
-}
-
-.matlab-code code {white-space: pre;}
-
-.matlab-code .com {
-  color: #228b22;
-  font-style: italic;
-}
-
-.matlab-code .kw {
-  color: #0000ff;
-  font-weight: 700;
-}
-
-.matlab-code .str {
-  color: #a31515;
-}
-
-.matlab-code .num {
-  color: #098658;
-  font-weight: 600;
-}
-
+.hero-desc{color:var(--muted);font-size:1rem;max-width:540px;line-height:1.7;margin-bottom:2rem}
+.hero-chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{padding:.3em .8em;background:var(--surface2);border:1px solid var(--border);border-radius:100px;font-size:.78rem;color:var(--muted);font-family:var(--mono);text-decoration:none}
+a.chip:hover{color:var(--gold);border-color:var(--gold)}
+.code-box{background:#020617;color:#d1fae5;border:1px solid rgba(20,184,166,.35);border-radius:16px;padding:1rem 1.2rem;overflow-x:auto;font-family:"Fira Code",Consolas,Monaco,monospace;font-size:.92rem;line-height:1.65;box-shadow:inset 0 0 0 1px rgba(255,255,255,.03)}
+.code-box code{white-space:pre}
+.matlab-panel{background:linear-gradient(135deg, rgba(0, 97, 160, .18), rgba(15, 23, 42, .88)),rgba(15, 23, 42, .9);border:1px solid rgba(56, 189, 248, .28)}
+.matlab-code{position:relative;margin:1rem 0 0;padding:3.2rem 1.2rem 1.2rem;overflow-x:auto;border-radius:18px;background:linear-gradient(#f8fafc,#eef2ff);border:1px solid rgba(148,163,184,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 16px 35px rgba(0,0,0,.25);color:#111827;font-family:Consolas,Monaco,"Courier New",monospace;font-size:.92rem;line-height:1.65}
+.matlab-code::before{content:"MATLAB Editor";position:absolute;inset:0 0 auto 0;height:2.35rem;display:flex;align-items:center;padding-left:1rem;border-bottom:1px solid rgba(148,163,184,.45);background:linear-gradient(#e0e7ff,#c7d2fe);color:#1e3a8a;font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:.03em}
+.matlab-code::after{content:"";position:absolute;top:.72rem;right:1rem;width:.72rem;height:.72rem;border-radius:50%;background:#ef4444;box-shadow:-1.1rem 0 #f59e0b,-2.2rem 0 #22c55e}
+.matlab-code code{white-space:pre}
+.matlab-code .com{color:#228b22;font-style:italic}
+.matlab-code .kw{color:#0000ff;font-weight:700}
+.matlab-code .str{color:#a31515}
+.matlab-code .num{color:#098658;font-weight:600}
 @media(max-width:800px){
   .sidebar{display:none}
   .main{padding:2rem 1.25rem;max-width:100%}
@@ -737,11 +132,8 @@ a.chip:hover{
   .hero-title{font-size:2.2rem}
 }
 </style>
-
-<!-- KaTeX JS -->
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
-
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     renderMathInElement(document.body, {
@@ -756,111 +148,1893 @@ a.chip:hover{
   });
 </script>
 </head>
-
 <body>
-
 <div id="progress"></div>
-
 <!-- ─────────── SIDEBAR ─────────── -->
 <aside class="sidebar">
   <div class="sb-header">
     <div class="sb-title">Numerical Methods<br>for PDEs</div>
     <div class="sb-sub">ChemE · PDE Solvers · Step-by-Step</div>
     <a class="nav-item" href="index.html">
-        <span class="nav-icon">🌊</span>
-        <span class="nav-label">ODE Methods Page</span>
-      </a>
+      <span class="nav-icon">📊</span>
+      <span class="nav-label">ODE Methods Page</span>
+    </a>
   </div>
-
   <nav class="sb-nav">
-    <a class="nav-item active" href="#pde-classification">
-      <span class="nav-icon">📘</span>
-      <span class="nav-label">PDE Classification</span>
-    </a>
-
-    <a class="nav-item" href="#fdm-grid">
-      <span class="nav-icon">📐</span>
-      <span class="nav-label">FDM Grid Setup</span>
-    </a>
-
-    <a class="nav-item" href="#laplace">
-      <span class="nav-icon">🧊</span>
-      <span class="nav-label">Laplace Equation</span>
-    </a>
-
-    <a class="nav-item" href="#poisson">
-      <span class="nav-icon">🔥</span>
-      <span class="nav-label">Poisson Equation</span>
-    </a>
-
-    <a class="nav-item" href="#explicit-heat">
-      <span class="nav-icon">⏩</span>
-      <span class="nav-label">Explicit Heat</span>
-    </a>
-
-    <a class="nav-item" href="#implicit-heat">
-      <span class="nav-icon">⏪</span>
-      <span class="nav-label">Implicit Heat</span>
-    </a>
-
-    <a class="nav-item" href="#crank-nicolson">
-      <span class="nav-icon">⚖️</span>
-      <span class="nav-label">Crank-Nicolson</span>
-    </a>
-
-    <a class="nav-item" href="#method-lines">
-      <span class="nav-icon">📈</span>
-      <span class="nav-label">Method of Lines</span>
-    </a>
-
-    <a class="nav-item" href="#wave">
-      <span class="nav-icon">🌊</span>
-      <span class="nav-label">Wave Equation</span>
-    </a>
-
-    <a class="nav-item" href="#psor">
-      <span class="nav-icon">🔁</span>
-      <span class="nav-label">PSOR Method</span>
-    </a>
-
-    <a class="nav-item" href="#practice">
-      <span class="nav-icon">📝</span>
-      <span class="nav-label">Practice Problems</span>
-    </a>
-
-    <a class="nav-item" href="index.html">
-      <span class="nav-icon">↩️</span>
-      <span class="nav-label">Back to ODE Page</span>
-    </a>
+    <a class="nav-item active" href="#pde-classification"><span class="nav-icon">📘</span><span class="nav-label">PDE Classification</span></a>
+    <a class="nav-item" href="#fdm-grid"><span class="nav-icon">📐</span><span class="nav-label">FDM Grid Setup</span></a>
+    <a class="nav-item" href="#laplace"><span class="nav-icon">🧊</span><span class="nav-label">Laplace Equation</span></a>
+    <a class="nav-item" href="#poisson"><span class="nav-icon">🔥</span><span class="nav-label">Poisson Equation</span></a>
+    <a class="nav-item" href="#explicit-heat"><span class="nav-icon">⏩</span><span class="nav-label">Explicit Heat (FTCS)</span></a>
+    <a class="nav-item" href="#implicit-heat"><span class="nav-icon">⏪</span><span class="nav-label">Implicit Heat (BTCS)</span></a>
+    <a class="nav-item" href="#crank-nicolson"><span class="nav-icon">⚖️</span><span class="nav-label">Crank-Nicolson</span></a>
+    <a class="nav-item" href="#adi"><span class="nav-icon">↔️</span><span class="nav-label">ADI Method</span></a>
+    <a class="nav-item" href="#method-lines"><span class="nav-icon">📈</span><span class="nav-label">Method of Lines</span></a>
+    <a class="nav-item" href="#wave"><span class="nav-icon">🌊</span><span class="nav-label">Wave Equation</span></a>
+    <a class="nav-item" href="#psor"><span class="nav-icon">🔁</span><span class="nav-label">SOR &amp; PSOR</span></a>
+    <a class="nav-item" href="#practice"><span class="nav-icon">📝</span><span class="nav-label">Practice Problems</span></a>
+    <a class="nav-item" href="index.html"><span class="nav-icon">↩️</span><span class="nav-label">Back to ODE Page</span></a>
   </nav>
-
   <div class="sb-footer">Click any step box to expand it</div>
 </aside>
-
 <!-- ─────────── MAIN ─────────── -->
 <main class="main">
-
 <!-- HERO -->
 <div class="hero">
   <div class="hero-tag">Kamyab Safaei · Chemical Engineering</div>
-
   <h1 class="hero-title">
     Numerical Methods for PDEs<br>
     <span>Step by Step</span>
   </h1>
-
   <p class="hero-desc">
-    This lecture-style guide covers numerical methods for partial differential equations:
-    finite difference grids, Laplace and Poisson equations, explicit and implicit heat equation
-    schemes, Crank-Nicolson, Method of Lines, wave equations, and PSOR iteration.
-    Each method includes definitions, detailed hand calculations, MATLAB code, and engineering examples.
+    I'm Kamyab Safaei, a Chemical Engineering M.Sc. student at University of Tehran.
+    This lecture-style guide covers finite difference grids, Laplace and Poisson equations,
+    explicit and implicit heat-equation schemes, Crank–Nicolson, ADI splitting, the Method of Lines,
+    wave equations, and SOR/PSOR iteration — with complete hand calculations, stability analysis,
+    verification tables, and fully commented MATLAB codes.
   </p>
-
   <div class="hero-chips">
-    <span class="chip">Partial Differential Equations</span>
+    <span class="chip">kamyabsafaie80@gmail.com</span>
+    <span class="chip">09928582327</span>
     <span class="chip">Finite Difference Method</span>
     <span class="chip">Heat Transfer</span>
     <span class="chip">MATLAB</span>
     <a class="chip" href="index.html">Back to ODE Methods</a>
   </div>
 </div>
+<!-- ════════════════════════════════════════════
+     SECTION 1 — PDE CLASSIFICATION
+═════════════════════════════════════════════ -->
+<section id="pde-classification" class="sect">
+  <div class="sect-number">01</div>
+  <h2 class="sect-title">PDE Classification <span class="badge badge-gold">Foundation</span><span class="badge badge-teal">Decision Guide</span></h2>
+  <p class="sect-subtitle">
+    Before choosing a numerical method, identify the mathematical type of the PDE, the required
+    initial and boundary data, and whether the solution evolves in time or represents a steady field.
+    Choosing the wrong scheme for the wrong PDE type is the most common source of divergence and
+    unphysical results.
+  </p>
+  <div class="formula-box">
+    <div class="formula-title">General second-order linear PDE in two variables</div>
+    \[
+      A\frac{\partial^2 u}{\partial x^2}
+      +B\frac{\partial^2 u}{\partial x\partial y}
+      +C\frac{\partial^2 u}{\partial y^2}
+      +D\frac{\partial u}{\partial x}
+      +E\frac{\partial u}{\partial y}
+      +Fu=G
+    \]
+    <p>The classification depends only on the highest-order coefficients through the discriminant:</p>
+    \[
+      \Delta = B^2-4AC
+    \]
+  </div>
+  <div class="tbl-wrap">
+    <table class="comp-table">
+      <thead>
+        <tr><th>Type</th><th>Condition</th><th>Canonical equation</th><th>Physical meaning</th><th>Data needed</th><th>Common numerical methods</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="order-pill o4">Elliptic</span></td><td>\(B^2-4AC&lt;0\)</td><td>\(u_{xx}+u_{yy}=0\)</td><td>Steady conduction, potential flow, electrostatics</td><td>BCs on a closed boundary</td><td>FDM, Gauss-Seidel, SOR/PSOR, FEM</td></tr>
+        <tr><td><span class="order-pill o2">Parabolic</span></td><td>\(B^2-4AC=0\)</td><td>\(u_t=\alpha u_{xx}\)</td><td>Diffusion, unsteady heat and mass transfer</td><td>One IC + BCs</td><td>FTCS, BTCS, Crank-Nicolson, ADI, MOL</td></tr>
+        <tr><td><span class="order-pill o3">Hyperbolic</span></td><td>\(B^2-4AC&gt;0\)</td><td>\(u_{tt}=c^2u_{xx}\)</td><td>Waves, vibrations, acoustics, water hammer</td><td>Two ICs + BCs</td><td>Central difference, Lax-Wendroff, characteristics</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="example-card">
+    <div class="example-header"><span class="example-icon">📘</span><div class="example-title">Worked Example — Classify Three PDEs by the Discriminant</div></div>
+    <div class="steps">
+      <details class="step" open>
+        <summary><span class="step-num">1</span><span class="step-label">Classify \(3u_{xx}+4u_{xy}+u_{yy}=0\)</span></summary>
+        <div class="step-body">
+          <p>Identify the coefficients of the highest derivatives:</p>
+          <div class="eq-row">\(A=3,\qquad B=4,\qquad C=1\)</div>
+          \[
+            \Delta=B^2-4AC=16-12=4
+          \]
+          <div class="eq-row">\(\Delta=4&gt;0\Rightarrow\) <strong>Hyperbolic</strong>. Wave-type methods with a CFL restriction are required.</div>
+        </div>
+      </details>
+      <details class="step" open>
+        <summary><span class="step-num">2</span><span class="step-label">Classify \(u_{xx}+2u_{xy}+u_{yy}+u_x=0\)</span></summary>
+        <div class="step-body">
+          <div class="eq-row">\(A=1,\qquad B=2,\qquad C=1\)</div>
+          \[
+            \Delta=4-4=0
+          \]
+          <div class="eq-row">\(\Delta=0\Rightarrow\) <strong>Parabolic</strong>. First-order terms do not change the type — only \(A,B,C\) matter.</div>
+        </div>
+      </details>
+      <details class="step" open>
+        <summary><span class="step-num">3</span><span class="step-label">Classify \(u_{xx}+u_{yy}+5u=10\)</span></summary>
+        <div class="step-body">
+          <div class="eq-row">\(A=1,\qquad B=0,\qquad C=1\)</div>
+          \[
+            \Delta=0-4=-4
+          \]
+          <div class="eq-row">\(\Delta=-4&lt;0\Rightarrow\) <strong>Elliptic</strong>. This is a Helmholtz-type steady equation; iterative or direct linear solvers apply.</div>
+        </div>
+      </details>
+    </div>
+  </div>
+  <h3 class="sub">Boundary condition types</h3>
+  <div class="tbl-wrap">
+    <table class="dtbl">
+      <thead><tr><th>Type</th><th>Mathematical form</th><th>Engineering interpretation</th><th>FDM treatment</th></tr></thead>
+      <tbody>
+        <tr><td>Dirichlet</td><td>\(u=a\)</td><td>Specified temperature, concentration, displacement</td><td>Move known value to RHS</td></tr>
+        <tr><td>Neumann</td><td>\(\partial u/\partial n=q\)</td><td>Specified heat flux or mass flux; \(q=0\) means insulated</td><td>Ghost node + central difference</td></tr>
+        <tr><td>Robin</td><td>\(a u+b\,\partial u/\partial n=c\)</td><td>Convection boundary: \(-k\,T_x=h_c(T-T_\infty)\)</td><td>Ghost node, eliminate with the BC</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="two-col">
+    <div class="info-box">
+      <strong>Initial condition:</strong> needed only when the PDE evolves in time.
+      Parabolic PDEs need one IC, \(T(x,0)=T_0(x)\). Hyperbolic PDEs need two:
+      \(u(x,0)\) and \(u_t(x,0)\), because \(u_{tt}\) is second order in time.
+    </div>
+    <div class="info-box">
+      <strong>Boundary condition:</strong> required at every physical boundary of the domain.
+      Elliptic problems need boundary data on the <em>entire closed boundary</em> — they have
+      no marching direction.
+    </div>
+  </div>
+  <div class="warn-box">
+    <strong>Common mistake:</strong> trying to “march” an elliptic problem in one spatial direction
+    like an initial value problem. Elliptic PDEs are globally coupled — every interior node feels
+    every boundary — so they must be solved as a full linear system or by iteration until convergence.
+  </div>
+</section>
+<!-- ════════════════════════════════════════════
+     SECTION 2 — FDM GRID
+═════════════════════════════════════════════ -->
+<section id="fdm-grid" class="sect">
+  <div class="sect-number">02</div>
+  <h2 class="sect-title">Finite Difference Grid Setup <span class="badge badge-teal">Stencil Logic</span></h2>
+  <p class="sect-subtitle">
+    The finite difference method replaces derivatives with algebraic approximations at grid nodes.
+    This converts a PDE into a system of algebraic equations (steady problems) or a system of ODEs
+    (transient problems). Everything downstream — accuracy, stability, cost — is decided here.
+  </p>
+  <div class="grid-diagram">
+    <svg width="520" height="320" viewBox="0 0 520 320" role="img" aria-label="Finite difference grid with five point stencil">
+      <rect x="35" y="25" width="450" height="260" rx="14" fill="#0f172a" stroke="#27305e"/>
+      <g stroke="#334155" stroke-width="1">
+        <line x1="110" y1="55" x2="110" y2="255"/><line x1="185" y1="55" x2="185" y2="255"/><line x1="260" y1="55" x2="260" y2="255"/><line x1="335" y1="55" x2="335" y2="255"/><line x1="410" y1="55" x2="410" y2="255"/>
+        <line x1="80" y1="80" x2="440" y2="80"/><line x1="80" y1="130" x2="440" y2="130"/><line x1="80" y1="180" x2="440" y2="180"/><line x1="80" y1="230" x2="440" y2="230"/>
+      </g>
+      <g fill="#1ed8c8" stroke="#6ef0e8" stroke-width="2">
+        <circle cx="260" cy="130" r="19"/><circle cx="185" cy="130" r="15"/><circle cx="335" cy="130" r="15"/><circle cx="260" cy="80" r="15"/><circle cx="260" cy="180" r="15"/>
+      </g>
+      <g fill="#d8e2f8" font-family="DM Mono, monospace" font-size="15" text-anchor="middle">
+        <text x="260" y="135">P</text><text x="185" y="135">W</text><text x="335" y="135">E</text><text x="260" y="85">N</text><text x="260" y="185">S</text>
+      </g>
+      <text x="260" y="282" text-anchor="middle" fill="#6878aa" font-size="13">Five-point stencil: west, east, south, north, and center node</text>
+    </svg>
+  </div>
+  <div class="example-card">
+    <div class="example-header"><span class="example-icon">📐</span><div class="example-title">Derivation — Where the Formulas Come From</div></div>
+    <div class="steps">
+      <details class="step" open>
+        <summary><span class="step-num">1</span><span class="step-label">Taylor expansion of the neighbors</span></summary>
+        <div class="step-body">
+          <p>Expand \(u\) about node \(i\) with spacing \(h=\Delta x\):</p>
+          \[
+            u_{i+1}=u_i+h\,u_i'+\frac{h^2}{2}u_i''+\frac{h^3}{6}u_i'''+\frac{h^4}{24}u_i''''+\cdots
+          \]
+          \[
+            u_{i-1}=u_i-h\,u_i'+\frac{h^2}{2}u_i''-\frac{h^3}{6}u_i'''+\frac{h^4}{24}u_i''''-\cdots
+          \]
+        </div>
+      </details>
+      <details class="step" open>
+        <summary><span class="step-num">2</span><span class="step-label">Subtract for the first derivative, add for the second</span></summary>
+        <div class="step-body">
+          <p><strong>Subtracting</strong> cancels all even-order terms:</p>
+          \[
+            u_i'=\frac{u_{i+1}-u_{i-1}}{2h}-\frac{h^2}{6}u_i'''+\cdots
+            \qquad\Rightarrow\qquad O(h^2)
+          \]
+          <p><strong>Adding</strong> cancels all odd-order terms:</p>
+          \[
+            u_i''=\frac{u_{i-1}-2u_i+u_{i+1}}{h^2}-\frac{h^2}{12}u_i''''+\cdots
+            \qquad\Rightarrow\qquad O(h^2)
+          \]
+          <div class="info-box">
+            The leading error of the central second difference is \(-\dfrac{h^2}{12}u''''\).
+            This is why central differences are <em>exact</em> for any polynomial up to degree 3 —
+            the fourth derivative vanishes.
+          </div>
+        </div>
+      </details>
+      <details class="step">
+        <summary><span class="step-num">3</span><span class="step-label">Handling a Neumann boundary with a ghost node</span></summary>
+        <div class="step-body">
+          <p>Suppose the right boundary at node \(N\) is insulated: \(\left.\dfrac{\partial T}{\partial x}\right|_N=0\).</p>
+          <p>Introduce a fictitious ghost node \(T_{N+1}\) outside the domain and apply the central difference to the BC:</p>
+          \[
+            \frac{T_{N+1}-T_{N-1}}{2h}=0
+            \qquad\Longrightarrow\qquad
+            T_{N+1}=T_{N-1}
+          \]
+          <p>Substituting into the interior stencil at node \(N\):</p>
+          \[
+            \frac{T_{N-1}-2T_N+T_{N+1}}{h^2}
+            =\frac{2T_{N-1}-2T_N}{h^2}
+          \]
+          <div class="eq-row">The ghost node disappears — the insulated boundary simply doubles the interior neighbor.</div>
+        </div>
+      </details>
+      <details class="step">
+        <summary><span class="step-num">4</span><span class="step-label">Handling a convection (Robin) boundary</span></summary>
+        <div class="step-body">
+          <p>Convective cooling at the right face: \(-k\left.\dfrac{\partial T}{\partial x}\right|_N=h_c\,(T_N-T_\infty)\).</p>
+          <p>Central difference with a ghost node:</p>
+          \[
+            \frac{T_{N+1}-T_{N-1}}{2h}=-\frac{h_c}{k}(T_N-T_\infty)
+          \]
+          \[
+            \Longrightarrow\quad
+            T_{N+1}=T_{N-1}-\frac{2h\,h_c}{k}(T_N-T_\infty)
+          \]
+          <p>This expression is substituted into the node-\(N\) stencil, eliminating the ghost value and coupling \(T_N\) to the ambient temperature \(T_\infty\).</p>
+        </div>
+      </details>
+    </div>
+  </div>
+  <div class="formula-grid">
+    <div class="formula-cell">
+      <div class="formula-cell-label">Forward difference — \(O(h)\)</div>
+      \[u_x\big|_i\approx \frac{u_{i+1}-u_i}{\Delta x}\]
+    </div>
+    <div class="formula-cell">
+      <div class="formula-cell-label">Backward difference — \(O(h)\)</div>
+      \[u_x\big|_i\approx \frac{u_i-u_{i-1}}{\Delta x}\]
+    </div>
+    <div class="formula-cell">
+      <div class="formula-cell-label">Central first derivative — \(O(h^2)\)</div>
+      \[u_x\big|_i\approx \frac{u_{i+1}-u_{i-1}}{2\Delta x}\]
+    </div>
+    <div class="formula-cell">
+      <div class="formula-cell-label">Central second derivative — \(O(h^2)\)</div>
+      \[u_{xx}\big|_i\approx \frac{u_{i-1}-2u_i+u_{i+1}}{\Delta x^2}\]
+    </div>
+  </div>
+  <div class="formula-box">
+    <div class="formula-title">Two-dimensional Laplacian, uniform grid</div>
+    \[
+      \nabla^2 u\big|_{i,j}
+      \approx
+      \frac{u_{i-1,j}-2u_{i,j}+u_{i+1,j}}{\Delta x^2}
+      +
+      \frac{u_{i,j-1}-2u_{i,j}+u_{i,j+1}}{\Delta y^2}
+    \]
+    <p>For \(\Delta x=\Delta y=h\):</p>
+    \[
+      \nabla^2u\approx\frac{u_E+u_W+u_N+u_S-4u_P}{h^2}
+    \]
+  </div>
+  <div class="warn-box">
+    <strong>Halving \(h\) costs more than you think:</strong> in 2D, halving the spacing quadruples the
+    number of unknowns; in a 2D transient problem with an explicit scheme it also forces
+    \(\Delta t\) down by a factor of 4 — a total cost increase of 16×. This trade-off is exactly why
+    implicit and ADI methods exist.
+  </div>
+</section>
+<!-- ════════════════════════════════════════════
+     SECTION 3 — LAPLACE
+═════════════════════════════════════════════ -->
+<section id="laplace" class="sect">
+  <div class="sect-number">03</div>
+  <h2 class="sect-title">Laplace Equation <span class="badge badge-teal">Steady Field</span><span class="badge badge-gold">Liebmann Iteration</span></h2>
+  <p class="sect-subtitle">
+    Laplace's equation describes steady fields with no internal source. The discrete form says:
+    the value at each interior node is the average of its four neighbors. Small grids can be solved
+    exactly by hand; larger grids are solved by Liebmann (Gauss-Seidel) iteration or SOR.
+  </p>
+  <div class="formula-box">
+    <div class="formula-title">Five-point Laplace update</div>
+    \[
+      \frac{T_E+T_W+T_N+T_S-4T_P}{h^2}=0
+      \qquad\Longrightarrow\qquad
+      T_P=\frac{T_E+T_W+T_N+T_S}{4}
+    \]
+    <p class="note">
+      The coefficient matrix of the assembled system is symmetric and diagonally dominant
+      (\(|{-4}|\ge 1+1+1+1\)), which guarantees Gauss-Seidel and SOR convergence.
+    </p>
+  </div>
+  <!-- Example A -->
+  <div class="example-card">
+    <div class="example-header"><span class="example-icon">🧊</span><div class="example-title">Worked Example A — 2×2 Interior Plate (Exact Hand Solution)</div></div>
+    <div class="problem-box">
+      <p>Solve \(\nabla^2T=0\) on a square plate with four interior nodes. The top boundary is \(100^\circ C\); the left, right, and bottom boundaries are \(0^\circ C\).</p>
+    </div>
+    <div class="steps">
+      <details class="step" open>
+        <summary><span class="step-num">1</span><span class="step-label">Write the four node equations</span></summary>
+        <div class="step-body">
+          <p>Let the bottom interior row be \(T_{11},T_{21}\) and the top interior row be \(T_{12},T_{22}\). Insert the known boundaries:</p>
+          \[
+          \begin{aligned}
+          4T_{11}-T_{21}-T_{12}&=0\\
+          -T_{11}+4T_{21}-T_{22}&=0\\
+          -T_{11}+4T_{12}-T_{22}&=100\\
+          -T_{21}-T_{12}+4T_{22}&=100
+          \end{aligned}
+          \]
+        </div>
+      </details>
+      <details class="step" open>
+        <summary><span class="step-num">2</span><span class="step-label">Exploit symmetry and solve</span></summary>
+        <div class="step-body">
+          <p>The left and right boundaries are identical, so \(T_{11}=T_{21}=a\) and \(T_{12}=T_{22}=b\).</p>
+          <div class="eq-row">Bottom equation: \(4a-a-b=0\Rightarrow 3a=b\)</div>
+          <div class="eq-row">Top equation: \(-a+4b-b=100\Rightarrow -a+3b=100\)</div>
+          <div class="eq-row">Substitute \(b=3a\): \(-a+9a=100\Rightarrow 8a=100\Rightarrow a=12.5\)</div>
+          <div class="eq-row">Therefore \(b=3(12.5)=37.5\)</div>
+        </div>
+      </details>
+      <details class="step">
+        <summary><span class="step-num">3</span><span class="step-label">Verify by substituting back</span></summary>
+        <div class="step-body">
+          <div class="eq-row">Node \(T_{12}\): \(-12.5+4(37.5)-37.5=-12.5+150-37.5=100\;\checkmark\)</div>
+          <div class="eq-row">Node \(T_{22}\): \(-12.5-37.5+4(37.5)=-50+150=100\;\checkmark\)</div>
+        </div>
+      </details>
+    </div>
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead><tr><th>Node</th><th>Value (°C)</th><th>Interpretation</th></tr></thead>
+        <tbody>
+          <tr><td>\(T_{11}\)</td><td>12.5000</td><td>Bottom-left interior node</td></tr>
+          <tr><td>\(T_{21}\)</td><td>12.5000</td><td>Bottom-right interior node</td></tr>
+          <tr><td>\(T_{12}\)</td><td class="highlight">37.5000</td><td>Top-left interior node — closer to hot wall</td></tr>
+          <tr><td>\(T_{22}\)</td><td class="highlight">37.5000</td><td>Top-right interior node — closer to hot wall</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Example B -->
+  <div class="example-card">
+    <div class="example-header"><span class="example-icon">🌡️</span><div class="example-title">Worked Example B — 3×3 Heated Plate by Liebmann (Gauss-Seidel) Iteration</div></div>
+    <div class="problem-box">
+      <p>A square plate has <strong>nine interior nodes</strong> (\(h=L/4\)). Boundary temperatures:</p>
+      <p>Top \(=100^\circ C\), &ensp; Left \(=75^\circ C\), &ensp; Right \(=50^\circ C\), &ensp; Bottom \(=0^\circ C\).</p>
+      <p>Start with all interior nodes at \(0^\circ C\) and sweep in the order \(T_{11},T_{21},T_{31},T_{12},T_{22},T_{32},T_{13},T_{23},T_{33}\) (left→right, bottom→top).</p>
+    </div>
+    <div class="steps">
+      <details class="step" open>
+        <summary><span class="step-num">1</span><span class="step-label">Sweep 1 — full hand calculation</span></summary>
+        <div class="step-body">
+          <p>Gauss-Seidel uses <strong>the newest available value</strong> for every neighbor:</p>
+          <div class="eq-row">\(T_{11}=\dfrac{75+0+0+0}{4}=18.7500\)</div>
+          <div class="eq-row">\(T_{21}=\dfrac{18.7500+0+0+0}{4}=4.6875\)</div>
+          <div class="eq-row">\(T_{31}=\dfrac{4.6875+50+0+0}{4}=13.6719\)</div>
+          <div class="eq-row">\(T_{12}=\dfrac{75+0+18.7500+0}{4}=23.4375\)</div>
+          <div class="eq-row">\(T_{22}=\dfrac{23.4375+0+4.6875+0}{4}=7.0313\)</div>
+          <div class="eq-row">\(T_{32}=\dfrac{7.0313+50+13.6719+0}{4}=17.6758\)</div>
+          <div class="eq-row">\(T_{13}=\dfrac{75+0+23.4375+100}{4}=49.6094\)</div>
+          <div class="eq-row">\(T_{23}=\dfrac{49.6094+0+7.0313+100}{4}=39.1602\)</div>
+          <div class="eq-row">\(T_{33}=\dfrac{39.1602+50+17.6758+100}{4}=51.7090\)</div>
+        </div>
+      </details>
+      <details class="step">
+        <summary><span class="step-num">2</span><span class="step-label">Sweep 2 — same recipe, updated neighbors</span></summary>
+        <div class="step-body">
+          <div class="eq-row">\(T_{11}=\dfrac{75+4.6875+0+23.4375}{4}=25.7813\)</div>
+          <div class="eq-row">\(T_{21}=\dfrac{25.7813+13.6719+0+7.0313}{4}=11.6211\)</div>
+          <div class="eq-row">\(T_{31}=\dfrac{11.6211+50+0+17.6758}{4}=19.8242\)</div>
+          <div class="eq-row">\(T_{12}=\dfrac{75+7.0313+25.7813+49.6094}{4}=39.3555\)</div>
+          <div class="eq-row">\(T_{22}=\dfrac{39.3555+17.6758+11.6211+39.1602}{4}=26.9531\)</div>
+          <div class="eq-row">\(T_{32}=\dfrac{26.9531+50+19.8242+51.7090}{4}=37.1216\)</div>
+          <div class="eq-row">\(T_{13}=\dfrac{75+39.1602+39.3555+100}{4}=63.3789\)</div>
+          <div class="eq-row">\(T_{23}=\dfrac{63.3789+51.7090+26.9531+100}{4}=60.5103\)</div>
+          <div class="eq-row">\(T_{33}=\dfrac{60.5103+50+37.1216+100}{4}=61.9080\)</div>
+        </div>
+      </details>
+      <details class="step">
+        <summary><span class="step-num">3</span><span class="step-label">Continue until converged</span></summary>
+        <div class="step-body">
+          <p>Repeating the sweeps until the maximum change is below \(10^{-4}\) gives the exact discrete solution (which can be confirmed by direct Gaussian elimination of the 9×9 system):</p>
+          \[
+          \boxed{
+          \begin{matrix}
+          T_{13} & T_{23} & T_{33}\\
+          T_{12} & T_{22} & T_{32}\\
+          T_{11} & T_{21} & T_{31}
+          \end{matrix}
+          =
+          \begin{matrix}
+          78.5714 & 76.1161 & 69.6429\\
+          63.1696 & 56.2500 & 52.4554\\
+          42.8571 & 33.2589 & 33.9286
+          \end{matrix}}
+          \]
+        </div>
+      </details>
+    </div>
+    <h4 class="subsub">Convergence History</h4>
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead><tr><th>Node</th><th>Sweep 1</th><th>Sweep 2</th><th>Converged</th></tr></thead>
+        <tbody>
+          <tr><td>\(T_{11}\)</td><td>18.7500</td><td>25.7813</td><td class="exact">42.8571</td></tr>
+          <tr><td>\(T_{21}\)</td><td>4.6875</td><td>11.6211</td><td class="exact">33.2589</td></tr>
+          <tr><td>\(T_{31}\)</td><td>13.6719</td><td>19.8242</td><td class="exact">33.9286</td></tr>
+          <tr><td>\(T_{12}\)</td><td>23.4375</td><td>39.3555</td><td class="exact">63.1696</td></tr>
+          <tr><td>\(T_{22}\)</td><td>7.0313</td><td>26.9531</td><td class="exact">56.2500</td></tr>
+          <tr><td>\(T_{32}\)</td><td>17.6758</td><td>37.1216</td><td class="exact">52.4554</td></tr>
+          <tr><td>\(T_{13}\)</td><td>49.6094</td><td>63.3789</td><td class="exact">78.5714</td></tr>
+          <tr><td>\(T_{23}\)</td><td>39.1602</td><td>60.5103</td><td class="exact">76.1161</td></tr>
+          <tr><td>\(T_{33}\)</td><td>51.7090</td><td>61.9080</td><td class="exact">69.6429</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="info-box">
+      <strong>Physical sanity check:</strong> the hottest interior node \(T_{13}=78.57\) sits next to the two
+      hottest boundaries (top = 100, left = 75). The coldest node \(T_{21}=33.26\) sits next to the cold
+      bottom (0°C) and away from both hot walls. The center node \(T_{22}=56.25\) is close to the average
+      of the four boundaries \((100+75+50+0)/4=56.25\) — exactly equal here by the discrete mean-value property.
+    </div>
+    <details class="ans"><summary>▶ MATLAB Code</summary><div class="ans-body">
+    <div class="formula-box matlab-panel"><div class="formula-title">Laplace equation by Liebmann iteration with over-relaxation</div>
+<pre class="matlab-code"><code><span class="com">%% Laplace equation on a rectangular plate — Liebmann (Gauss-Seidel) + SOR</span>
+<span class="com">% PDE:  d2T/dx2 + d2T/dy2 = 0</span>
+<span class="com">% BCs:  top = 100, left = 75, right = 50, bottom = 0</span>
+<span class="com">% The interior update is the four-neighbor average, accelerated by omega.</span>
+<span class="kw">clc</span>; <span class="kw">clear</span>; <span class="kw">close</span> <span class="kw">all</span>;
+<span class="com">%% Step 1: Grid and boundary data</span>
+Nx = <span class="num">3</span>; Ny = <span class="num">3</span>;              <span class="com">% interior nodes (use larger values for finer grids)</span>
+T  = zeros(Ny+<span class="num">2</span>, Nx+<span class="num">2</span>);      <span class="com">% full array including boundary rows/columns</span>
+T(end,:) = <span class="num">100</span>;              <span class="com">% top boundary</span>
+T(<span class="num">1</span>,:)   = <span class="num">0</span>;                <span class="com">% bottom boundary</span>
+T(:,<span class="num">1</span>)   = <span class="num">75</span>;               <span class="com">% left boundary</span>
+T(:,end) = <span class="num">50</span>;               <span class="com">% right boundary</span>
+<span class="com">%% Step 2: Iteration settings</span>
+omega   = <span class="num">1.2</span>;               <span class="com">% 1.0 = pure Gauss-Seidel</span>
+tol     = <span class="num">1e-6</span>;
+maxIter = <span class="num">10000</span>;
+<span class="com">%% Step 3: Liebmann sweeps</span>
+<span class="kw">for</span> iter = <span class="num">1</span>:maxIter
+    T_old = T;
+    <span class="kw">for</span> j = <span class="num">2</span>:Ny+<span class="num">1</span>
+        <span class="kw">for</span> i = <span class="num">2</span>:Nx+<span class="num">1</span>
+            T_gs   = <span class="num">0.25</span>*(T(j,i-<span class="num">1</span>) + T(j,i+<span class="num">1</span>) + T(j-<span class="num">1</span>,i) + T(j+<span class="num">1</span>,i));
+            T(j,i) = (<span class="num">1</span>-omega)*T(j,i) + omega*T_gs;
+        <span class="kw">end</span>
+    <span class="kw">end</span>
+    err = max(abs(T(:) - T_old(:)));
+    <span class="kw">if</span> err &lt; tol
+        <span class="kw">break</span>
+    <span class="kw">end</span>
+<span class="kw">end</span>
+fprintf(<span class="str">'Converged in %d sweeps, final change = %.2e\n'</span>, iter, err)
+disp(<span class="str">'Interior temperature field (top row printed first):'</span>)
+disp(flipud(T(<span class="num">2</span>:end-<span class="num">1</span>, <span class="num">2</span>:end-<span class="num">1</span>)))
+<span class="com">%% Step 4: Visualization</span>
+figure;
+contourf(T, <span class="num">20</span>); colorbar; axis equal tight;
+title(<span class="str">'Laplace Equation — Liebmann Iteration'</span>);</code></pre>
+    </div></div></details>
+  </div>
+</section>
+<!-- ════════════════════════════════════════════
+     SECTION 4 — POISSON
+═════════════════════════════════════════════ -->
+<section id="poisson" class="sect">
+  <div class="sect-number">04</div>
+  <h2 class="sect-title">Poisson Equation <span class="badge badge-gold">Source Term</span></h2>
+  <p class="sect-subtitle">
+    Poisson's equation adds an internal generation or consumption term. In heat transfer this is
+    volumetric generation (electrical heating, reaction exotherm); in mass transfer it is a
+    homogeneous reaction term.
+  </p>
+  <div class="formula-box">
+    <div class="formula-title">Poisson update for \(\nabla^2T=-S\)</div>
+    \[
+      \frac{T_E+T_W+T_N+T_S-4T_P}{h^2}=-S
+      \qquad\Longrightarrow\qquad
+      T_P=\frac{T_E+T_W+T_N+T_S+h^2S}{4}
+    \]
+    <p class="note">The only change relative to Laplace is the extra constant \(h^2S\) inside the average. Every solver from Section 03 works unchanged.</p>
+  </div>
+  <!-- Example A -->
+  <div class="example-card">
+    <div class="example-header"><span class="example-icon">🔥</span><div class="example-title">Worked Example A — Uniform Source, Symmetric Grid</div></div>
+    <div class="problem-box">
+      <p>Solve \(\nabla^2T=-36\) on a unit square with all boundaries fixed at zero. Use 2 interior nodes per direction, so \(h=1/3\).</p>
+    </div>
+    <div class="steps">
+      <details class="step" open>
+        <summary><span class="step-num">1</span><span class="step-label">Compute the source contribution</span></summary>
+        <div class="step-body">
+          \[
+            h^2S=\left(\frac{1}{3}\right)^2(36)=\frac{36}{9}=4
+          \]
+          <p>Each interior equation becomes \(4T_P-T_E-T_W-T_N-T_S=4\).</p>
+        </div>
+      </details>
+      <details class="step" open>
+        <summary><span class="step-num">2</span><span class="step-label">Use symmetry and solve</span></summary>
+        <div class="step-body">
+          <p>All four interior nodes are equivalent by symmetry, so \(T_P=a\). Each node has two boundary neighbors (value 0) and two interior neighbors (value \(a\)):</p>
+          <div class="eq-row">\(4a-a-a-0-0=4\)</div>
+          <div class="eq-row">\(2a=4\Rightarrow \boxed{a=2}\)</div>
+        </div>
+      </details>
+    </div>
+    <div class="info-box">The source lifts the interior above the cold boundary. Without the source the solution would be identically zero — the boundary alone provides no driving force.</div>
+  </div>
+  <!-- Example B -->
+  <div class="example-card">
+    <div class="example-header"><span class="example-icon">⚗️</span><div class="example-title">Worked Example B — Source + Four Different Boundaries (Exact Hand Solution)</div></div>
+    <div class="problem-box">
+      <p>A reactor wall section satisfies \(\nabla^2T=-S\) with \(h^2S=5\). The grid has 2×2 interior nodes with boundaries:</p>
+      <p>Left \(=40\), &ensp; Right \(=10\), &ensp; Top \(=30\), &ensp; Bottom \(=20\) (°C).</p>
+    </div>
+    <div class="steps">
+      <details class="step" open>
+        <summary><span class="step-num">1</span><span class="step-label">Assemble the four equations</span></summary>
+        <div class="step-body">
+          <p>Let \(w=T_{11}\) (bottom-left), \(x=T_{21}\) (bottom-right), \(y=T_{12}\) (top-left), \(z=T_{22}\) (top-right):</p>
+          \[
+          \begin{aligned}
+          4w-x-y&=40+20+5=65\\
+          4x-w-z&=10+20+5=35\\
+          4y-w-z&=40+30+5=75\\
+          4z-x-y&=10+30+5=45
+          \end{aligned}
+          \]
+        </div>
+      </details>
+      <details class="step" open>
+        <summary><span class="step-num">2</span><span class="step-label">Eliminate by pairing equations</span></summary>
+        <div class="step-body">
+          <div class="eq-row">Eq(3) − Eq(2): \(4y-4x=40\Rightarrow y=x+10\)</div>
+          <div class="eq-row">Eq(1) − Eq(4): \(4w-4z=20\Rightarrow w=z+5\)</div>
+          <p>Substitute into Eq(1):</p>
+          <div class="eq-row">\(4(z+5)-x-(x+10)=65\Rightarrow 4z-2x=55\)</div>
+          <p>Substitute into Eq(2):</p>
+          <div class="eq-row">\(4x-(z+5)-z=35\Rightarrow 4x-2z=40\Rightarrow z=2x-20\)</div>
+          <p>Combine:</p>
+          <div class="eq-row">\(4(2x-20)-2x=55\Rightarrow 6x=135\Rightarrow x=22.5\)</div>
+          <div class="eq-row">\(z=2(22.5)-20=25,\qquad w=30,\qquad y=32.5\)</div>
+        </div>
+      </details>
+      <details class="step">
+        <summary><span class="step-num">3</span><span class="step-label">Verify all four equations</span></summary>
+        <div class="step-body">
+          <div class="eq-row">Eq(1): \(4(30)-22.5-32.5=120-55=65\;\checkmark\)</div>
+          <div class="eq-row">Eq(2): \(4(22.5)-30-25=90-55=35\;\checkmark\)</div>
+          <div class="eq-row">Eq(3): \(4(32.5)-30-25=130-55=75\;\checkmark\)</div>
+          <div class="eq-row">Eq(4): \(4(25)-22.5-32.5=100-55=45\;\checkmark\)</div>
+        </div>
+      </details>
+    </div>
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead><tr><th>Node</th><th>Value (°C)</th><th>Dominant influence</th></tr></thead>
+        <tbody>
+          <tr><td>\(T_{11}\)</td><td class="highlight">30.0000</td><td>Hot left wall (40°C)</td></tr>
+          <tr><td>\(T_{21}\)</td><td>22.5000</td><td>Cold right wall (10°C)</td></tr>
+          <tr><td>\(T_{12}\)</td><td class="highlight">32.5000</td><td>Left wall + warm top</td></tr>
+          <tr><td>\(T_{22}\)</td><td>25.0000</td><td>Right wall + warm top</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <details class="ans"><summary>▶ MATLAB Code</summary><div class="ans-body">
+    <div class="formula-box matlab-panel"><div class="formula-title">Poisson equation — direct sparse assembly and solve</div>
+<pre class="matlab-code"><code><span class="com">%% Poisson equation on a square plate:  del2(T) = -S</span>
+<span class="com">% Assembles the full sparse system A*T = b and solves it directly.</span>
+<span class="kw">clc</span>; <span class="kw">clear</span>; <span class="kw">close</span> <span class="kw">all</span>;
+<span class="com">%% Step 1: Grid and physical data</span>
+N = <span class="num">20</span>;                       <span class="com">% interior nodes per direction</span>
+L = <span class="num">1</span>;
+h = L/(N+<span class="num">1</span>);
+S = <span class="num">36</span>;                       <span class="com">% uniform volumetric source term</span>
+TL = <span class="num">40</span>; TR = <span class="num">10</span>; TT = <span class="num">30</span>; TB = <span class="num">20</span>;   <span class="com">% boundary temperatures</span>
+<span class="com">%% Step 2: Assemble A and b using the 5-point stencil</span>
+A = sparse(N*N, N*N);
+b = zeros(N*N, <span class="num">1</span>);
+idx = @(i,j) (j-<span class="num">1</span>)*N + i;     <span class="com">% node numbering: left-right, bottom-top</span>
+<span class="kw">for</span> j = <span class="num">1</span>:N
+    <span class="kw">for</span> i = <span class="num">1</span>:N
+        p = idx(i,j);
+        A(p,p) = <span class="num">4</span>;
+        b(p)   = h^<span class="num">2</span>*S;
+        <span class="kw">if</span> i &gt; <span class="num">1</span>, A(p,idx(i-<span class="num">1</span>,j)) = -<span class="num">1</span>; <span class="kw">else</span>, b(p) = b(p) + TL; <span class="kw">end</span>
+        <span class="kw">if</span> i &lt; N, A(p,idx(i+<span class="num">1</span>,j)) = -<span class="num">1</span>; <span class="kw">else</span>, b(p) = b(p) + TR; <span class="kw">end</span>
+        <span class="kw">if</span> j &gt; <span class="num">1</span>, A(p,idx(i,j-<span class="num">1</span>)) = -<span class="num">1</span>; <span class="kw">else</span>, b(p) = b(p) + TB; <span class="kw">end</span>
+        <span class="kw">if</span> j &lt; N, A(p,idx(i,j+<span class="num">1</span>)) = -<span class="num">1</span>; <span class="kw">else</span>, b(p) = b(p) + TT; <span class="kw">end</span>
+    <span class="kw">end</span>
+<span class="kw">end</span>
+<span class="com">%% Step 3: Solve and verify the residual</span>
+Tvec = A\b;
+fprintf(<span class="str">'Residual norm = %.2e\n'</span>, norm(A*Tvec - b))
+T = reshape(Tvec, N, N);
+<span class="com">%% Step 4: Plot</span>
+surf(T); shading interp; colorbar;
+xlabel(<span class="str">'i'</span>); ylabel(<span class="str">'j'</span>); zlabel(<span class="str">'T'</span>);
+title(<span class="str">'Poisson Equation with Internal Source'</span>);</code></pre>
+    </div></div></details>
+  </div>
+</section>
+<!-- ════════════════════════════════════════════
+     SECTION 5 — EXPLICIT HEAT
+═════════════════════════════════════════════ -->
+<section id="explicit-heat" class="sect">
+  <div class="sect-number">05</div>
+  <h2 class="sect-title">Explicit Heat Equation <span class="badge badge-red">FTCS</span><span class="badge badge-gold">Conditionally Stable</span></h2>
+  <p class="sect-subtitle">
+    The explicit Forward-Time Central-Space (FTCS) method computes every new nodal temperature
+    directly from old values — no matrix solve needed. Its price is a strict stability limit
+    on the time step.
+  </p>
+  <div class="formula-box">
+    <div class="formula-title">FTCS scheme</div>
+    \[
+      \frac{T_i^{n+1}-T_i^n}{\Delta t}
+      =\alpha\frac{T_{i-1}^n-2T_i^n+T_{i+1}^n}{\Delta x^2}
+    \]
+    \[
+      \boxed{T_i^{n+1}=rT_{i-1}^n+(1-2r)T_i^n+rT_{i+1}^n},
+      \qquad r=\frac{\alpha\Delta t}{\Delta x^2}
+    \]
+  </div>
+  <div class="example-card">
+    <div class="example-header"><span class="example-icon">🧮</span><div class="example-title">Derivation — Von Neumann Stability Analysis</div></div>
+    <div class="steps">
+      <details class="step" open>
+        <summary><span class="step-num">1</span><span class="step-label">Insert a Fourier mode</span></summary>
+        <div class="step-body">
+          <p>Assume an error component of the form \(T_j^n=\xi^n e^{Ikx_j}\), where \(\xi\) is the amplification factor per step. Substituting into FTCS and using \(e^{Ik\Delta x}+e^{-Ik\Delta x}=2\cos(k\Delta x)\):</p>
+          \[
+            \xi = 1+2r\left[\cos(k\Delta x)-1\right]
+            = 1-4r\sin^2\!\left(\frac{k\Delta x}{2}\right)
+          \]
+        </div>
+      </details>
+      <details class="step" open>
+        <summary><span class="step-num">2</span><span class="step-label">Require \(|\xi|\le 1\) for every wavenumber</span></summary>
+        <div class="step-body">
+          <p>The worst case is \(\sin^2=1\) (the shortest wavelength the grid can hold):</p>
+          \[
+            -1\le 1-4r\le 1
+            \qquad\Longrightarrow\qquad
+            \boxed{r\le\frac12}
+          \]
+          <div class="eq-row">Equivalently: \(\Delta t\le\dfrac{\Delta x^2}{2\alpha}\). Halving \(\Delta x\) forces \(\Delta t\) down by 4×.</div>
+        </div>
+      </details>
+    </div>
+  </div>
+  <div class="warn-box"><strong>Stability requirement:</strong> for 1D FTCS use \(r\le 0.5\); for 2D with equal spacing, \(r_x+r_y\le 0.5\). If violated, the shortest-wavelength error mode is amplified every step and grows into a sawtooth oscillation.</div>
+  <div class="example-card">
+    <div class="example-header"><span class="example-icon">⏩</span><div class="example-title">Worked Example — Four Explicit Time Steps by Hand</div></div>
+    <div class="problem-box">
+      <p>Rod length \(L=1\), \(\Delta x=0.25\), \(\alpha=1\), \(\Delta t=0.02\). Boundary temperatures \(T_0=100\) and \(T_4=50\). Initial interior values \(T_1^0=T_2^0=T_3^0=20\).</p>
+    </div>
+    <div class="steps">
+      <details class="step" open>
+        <summary><span class="step-num">1</span><span class="step-label">Check stability and build the update rule</span></summary>
+        <div class="step-body">
+          \[
+            r=\frac{1(0.02)}{(0.25)^2}=\frac{0.02}{0.0625}=0.32\le0.5\;\checkmark
+          \]
+          <div class="eq-row">Update rule: \(T_i^{n+1}=0.32\,T_{i-1}^n+0.36\,T_i^n+0.32\,T_{i+1}^n\)</div>
+        </div>
+      </details>
+      <details class="step" open>
+        <summary><span class="step-num">2</span><span class="step-label">Time step 1 (\(t=0.02\))</span></summary>
+        <div class="step-body">
+          <div class="eq-row">\(T_1^1=0.32(100)+0.36(20)+0.32(20)=32+7.2+6.4=45.6000\)</div>
+          <div class="eq-row">\(T_2^1=0.32(20)+0.36(20)+0.32(20)=20.0000\)</div>
+          <div class="eq-row">\(T_3^1=0.32(20)+0.36(20)+0.32(50)=6.4+7.2+16=29.6000\)</div>
+        </div>
+      </details>
+      <details class="step">
+        <summary><span class="step-num">3</span><span class="step-label">Time step 2 (\(t=0.04\))</span></summary>
+        <div class="step-body">
+          <div class="eq-row">\(T_1^2=0.32(100)+0.36(45.6)+0.32(20)=32+16.416+6.4=54.8160\)</div>
+          <div class="eq-row">\(T_2^2=0.32(45.6)+0.36(20)+0.32(29.6)=14.592+7.2+9.472=31.2640\)</div>
+          <div class="eq-row">\(T_3^2=0.32(20)+0.36(29.6)+0.32(50)=6.4+10.656+16=33.0560\)</div>
+        </div>
+      </details>
+      <details class="step">
+        <summary><span class="step-num">4</span><span class="step-label">Time step 3 (\(t=0.06\))</span></summary>
+        <div class="step-body">
+          <div class="eq-row">\(T_1^3=32+0.36(54.816)+0.32(31.264)=32+19.7338+10.0045=61.7382\)</div>
+          <div class="eq-row">\(T_2^3=0.32(54.816)+0.36(31.264)+0.32(33.056)=17.5411+11.2550+10.5779=39.3741\)</div>
+          <div class="eq-row">\(T_3^3=0.32(31.264)+0.36(33.056)+16=10.0045+11.9002+16=37.9046\)</div>
+        </div>
+      </details>
+      <details class="step">
+        <summary><span class="step-num">5</span><span class="step-label">Time step 4 (\(t=0.08\))</span></summary>
+        <div class="step-body">
+          <div class="eq-row">\(T_1^4=32+0.36(61.7382)+0.32(39.3741)=32+22.2258+12.5997=66.8255\)</div>
+          <div class="eq-row">\(T_2^4=0.32(61.7382)+0.36(39.3741)+0.32(37.9046)=19.7562+14.1747+12.1295=46.0604\)</div>
+          <div class="eq-row">\(T_3^4=0.32(39.3741)+0.36(37.9046)+16=12.5997+13.6457+16=42.2454\)</div>
+        </div>
+      </details>
+    </div>
+    <h4 class="subsub">Marching Table</h4>
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead><tr><th>n</th><th>t</th><th>\(T_1\)</th><th>\(T_2\)</th><th>\(T_3\)</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0.00</td><td>20.0000</td><td>20.0000</td><td>20.0000</td></tr>
+          <tr><td>1</td><td>0.02</td><td>45.6000</td><td>20.0000</td><td>29.6000</td></tr>
+          <tr><td>2</td><td>0.04</td><td>54.8160</td><td>31.2640</td><td>33.0560</td></tr>
+          <tr><td>3</td><td>0.06</td><td>61.7382</td><td>39.3741</td><td>37.9046</td></tr>
+          <tr><td>4</td><td>0.08</td><td>66.8255</td><td>46.0604</td><td>42.2454</td></tr>
+          <tr><td colspan="2">Steady state</td><td class="exact">87.5000</td><td class="exact">75.0000</td><td class="exact">62.5000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">The steady state of a source-free rod is the straight line between the boundary values: \(T_{ss}(x)=100-50x\). All nodes are marching smoothly toward it.</p>
+    <h4 class="subsub">What Instability Actually Looks Like (r = 0.8)</h4>
+    <div class="error-box">
+      <p>Repeat the same problem with \(\Delta t=0.05\Rightarrow r=0.8&gt;0.5\). The rule becomes \(T_i^{n+1}=0.8T_{i-1}^n-0.6T_i^n+0.8T_{i+1}^n\) — note the <strong>negative center coefficient</strong>:</p>
+      <div class="tbl-wrap">
+        <table class="dtbl">
+          <thead><tr><th>n</th><th>\(T_1\)</th><th>\(T_2\)</th><th>\(T_3\)</th><th>Behavior</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>84.00</td><td>20.00</td><td>44.00</td><td>Overshoot begins</td></tr>
+            <tr><td>2</td><td>45.60</td><td>90.40</td><td>29.60</td><td>Sawtooth appears</td></tr>
+            <tr><td>3</td><td>124.96</td><td>5.92</td><td>94.56</td><td>Amplitude growing</td></tr>
+            <tr><td>4</td><td>9.76</td><td class="err">172.06</td><td class="err">−12.00</td><td class="err">Above max BC and below 0 — unphysical</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>A temperature below zero and above both boundaries violates the maximum principle of the heat equation. This is a pure numerical artifact of violating \(r\le0.5\).</p>
+    </div>
+    <details class="ans"><summary>▶ MATLAB Code</summary><div class="ans-body">
+    <div class="formula-box matlab-panel"><div class="formula-title">Explicit FTCS heat solver with stability guard</div>
+<pre class="matlab-code"><code><span class="com">%% Explicit FTCS method for the 1D heat equation</span>
+<span class="com">% dT/dt = alpha * d2T/dx2</span>
+<span class="com">% Update: T(i,new) = r*T(i-1) + (1-2r)*T(i) + r*T(i+1)</span>
+<span class="kw">clc</span>; <span class="kw">clear</span>; <span class="kw">close</span> <span class="kw">all</span>;
+<span class="com">%% Step 1: Physical and numerical parameters</span>
+alpha = <span class="num">1</span>;
+L  = <span class="num">1</span>;
+dx = <span class="num">0.25</span>;
+dt = <span class="num">0.02</span>;
+r  = alpha*dt/dx^<span class="num">2</span>;
+fprintf(<span class="str">'Stability number r = %.4f\n'</span>, r)
+<span class="kw">if</span> r &gt; <span class="num">0.5</span>
+    error(<span class="str">'Unstable FTCS grid: r must be &lt;= 0.5'</span>)
+<span class="kw">end</span>
+<span class="com">%% Step 2: Grid, initial and boundary conditions</span>
+x = <span class="num">0</span>:dx:L;
+T = <span class="num">20</span>*ones(length(x), <span class="num">1</span>);
+T(<span class="num">1</span>)   = <span class="num">100</span>;              <span class="com">% left boundary</span>
+T(end) = <span class="num">50</span>;               <span class="com">% right boundary</span>
+Nt = <span class="num">4</span>;                    <span class="com">% number of time steps to reproduce the hand table</span>
+history = zeros(length(x), Nt+<span class="num">1</span>);
+history(:,<span class="num">1</span>) = T;
+<span class="com">%% Step 3: March forward in time</span>
+<span class="kw">for</span> n = <span class="num">1</span>:Nt
+    Told = T;
+    <span class="kw">for</span> i = <span class="num">2</span>:length(x)-<span class="num">1</span>
+        T(i) = r*Told(i-<span class="num">1</span>) + (<span class="num">1</span>-<span class="num">2</span>*r)*Told(i) + r*Told(i+<span class="num">1</span>);
+    <span class="kw">end</span>
+    history(:,n+<span class="num">1</span>) = T;
+<span class="kw">end</span>
+disp(<span class="str">'Interior nodes at each time level (rows = nodes 1..3):'</span>)
+disp(history(<span class="num">2</span>:<span class="num">4</span>, :))
+<span class="com">%% Step 4: Plot</span>
+plot(x, history, <span class="str">'-o'</span>, <span class="str">'LineWidth'</span>, <span class="num">1.5</span>); grid on;
+xlabel(<span class="str">'x'</span>); ylabel(<span class="str">'Temperature'</span>);
+title(<span class="str">'FTCS Marching — each curve is one time level'</span>);</code></pre>
+    </div></div></details>
+  </div>
+</section>
+<!-- ════════════════════════════════════════════
+     SECTION 6 — IMPLICIT HEAT
+═════════════════════════════════════════════ -->
+<section id="implicit-heat" class="sect">
+  <div class="sect-number">06</div>
+  <h2 class="sect-title">Implicit Heat Equation <span class="badge badge-teal">BTCS · Backward Euler</span><span class="badge badge-gold">Unconditionally Stable</span></h2>
+  <p class="sect-subtitle">
+    The implicit (BTCS) method evaluates the spatial derivative at the <em>new</em> time level. Each step
+    requires a tridiagonal solve, but there is no stability restriction — any \(\Delta t\) works for the
+    linear heat equation. The tridiagonal system is solved with the Thomas algorithm in \(O(N)\) operations.
+  </p>
+  <div class="formula-box">
+    <div class="formula-title">Backward Euler in time, central difference in space</div>
+    \[
+      \frac{T_i^{n+1}-T_i^n}{\Delta t}=\alpha\frac{T_{i-1}^{n+1}-2T_i^{n+1}+T_{i+1}^{n+1}}{\Delta x^2}
+    \]
+    \[
+      \boxed{-rT_{i-1}^{n+1}+(1+2r)T_i^{n+1}-rT_{i+1}^{n+1}=T_i^n}
+    \]
+    <p class="note">Von Neumann analysis gives \(\xi=\dfrac{1}{1+4r\sin^2(k\Delta x/2)}\le1\) for every \(r&gt;0\) — unconditional stability, but only first-order accuracy in time.</p>
+  </div>
+  <div class="formula-box">
+    <div class="formula-title">Thomas algorithm (TDMA) — the workhorse of implicit PDE solvers</div>
+    <p>For a tridiagonal system \(a_iT_{i-1}+b_iT_i+c_iT_{i+1}=d_i\):</p>
+    <div class="eq-row"><strong>Forward sweep:</strong> \(c_1'=c_1/b_1\), \(d_1'=d_1/b_1\); then for \(i=2\ldots N\): \(m=b_i-a_ic_{i-1}'\), \(c_i'=c_i/m\), \(d_i'=(d_i-a_id_{i-1}')/m\)</div>
+    <div class="eq-row"><strong>Back substitution:</strong> \(T_N=d_N'\); then \(T_i=d_i'-c_i'T_{i+1}\) for \(i=N-1\ldots1\)</div>
+  </div>
+  <div class="example-card">
+    <div class="example-header"><span class="example-icon">⏪</span><div class="example-title">Worked Example — Two Implicit Steps Solved by the Thomas Algorithm</div></div>
+    <div class="problem-box">
+      <p>Same rod as Section 05 (\(T_0=100\), \(T_4=50\), interior initially 20), but now with a large step \(\Delta t=0.0625\), giving \(r=1\) — <strong>double</strong> the explicit limit.</p>
+    </div>
+    <div class="steps">
+      <details class="step" open>
+        <summary><span class="step-num">1</span><span class="step-label">Assemble the system for step 1</span></summary>
+        <div class="step-body">
+          <p>With \(r=1\): diagonal \(=1+2r=3\), off-diagonals \(=-1\). Boundary values enter the RHS:</p>
+          \[
+          \begin{bmatrix}
+          3&-1&0\\
+          -1&3&-1\\
+          0&-1&3
+          \end{bmatrix}
+          \begin{bmatrix}T_1^1\\T_2^1\\T_3^1\end{bmatrix}
+          =
+          \begin{bmatrix}20+1(100)\\20\\20+1(50)\end{bmatrix}
+          =
+          \begin{bmatrix}120\\20\\70\end{bmatrix}
+          \]
+        </div>
+      </details>
+      <details class="step" open>
+        <summary><span class="step-num">2</span><span class="step-label">Thomas forward sweep</span></summary>
+        <div class="step-body">
+          <div class="eq-row">Row 1: \(c_1'=-1/3=-0.3333\), \(\quad d_1'=120/3=40.0000\)</div>
+          <div class="eq-row">Row 2: \(m=3-(-1)(-0.3333)=2.6667\), \(\quad c_2'=-1/2.6667=-0.3750\), \(\quad d_2'=\dfrac{20-(-1)(40)}{2.6667}=\dfrac{60}{2.6667}=22.5000\)</div>
+          <div class="eq-row">Row 3: \(m=3-(-1)(-0.3750)=2.6250\), \(\quad d_3'=\dfrac{70-(-1)(22.5)}{2.6250}=\dfrac{92.5}{2.6250}=35.2381\)</div>
+        </div>
+      </details>
+      <details class="step" open>
+        <summary><span class="step-num">3</span><span class="step-label">Back substitution</span></summary>
+        <div class="step-body">
+          <div class="eq-row">\(T_3^1=35.2381\)</div>
+          <div class="eq-row">\(T_2^1=22.5000-(-0.3750)(35.2381)=22.5000+13.2143=35.7143\)</div>
+          <div class="eq-row">\(T_1^1=40.0000-(-0.3333)(35.7143)=40.0000+11.9048=51.9048\)</div>
+        </div>
+      </details>
+      <details class="step">
+        <summary><span class="step-num">4</span><span class="step-label">Step 2 — repeat with the new RHS</span></summary>
+        <div class="step-body">
+          <p>New RHS: \(b=[51.9048+100,\;35.7143,\;35.2381+50]=[151.9048,\;35.7143,\;85.2381]\).</p>
+          <div class="eq-row">Forward: \(d_1'=151.9048/3=50.6349\); \(\;d_2'=(35.7143+50.6349)/2.6667=32.3810\); \(\;d_3'=(85.2381+32.3810)/2.6250=44.8073\)</div>
+          <div class="eq-row">Back: \(T_3^2=44.8073\); \(\;T_2^2=32.3810+0.375(44.8073)=49.1837\); \(\;T_1^2=50.6349+0.3333(49.1837)=67.0295\)</div>
+        </div>
+      </details>
+    </div>
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead><tr><th>Level</th><th>\(T_1\)</th><th>\(T_2\)</th><th>\(T_3\)</th><th>Comment</th></tr></thead>
+        <tbody>
+          <tr><td>n = 0</td><td>20.0000</td><td>20.0000</td><td>20.0000</td><td>Initial condition</td></tr>
+          <tr><td>n = 1</td><td>51.9048</td><td>35.7143</td><td>35.2381</td><td>One implicit step, r = 1</td></tr>
+          <tr><td>n = 2</td><td>67.0295</td><td>49.1837</td><td>44.8073</td><td>Smooth, monotone approach</td></tr>
+          <tr><td>Steady</td><td class="exact">87.5000</td><td class="exact">75.0000</td><td class="exact">62.5000</td><td>Linear profile</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="info-box"><strong>Key observation:</strong> at \(r=1\), FTCS would explode, but BTCS marches smoothly. The trade-off: BTCS is only first-order in time, so very large steps are stable but <em>inaccurate</em>. Crank–Nicolson (next section) fixes the accuracy.</div>
+    <details class="ans"><summary>▶ MATLAB Code</summary><div class="ans-body">
+    <div class="formula-box matlab-panel"><div class="formula-title">Backward Euler with an explicit Thomas algorithm</div>
+<pre class="matlab-code"><code><span class="com">%% Backward Euler (BTCS) for the 1D heat equation with Thomas algorithm</span>
+<span class="kw">clc</span>; <span class="kw">clear</span>; <span class="kw">close</span> <span class="kw">all</span>;
+<span class="com">%% Step 1: Data</span>
+alpha = <span class="num">1</span>;  dx = <span class="num">0.25</span>;  dt = <span class="num">0.0625</span>;
+r = alpha*dt/dx^<span class="num">2</span>;
+Tleft = <span class="num">100</span>;  Tright = <span class="num">50</span>;
+T = [<span class="num">20</span>; <span class="num">20</span>; <span class="num">20</span>];
+N = length(T);
+Nt = <span class="num">2</span>;
+<span class="com">%% Step 2: Constant tridiagonal coefficients</span>
+a = -r*ones(N,<span class="num">1</span>);  a(<span class="num">1</span>) = <span class="num">0</span>;     <span class="com">% sub-diagonal</span>
+b = (<span class="num">1</span>+<span class="num">2</span>*r)*ones(N,<span class="num">1</span>);          <span class="com">% main diagonal</span>
+c = -r*ones(N,<span class="num">1</span>);  c(N) = <span class="num">0</span>;     <span class="com">% super-diagonal</span>
+<span class="com">%% Step 3: Time marching</span>
+<span class="kw">for</span> n = <span class="num">1</span>:Nt
+    d = T;
+    d(<span class="num">1</span>)   = d(<span class="num">1</span>)   + r*Tleft;    <span class="com">% boundary contributions</span>
+    d(end) = d(end) + r*Tright;
+    <span class="com">% --- Thomas algorithm: forward sweep ---</span>
+    cp = zeros(N,<span class="num">1</span>); dp = zeros(N,<span class="num">1</span>);
+    cp(<span class="num">1</span>) = c(<span class="num">1</span>)/b(<span class="num">1</span>);
+    dp(<span class="num">1</span>) = d(<span class="num">1</span>)/b(<span class="num">1</span>);
+    <span class="kw">for</span> i = <span class="num">2</span>:N
+        m     = b(i) - a(i)*cp(i-<span class="num">1</span>);
+        cp(i) = c(i)/m;
+        dp(i) = (d(i) - a(i)*dp(i-<span class="num">1</span>))/m;
+    <span class="kw">end</span>
+    <span class="com">% --- Back substitution ---</span>
+    T(N) = dp(N);
+    <span class="kw">for</span> i = N-<span class="num">1</span>:-<span class="num">1</span>:<span class="num">1</span>
+        T(i) = dp(i) - cp(i)*T(i+<span class="num">1</span>);
+    <span class="kw">end</span>
+    fprintf(<span class="str">'Step %d:  T = [%.4f  %.4f  %.4f]\n'</span>, n, T)
+<span class="kw">end</span></code></pre>
+    </div></div></details>
+  </div>
+</section>
+<!-- ════════════════════════════════════════════
+     SECTION 7 — CRANK NICOLSON
+═════════════════════════════════════════════ -->
+<section id="crank-nicolson" class="sect">
+  <div class="sect-number">07</div>
+  <h2 class="sect-title">Crank–Nicolson Method <span class="badge badge-gold">Second Order in Time</span><span class="badge badge-teal">Unconditionally Stable</span></h2>
+  <p class="sect-subtitle">
+    Crank–Nicolson averages the explicit and implicit spatial operators — a trapezoidal rule in time.
+    It is second-order accurate in both space and time and unconditionally stable, making it the
+    default workhorse for 1D diffusion problems.
+  </p>
+  <div class="formula-box">
+    <div class="formula-title">Crank–Nicolson stencil</div>
+    \[
+      \frac{T_i^{n+1}-T_i^n}{\Delta t}
+      =\frac{\alpha}{2}\left[
+      \frac{\delta_x^2 T^{n+1}}{\Delta x^2}
+      +\frac{\delta_x^2 T^{n}}{\Delta x^2}\right]
+    \]
+    \[
+      \boxed{
+      -\frac r2T_{i-1}^{n+1}+(1+r)T_i^{n+1}-\frac r2T_{i+1}^{n+1}
+      =
+      \frac r2T_{i-1}^n+(1-r)T_i^n+\frac r2T_{i+1}^n}
+    \]
+    <p class="note">Amplification factor: \(\xi=\dfrac{1-2r\sin^2(k\Delta x/2)}{1+2r\sin^2(k\Delta x/2)}\). Always \(|\xi|\le1\) — stable — but \(\xi\to-1\) for large \(r\), which can cause slowly-decaying oscillations when the initial data has sharp jumps.</p>
+  </div>
+  <div class="example-card">
+    <div class="example-header"><span class="example-icon">⚖️</span><div class="example-title">Worked Example — Two Crank–Nicolson Steps by Hand</div></div>
+    <div class="problem-box"><p>Same rod: 3 interior nodes, \(r=1\), \(T_0=100\), \(T_4=50\), initial interior values equal to 20.</p></div>
+    <div class="steps">
+      <details class="step" open>
+        <summary><span class="step-num">1</span><span class="step-label">Assemble the RHS for step 1</span></summary>
+        <div class="step-body">
+          <p>With \(r=1\): LHS diagonal \(=1+r=2\), off-diagonals \(=-0.5\); RHS uses \((1-r)=0\) and \(r/2=0.5\):</p>
+          <div class="eq-row">\(b_1=0.5(100)+0(20)+0.5(20)+\underbrace{0.5(100)}_{\text{new-level BC}}=110\)</div>
+          <div class="eq-row">\(b_2=0.5(20)+0(20)+0.5(20)=20\)</div>
+          <div class="eq-row">\(b_3=0.5(20)+0(20)+0.5(50)+0.5(50)=60\)</div>
+          \[
+          \begin{bmatrix}2&-0.5&0\\-0.5&2&-0.5\\0&-0.5&2\end{bmatrix}
+          \begin{bmatrix}T_1^1\\T_2^1\\T_3^1\end{bmatrix}
+          =
+          \begin{bmatrix}110\\20\\60\end{bmatrix}
+          \]
+        </div>
+      </details>
+      <details class="step" open>
+        <summary><span class="step-num">2</span><span class="step-label">Thomas solve for step 1</span></summary>
+        <div class="step-body">
+          <div class="eq-row">Forward: \(c_1'=-0.25\), \(d_1'=55.0000\); \(\;m_2=2-0.125=1.8750\), \(c_2'=-0.2667\), \(d_2'=(20+27.5)/1.875=25.3333\); \(\;m_3=2-0.1333=1.8667\), \(d_3'=(60+12.6667)/1.8667=38.9286\)</div>
+          <div class="eq-row">Back: \(T_3^1=38.9286\); \(\;T_2^1=25.3333+0.2667(38.9286)=35.7143\); \(\;T_1^1=55+0.25(35.7143)=63.9286\)</div>
+        </div>
+      </details>
+      <details class="step">
+        <summary><span class="step-num">3</span><span class="step-label">Step 2 — assemble and solve again</span></summary>
+        <div class="step-body">
+          <p>RHS from \(T^1=[63.9286,\,35.7143,\,38.9286]\):</p>
+          <div class="eq-row">\(b_1=0.5(35.7143)+100=117.8571\)</div>
+          <div class="eq-row">\(b_2=0.5(63.9286+38.9286)=51.4286\)</div>
+          <div class="eq-row">\(b_3=0.5(35.7143)+50=67.8571\)</div>
+          <div class="eq-row">Forward: \(d_1'=58.9286\); \(d_2'=(51.4286+29.4643)/1.875=43.1429\); \(d_3'=(67.8571+21.5714)/1.8667=47.9078\)</div>
+          <div class="eq-row">Back: \(T_3^2=47.9078\); \(\;T_2^2=43.1429+0.2667(47.9078)=55.9183\); \(\;T_1^2=58.9286+0.25(55.9183)=72.9081\)</div>
+        </div>
+      </details>
+    </div>
+    <h4 class="subsub">Scheme Comparison at the Same \(r=1\)</h4>
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead><tr><th>Scheme</th><th>\(T_1^1\)</th><th>\(T_2^1\)</th><th>\(T_3^1\)</th><th>Order in time</th><th>Stability</th></tr></thead>
+        <tbody>
+          <tr><td>Explicit FTCS</td><td class="err">unstable</td><td class="err">unstable</td><td class="err">unstable</td><td>\(O(\Delta t)\)</td><td>\(r\le0.5\)</td></tr>
+          <tr><td>Implicit BTCS</td><td>51.9048</td><td>35.7143</td><td>35.2381</td><td>\(O(\Delta t)\)</td><td class="exact">Unconditional</td></tr>
+          <tr><td>Crank–Nicolson</td><td class="highlight">63.9286</td><td class="highlight">35.7143</td><td class="highlight">38.9286</td><td class="exact">\(O(\Delta t^2)\)</td><td class="exact">Unconditional</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">CN responds faster near the hot boundary because the trapezoidal average retains half of the explicit information from the old time level, while BTCS lags with heavy numerical damping.</p>
+    <details class="ans"><summary>▶ MATLAB Code</summary><div class="ans-body">
+    <div class="formula-box matlab-panel"><div class="formula-title">Crank–Nicolson heat solver</div>
+<pre class="matlab-code"><code><span class="com">%% Crank-Nicolson method for the 1D heat equation</span>
+<span class="com">% LHS matrix A applies at the new level, RHS matrix B at the old level.</span>
+<span class="kw">clc</span>; <span class="kw">clear</span>; <span class="kw">close</span> <span class="kw">all</span>;
+<span class="com">%% Step 1: Data</span>
+alpha = <span class="num">1</span>;  dx = <span class="num">0.25</span>;  dt = <span class="num">0.0625</span>;
+r = alpha*dt/dx^<span class="num">2</span>;
+Tleft = <span class="num">100</span>;  Tright = <span class="num">50</span>;
+T = [<span class="num">20</span>; <span class="num">20</span>; <span class="num">20</span>];
+N = length(T);
+Nt = <span class="num">2</span>;
+<span class="com">%% Step 2: Constant CN matrices</span>
+A = diag((<span class="num">1</span>+r)*ones(N,<span class="num">1</span>)) + diag(-(r/<span class="num">2</span>)*ones(N-<span class="num">1</span>,<span class="num">1</span>),<span class="num">1</span>) + diag(-(r/<span class="num">2</span>)*ones(N-<span class="num">1</span>,<span class="num">1</span>),-<span class="num">1</span>);
+B = diag((<span class="num">1</span>-r)*ones(N,<span class="num">1</span>)) + diag( (r/<span class="num">2</span>)*ones(N-<span class="num">1</span>,<span class="num">1</span>),<span class="num">1</span>) + diag( (r/<span class="num">2</span>)*ones(N-<span class="num">1</span>,<span class="num">1</span>),-<span class="num">1</span>);
+<span class="com">%% Step 3: March in time</span>
+<span class="kw">for</span> n = <span class="num">1</span>:Nt
+    b = B*T;
+    b(<span class="num">1</span>)   = b(<span class="num">1</span>)   + (r/<span class="num">2</span>)*(Tleft  + Tleft);   <span class="com">% old + new boundary levels</span>
+    b(end) = b(end) + (r/<span class="num">2</span>)*(Tright + Tright);
+    T = A\b;                                       <span class="com">% tridiagonal solve</span>
+    fprintf(<span class="str">'Step %d:  T = [%.4f  %.4f  %.4f]\n'</span>, n, T)
+<span class="kw">end</span></code></pre>
+    </div></div></details>
+  </div>
+</section>
+<!-- ════════════════════════════════════════════
+     SECTION 8 — ADI
+═════════════════════════════════════════════ -->
+<section id="adi" class="sect">
+  <div class="sect-number">08</div>
+  <h2 class="sect-title">ADI Method <span class="badge badge-teal">Alternating Direction Implicit</span><span class="badge badge-gold">2D Workhorse</span></h2>
+  <p class="sect-subtitle">
+    ADI is the standard method for two-dimensional parabolic PDEs. It splits each time step into
+    two half-steps: one implicit in x (rows), one implicit in y (columns). Every line solve is
+    a cheap tridiagonal system — no large 2D matrix is ever formed.
+  </p>
+  <div class="formula-box">
+    <div class="formula-title">2D heat equation and grid numbers</div>
+    \[
+      \frac{\partial T}{\partial t}
+      =\alpha\left(\frac{\partial^2T}{\partial x^2}+\frac{\partial^2T}{\partial y^2}\right),
+      \qquad
+      r_x=\frac{\alpha\Delta t}{\Delta x^2},\qquad
+      r_y=\frac{\alpha\Delta t}{\Delta y^2}
+    \]
+  </div>
+  <h3 class="sub">Peaceman–Rachford splitting</h3>
+  <div class="steps">
+    <details class="step" open>
+      <summary><span class="step-num">1</span><span class="step-label">First half-step: x-implicit, y-explicit</span></summary>
+      <div class="step-body">
+        \[
+        -\frac{r_x}{2}T_{i-1,j}^*
+        +(1+r_x)T_{i,j}^*
+        -\frac{r_x}{2}T_{i+1,j}^*
+        =
+        \frac{r_y}{2}T_{i,j-1}^n
+        +(1-r_y)T_{i,j}^n
+        +\frac{r_y}{2}T_{i,j+1}^n
+        \]
+        <p>For each fixed row \(j\), solve one tridiagonal system along x with the Thomas algorithm.</p>
+      </div>
+    </details>
+    <details class="step" open>
+      <summary><span class="step-num">2</span><span class="step-label">Second half-step: y-implicit, x-explicit</span></summary>
+      <div class="step-body">
+        \[
+        -\frac{r_y}{2}T_{i,j-1}^{n+1}
+        +(1+r_y)T_{i,j}^{n+1}
+        -\frac{r_y}{2}T_{i,j+1}^{n+1}
+        =
+        \frac{r_x}{2}T_{i-1,j}^*
+        +(1-r_x)T_{i,j}^*
+        +\frac{r_x}{2}T_{i+1,j}^*
+        \]
+        <p>For each fixed column \(i\), solve one tridiagonal system along y. The combination is second-order in time and unconditionally stable for the 2D heat equation.</p>
+      </div>
+    </details>
+  </div>
+  <div class="info-box">
+    <strong>Cost comparison:</strong> a fully implicit 2D step on an \(N\times N\) grid requires one
+    \(N^2\times N^2\) solve. ADI replaces it with \(2N\) tridiagonal solves of size \(N\) — an enormous
+    saving, since each Thomas solve is only \(O(N)\).
+  </div>
+  <div class="example-card">
+    <div class="example-header"><span class="example-icon">↔️</span><div class="example-title">Worked Example — Two Full ADI Steps on a 2×2 Interior Grid</div></div>
+    <div class="problem-box">
+      <p>A square plate has 2×2 interior nodes. All boundaries are held at \(0^\circ C\). Initial interior temperature is \(100^\circ C\) everywhere. Take \(r_x=r_y=0.5\).</p>
+    </div>
+    <div class="steps">
+      <details class="step" open>
+        <summary><span class="step-num">1</span><span class="step-label">Step 1, x-sweep — build the row system</span></summary>
+        <div class="step-body">
+          <p>LHS coefficients: diagonal \(=1+r_x=1.5\), off-diagonal \(=-r_x/2=-0.25\). RHS uses \(r_y/2=0.25\) and \(1-r_y=0.5\). For either row, the vertical neighbors are one boundary (0) and one interior node (100):</p>
+          \[
+            b=0.25(0)+0.5(100)+0.25(100)=75
+          \]
+          \[
+          \begin{bmatrix}1.5&-0.25\\-0.25&1.5\end{bmatrix}
+          \begin{bmatrix}T_1^*\\T_2^*\end{bmatrix}
+          =
+          \begin{bmatrix}75\\75\end{bmatrix}
+          \]
+        </div>
+      </details>
+      <details class="step" open>
+        <summary><span class="step-num">2</span><span class="step-label">Thomas solve of the 2×2 row system</span></summary>
+        <div class="step-body">
+          <div class="eq-row">Forward: \(c_1'=-0.25/1.5=-0.1667\), \(\;d_1'=75/1.5=50.0000\)</div>
+          <div class="eq-row">Row 2: \(m=1.5-(-0.25)(-0.1667)=1.4583\), \(\;d_2'=\dfrac{75+0.25(50)}{1.4583}=\dfrac{87.5}{1.4583}=60.0000\)</div>
+          <div class="eq-row">Back: \(T_2^*=60\); \(\;T_1^*=50+0.1667(60)=60.0000\)</div>
+          <p>Both rows are identical, so <strong>all four intermediate nodes equal 60</strong>.</p>
+        </div>
+      </details>
+      <details class="step" open>
+        <summary><span class="step-num">3</span><span class="step-label">Step 1, y-sweep</span></summary>
+        <div class="step-body">
+          <p>Now the columns are implicit. RHS from \(T^*=60\):</p>
+          \[
+            b=0.25(0)+0.5(60)+0.25(60)=45
+          \]
+          <div class="eq-row">Same matrix, so: \(1.25T=45\Rightarrow T^{n+1}=36.0000\) at all four nodes</div>
+        </div>
+      </details>
+      <details class="step">
+        <summary><span class="step-num">4</span><span class="step-label">Step 2 — repeat the double sweep</span></summary>
+        <div class="step-body">
+          <div class="eq-row">x-sweep RHS: \(0.25(0)+0.5(36)+0.25(36)=27\Rightarrow 1.25T^*=27\Rightarrow T^*=21.6000\)</div>
+          <div class="eq-row">y-sweep RHS: \(0.25(0)+0.5(21.6)+0.25(21.6)=16.2\Rightarrow T^{n+2}=12.9600\)</div>
+        </div>
+      </details>
+    </div>
+    <h4 class="subsub">Decay History</h4>
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead><tr><th>Stage</th><th>Interior value (°C)</th><th>Ratio to previous</th></tr></thead>
+        <tbody>
+          <tr><td>Initial</td><td>100.0000</td><td>—</td></tr>
+          <tr><td>After x-sweep 1</td><td>60.0000</td><td>0.60</td></tr>
+          <tr><td>After y-sweep 1 (full step 1)</td><td class="highlight">36.0000</td><td>0.60</td></tr>
+          <tr><td>After x-sweep 2</td><td>21.6000</td><td>0.60</td></tr>
+          <tr><td>After y-sweep 2 (full step 2)</td><td class="highlight">12.9600</td><td>0.60</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Because this symmetric problem excites a single spatial mode, each half-sweep multiplies the field by exactly \(0.6\) — a clean, bounded amplification factor \(&lt;1\), confirming unconditional stability of the splitting.</p>
+    <details class="ans"><summary>▶ MATLAB Code</summary><div class="ans-body">
+    <div class="formula-box matlab-panel"><div class="formula-title">Peaceman–Rachford ADI for the 2D heat equation</div>
+<pre class="matlab-code"><code><span class="com">%% ADI (Peaceman-Rachford) method for the 2D heat equation</span>
+<span class="com">% Each time step = x-implicit sweep + y-implicit sweep.</span>
+<span class="com">% Every line solve is tridiagonal (here done with backslash for clarity).</span>
+<span class="kw">clc</span>; <span class="kw">clear</span>; <span class="kw">close</span> <span class="kw">all</span>;
+<span class="com">%% Step 1: Grid and parameters</span>
+Nx = <span class="num">20</span>; Ny = <span class="num">20</span>;
+alpha = <span class="num">1</span>;
+dx = <span class="num">1</span>/(Nx+<span class="num">1</span>);  dy = <span class="num">1</span>/(Ny+<span class="num">1</span>);
+dt = <span class="num">5e-4</span>;
+rx = alpha*dt/dx^<span class="num">2</span>;
+ry = alpha*dt/dy^<span class="num">2</span>;
+T  = <span class="num">100</span>*ones(Ny,Nx);       <span class="com">% hot interior, cold (zero) boundaries</span>
+nt = <span class="num">50</span>;
+<span class="com">%% Step 2: Constant sweep matrices</span>
+Ax = diag((<span class="num">1</span>+rx)*ones(Nx,<span class="num">1</span>)) + diag(-(rx/<span class="num">2</span>)*ones(Nx-<span class="num">1</span>,<span class="num">1</span>),<span class="num">1</span>) + diag(-(rx/<span class="num">2</span>)*ones(Nx-<span class="num">1</span>,<span class="num">1</span>),-<span class="num">1</span>);
+Ay = diag((<span class="num">1</span>+ry)*ones(Ny,<span class="num">1</span>)) + diag(-(ry/<span class="num">2</span>)*ones(Ny-<span class="num">1</span>,<span class="num">1</span>),<span class="num">1</span>) + diag(-(ry/<span class="num">2</span>)*ones(Ny-<span class="num">1</span>,<span class="num">1</span>),-<span class="num">1</span>);
+<span class="com">%% Step 3: Time marching</span>
+<span class="kw">for</span> n = <span class="num">1</span>:nt
+    Tstar = zeros(Ny,Nx);
+    <span class="com">% ---- half-step 1: x implicit, one tridiagonal solve per row ----</span>
+    <span class="kw">for</span> j = <span class="num">1</span>:Ny
+        rhs = (<span class="num">1</span>-ry)*T(j,:)';
+        <span class="kw">if</span> j &gt; <span class="num">1</span>,  rhs = rhs + (ry/<span class="num">2</span>)*T(j-<span class="num">1</span>,:)'; <span class="kw">end</span>
+        <span class="kw">if</span> j &lt; Ny, rhs = rhs + (ry/<span class="num">2</span>)*T(j+<span class="num">1</span>,:)'; <span class="kw">end</span>
+        Tstar(j,:) = (Ax\rhs)';
+    <span class="kw">end</span>
+    <span class="com">% ---- half-step 2: y implicit, one tridiagonal solve per column ----</span>
+    <span class="kw">for</span> i = <span class="num">1</span>:Nx
+        rhs = (<span class="num">1</span>-rx)*Tstar(:,i);
+        <span class="kw">if</span> i &gt; <span class="num">1</span>,  rhs = rhs + (rx/<span class="num">2</span>)*Tstar(:,i-<span class="num">1</span>); <span class="kw">end</span>
+        <span class="kw">if</span> i &lt; Nx, rhs = rhs + (rx/<span class="num">2</span>)*Tstar(:,i+<span class="num">1</span>); <span class="kw">end</span>
+        T(:,i) = Ay\rhs;
+    <span class="kw">end</span>
+<span class="kw">end</span>
+imagesc(T); axis equal tight; colorbar;
+title(<span class="str">'2D Heat Equation Solved by ADI'</span>);</code></pre>
+    </div></div></details>
+  </div>
+</section>
+<!-- ════════════════════════════════════════════
+     SECTION 9 — METHOD OF LINES
+═════════════════════════════════════════════ -->
+<section id="method-lines" class="sect">
+  <div class="sect-number">09</div>
+  <h2 class="sect-title">Method of Lines <span class="badge badge-teal">PDE → ODE System</span><span class="badge badge-gold">Reuses RK4</span></h2>
+  <p class="sect-subtitle">
+    The Method of Lines (MOL) discretizes only the spatial derivatives, producing a system of ODEs
+    in time. Every ODE method from the companion page — RK2, RK3, RK4, implicit solvers — can then
+    be applied directly. MOL is the natural bridge between the ODE and PDE worlds.
+  </p>
+  <div class="formula-box">
+    <div class="formula-title">Heat equation transformed into an ODE system</div>
+    \[
+      \frac{dT_i}{dt}=\alpha\frac{T_{i-1}-2T_i+T_{i+1}}{\Delta x^2},
+      \qquad i=1,2,\ldots,N
+      \qquad\Longrightarrow\qquad
+      \frac{d\mathbf{T}}{dt}=\frac{\alpha}{\Delta x^2}\left(\mathbf{M}\mathbf{T}+\mathbf{b}\right)
+    \]
+    <p>where \(\mathbf{M}\) is the tridiagonal \((1,-2,1)\) matrix and \(\mathbf{b}\) carries the boundary values.</p>
+  </div>
+  <div class="formula-box">
+    <div class="formula-title">Why the system becomes stiff</div>
+    <p>The eigenvalues of the semi-discrete operator are</p>
+    \[
+      \lambda_k=-\frac{4\alpha}{\Delta x^2}\sin^2\!\left(\frac{k\pi}{2(N+1)}\right),
+      \qquad k=1,\ldots,N
+    \]
+    <p>The stiffness ratio \(|\lambda_{\max}/\lambda_{\min}|\) grows like \(N^2\). Fine spatial grids therefore
+    produce stiff ODE systems — explicit RK4 needs tiny time steps, while <span class="badge badge-teal">ode15s</span>-type
+    implicit solvers remain efficient.</p>
+  </div>
+  <div class="example-card">
+    <div class="example-header"><span class="example-icon">📈</span><div class="example-title">Worked Example — One Full RK4 Step on the MOL System</div></div>
+    <div class="problem-box">
+      <p>Three interior nodes, \(\Delta x=0.25\), \(\alpha=1\) (so the prefactor is \(1/\Delta x^2=16\)), \(T_0=100\), \(T_4=50\), initial \(\mathbf{T}=(20,20,20)\). Take one RK4 step with \(\Delta t=0.02\).</p>
+      <p>System: \(\;\mathbf{f}(\mathbf{T})=16\left(\mathbf{M}\mathbf{T}+\mathbf{b}\right)\) with \(\mathbf{b}=(100,\,0,\,50)^T\).</p>
+    </div>
+    <div class="steps">
+      <details class="step" open>
+        <summary><span class="step-num">1</span><span class="step-label">Compute \(\mathbf{k}_1\)</span></summary>
+        <div class="step-body">
+          <div class="eq-row">\(\mathbf{M}\mathbf{T}=(-40+20,\;20-40+20,\;20-40)=(-20,\,0,\,-20)\)</div>
+          <div class="eq-row">\(\mathbf{M}\mathbf{T}+\mathbf{b}=(80,\,0,\,30)\Rightarrow \mathbf{k}_1=16(80,0,30)=(1280.0,\;0.0,\;480.0)\)</div>
+        </div>
+      </details>
+      <details class="step" open>
+        <summary><span class="step-num">2</span><span class="step-label">Compute \(\mathbf{k}_2\) at the midpoint</span></summary>
+        <div class="step-body">
+          <div class="eq-row">\(\mathbf{T}+\frac{\Delta t}{2}\mathbf{k}_1=(32.8,\;20.0,\;24.8)\)</div>
+          <div class="eq-row">\(\mathbf{M}\mathbf{T}+\mathbf{b}=(54.4,\;17.6,\;20.4)\Rightarrow \mathbf{k}_2=(870.40,\;281.60,\;326.40)\)</div>
+        </div>
+      </details>
+      <details class="step">
+        <summary><span class="step-num">3</span><span class="step-label">Compute \(\mathbf{k}_3\)</span></summary>
+        <div class="step-body">
+          <div class="eq-row">\(\mathbf{T}+\frac{\Delta t}{2}\mathbf{k}_2=(28.7040,\;22.8160,\;23.2640)\)</div>
+          <div class="eq-row">\(\mathbf{M}\mathbf{T}+\mathbf{b}=(65.4080,\;6.3360,\;26.2880)\Rightarrow \mathbf{k}_3=(1046.5280,\;101.3760,\;420.6080)\)</div>
+        </div>
+      </details>
+      <details class="step">
+        <summary><span class="step-num">4</span><span class="step-label">Compute \(\mathbf{k}_4\) and update</span></summary>
+        <div class="step-body">
+          <div class="eq-row">\(\mathbf{T}+\Delta t\,\mathbf{k}_3=(40.9306,\;22.0275,\;28.4122)\)</div>
+          <div class="eq-row">\(\mathbf{M}\mathbf{T}+\mathbf{b}=(40.1664,\;25.2877,\;15.2032)\Rightarrow \mathbf{k}_4=(642.6624,\;404.6029,\;243.2512)\)</div>
+          \[
+            \mathbf{T}(0.02)=\mathbf{T}_0+\frac{\Delta t}{6}\left(\mathbf{k}_1+2\mathbf{k}_2+2\mathbf{k}_3+\mathbf{k}_4\right)
+          \]
+          <div class="eq-row">\(\mathbf{k}_1+2\mathbf{k}_2+2\mathbf{k}_3+\mathbf{k}_4=(5756.5184,\;1170.5549,\;2217.2672)\)</div>
+          <div class="eq-row">\(\boxed{\mathbf{T}(0.02)=(39.1884,\;23.9018,\;27.3909)}\)</div>
+        </div>
+      </details>
+    </div>
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead><tr><th>Time integrator (same \(\Delta t=0.02\))</th><th>\(T_1\)</th><th>\(T_2\)</th><th>\(T_3\)</th><th>Time order</th></tr></thead>
+        <tbody>
+          <tr><td>MOL + forward Euler (= FTCS)</td><td>45.6000</td><td>20.0000</td><td>29.6000</td><td>\(O(\Delta t)\)</td></tr>
+          <tr><td>MOL + classical RK4</td><td class="highlight">39.1884</td><td class="highlight">23.9018</td><td class="highlight">27.3909</td><td class="exact">\(O(\Delta t^4)\)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="info-box"><strong>Connection to the ODE page:</strong> FTCS is exactly MOL + forward Euler. RK4 pays four function evaluations per step but tracks the true transient far more accurately — notice how it moderates the first-step overshoot at \(T_1\) and lets \(T_2\) begin to respond immediately.</div>
+    <details class="ans"><summary>▶ MATLAB Code</summary><div class="ans-body">
+    <div class="formula-box matlab-panel"><div class="formula-title">Method of Lines — stiff solver and fixed-step RK4</div>
+<pre class="matlab-code"><code><span class="com">%% Method of Lines for the 1D heat equation</span>
+<span class="com">% Space is discretized once; time is handled by any ODE solver.</span>
+<span class="kw">clc</span>; <span class="kw">clear</span>; <span class="kw">close</span> <span class="kw">all</span>;
+<span class="com">%% Step 1: Spatial discretization</span>
+alpha = <span class="num">1</span>;  L = <span class="num">1</span>;  N = <span class="num">20</span>;
+dx = L/(N+<span class="num">1</span>);
+x  = (<span class="num">1</span>:N)'*dx;
+Tleft = <span class="num">100</span>;  Tright = <span class="num">50</span>;
+T0 = <span class="num">20</span>*ones(N,<span class="num">1</span>);
+<span class="com">%% Step 2: Solve the stiff ODE system with ode15s</span>
+rhs = @(t,T) heat_mol_rhs(T, alpha, dx, Tleft, Tright);
+[t, T] = ode15s(rhs, [<span class="num">0</span> <span class="num">0.1</span>], T0);
+plot([<span class="num">0</span>; x; L], [Tleft; T(end,:)'; Tright], <span class="str">'-o'</span>, <span class="str">'LineWidth'</span>, <span class="num">2</span>);
+grid on; xlabel(<span class="str">'x'</span>); ylabel(<span class="str">'Temperature'</span>);
+title(<span class="str">'Method of Lines — ode15s'</span>);
+<span class="com">%% Local function: semi-discrete right-hand side</span>
+<span class="kw">function</span> dTdt = heat_mol_rhs(T, alpha, dx, Tleft, Tright)
+    N = length(T);
+    dTdt = zeros(N,<span class="num">1</span>);
+    <span class="kw">for</span> i = <span class="num">1</span>:N
+        west = Tleft;  east = Tright;
+        <span class="kw">if</span> i &gt; <span class="num">1</span>, west = T(i-<span class="num">1</span>); <span class="kw">end</span>
+        <span class="kw">if</span> i &lt; N, east = T(i+<span class="num">1</span>); <span class="kw">end</span>
+        dTdt(i) = alpha*(west - <span class="num">2</span>*T(i) + east)/dx^<span class="num">2</span>;
+    <span class="kw">end</span>
+<span class="kw">end</span></code></pre>
+    </div></div></details>
+  </div>
+</section>
+<!-- ════════════════════════════════════════════
+     SECTION 10 — WAVE EQUATION
+═════════════════════════════════════════════ -->
+<section id="wave" class="sect">
+  <div class="sect-number">10</div>
+  <h2 class="sect-title">Wave Equation <span class="badge badge-gold">Hyperbolic PDE</span><span class="badge badge-red">CFL Condition</span></h2>
+  <p class="sect-subtitle">
+    The wave equation contains a second time derivative, so the marching scheme couples three time
+    levels and needs a special first-step formula built from the two initial conditions.
+  </p>
+  <div class="formula-box">
+    <div class="formula-title">Explicit central-difference wave scheme</div>
+    \[
+      \frac{u_i^{n+1}-2u_i^n+u_i^{n-1}}{\Delta t^2}
+      =c^2\frac{u_{i-1}^n-2u_i^n+u_{i+1}^n}{\Delta x^2}
+    \]
+    \[
+      \boxed{u_i^{n+1}=2(1-\lambda^2)u_i^n-u_i^{n-1}+\lambda^2(u_{i-1}^n+u_{i+1}^n)},
+      \qquad \lambda=\frac{c\Delta t}{\Delta x}
+    \]
+  </div>
+  <div class="formula-box">
+    <div class="formula-title">Special first step from the initial velocity</div>
+    <p>The scheme needs \(u^{-1}\), which does not exist. Use a Taylor expansion of \(u(x,\Delta t)\) with \(u(x,0)=f(x)\) and \(u_t(x,0)=g(x)\), replacing \(u_{tt}\) by \(c^2u_{xx}\):</p>
+    \[
+      \boxed{u_i^1=u_i^0+\Delta t\,g_i+\frac{\lambda^2}{2}\left(u_{i-1}^0-2u_i^0+u_{i+1}^0\right)}
+    \]
+  </div>
+  <div class="warn-box"><strong>CFL condition:</strong> stability requires \(\lambda\le1\) — the numerical domain of dependence must contain the physical one. Information travels at speed \(c\); the grid must not be outrun.</div>
+  <div class="example-card">
+    <div class="example-header"><span class="example-icon">🌊</span><div class="example-title">Worked Example — Three Wave Steps with Exact Comparison</div></div>
+    <div class="problem-box">
+      <p>\(c=1\), \(\Delta x=0.25\), \(\Delta t=0.2\Rightarrow\lambda=0.8,\;\lambda^2=0.64\). Fixed ends, \(u(x,0)=\sin(\pi x)\), zero initial velocity.</p>
+      <p><strong>Exact solution:</strong> \(u(x,t)=\sin(\pi x)\cos(\pi t)\).</p>
+    </div>
+    <div class="steps">
+      <details class="step" open>
+        <summary><span class="step-num">1</span><span class="step-label">First step (special formula, \(g=0\))</span></summary>
+        <div class="step-body">
+          <p>Initial nodal values: \(u^0=(0.7071,\;1.0000,\;0.7071)\), \(\;\lambda^2/2=0.32\).</p>
+          <div class="eq-row">\(u_1^1=0.7071+0.32(0-1.4142+1.0)=0.7071+0.32(-0.4142)=0.5746\)</div>
+          <div class="eq-row">\(u_2^1=1.0+0.32(0.7071-2+0.7071)=1.0+0.32(-0.5858)=0.8125\)</div>
+          <div class="eq-row">\(u_3^1=0.5746\) (symmetry)</div>
+        </div>
+      </details>
+      <details class="step" open>
+        <summary><span class="step-num">2</span><span class="step-label">Second step (regular three-level formula)</span></summary>
+        <div class="step-body">
+          <p>Coefficients: \(2(1-\lambda^2)=0.72\), \(\;\lambda^2=0.64\):</p>
+          <div class="eq-row">\(u_1^2=0.72(0.5746)-0.7071+0.64(0+0.8125)=0.4137-0.7071+0.5200=0.2266\)</div>
+          <div class="eq-row">\(u_2^2=0.72(0.8125)-1.0+0.64(0.5746+0.5746)=0.5850-1.0+0.7354=0.3205\)</div>
+          <div class="eq-row">\(u_3^2=0.2266\)</div>
+        </div>
+      </details>
+      <details class="step">
+        <summary><span class="step-num">3</span><span class="step-label">Third step — the string swings below zero</span></summary>
+        <div class="step-body">
+          <div class="eq-row">\(u_1^3=0.72(0.2266)-0.5746+0.64(0+0.3205)=0.1632-0.5746+0.2051=-0.2063\)</div>
+          <div class="eq-row">\(u_2^3=0.72(0.3205)-0.8125+0.64(0.2266+0.2266)=0.2307-0.8125+0.2900=-0.2918\)</div>
+          <div class="eq-row">\(u_3^3=-0.2063\)</div>
+        </div>
+      </details>
+    </div>
+    <h4 class="subsub">Verification Against the Exact Solution</h4>
+    <div class="tbl-wrap">
+      <table class="dtbl">
+        <thead><tr><th>t</th><th>Node</th><th>Numerical</th><th class="exact">Exact \(\sin(\pi x)\cos(\pi t)\)</th><th>Abs. error</th></tr></thead>
+        <tbody>
+          <tr><td>0.2</td><td>\(u_1\)</td><td>0.5746</td><td class="exact">0.5721</td><td class="err">0.0025</td></tr>
+          <tr><td>0.2</td><td>\(u_2\)</td><td>0.8125</td><td class="exact">0.8090</td><td class="err">0.0035</td></tr>
+          <tr><td>0.4</td><td>\(u_1\)</td><td>0.2266</td><td class="exact">0.2185</td><td class="err">0.0081</td></tr>
+          <tr><td>0.4</td><td>\(u_2\)</td><td>0.3205</td><td class="exact">0.3090</td><td class="err">0.0115</td></tr>
+          <tr><td>0.6</td><td>\(u_1\)</td><td>−0.2063</td><td class="exact">−0.2185</td><td class="err">0.0122</td></tr>
+          <tr><td>0.6</td><td>\(u_2\)</td><td>−0.2918</td><td class="exact">−0.3090</td><td class="err">0.0172</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">The scheme conserves the oscillation (no artificial damping — a hallmark of the central wave scheme with \(\lambda\le1\)); errors are pure phase/dispersion errors that shrink as \(O(h^2)\).</p>
+    <details class="ans"><summary>▶ MATLAB Code</summary><div class="ans-body">
+    <div class="formula-box matlab-panel"><div class="formula-title">Explicit wave equation solver with CFL guard</div>
+<pre class="matlab-code"><code><span class="com">%% Explicit central-difference method for the 1D wave equation</span>
+<span class="com">% u_tt = c^2 * u_xx, fixed ends, initial shape sin(pi x), zero velocity.</span>
+<span class="kw">clc</span>; <span class="kw">clear</span>; <span class="kw">close</span> <span class="kw">all</span>;
+<span class="com">%% Step 1: Parameters and CFL check</span>
+c  = <span class="num">1</span>;   L = <span class="num">1</span>;
+dx = <span class="num">0.01</span>;  dt = <span class="num">0.008</span>;
+lambda = c*dt/dx;
+<span class="kw">if</span> lambda &gt; <span class="num">1</span>
+    error(<span class="str">'Unstable wave grid: c*dt/dx must be &lt;= 1'</span>)
+<span class="kw">end</span>
+<span class="com">%% Step 2: Initial conditions</span>
+x = (<span class="num">0</span>:dx:L)';
+Nt = <span class="num">200</span>;
+u_old = sin(pi*x);          <span class="com">% u(x,0)</span>
+g = zeros(size(x));          <span class="com">% initial velocity</span>
+<span class="com">%% Step 3: Special first step</span>
+u = u_old;
+u(<span class="num">2</span>:end-<span class="num">1</span>) = u_old(<span class="num">2</span>:end-<span class="num">1</span>) + dt*g(<span class="num">2</span>:end-<span class="num">1</span>) ...
+    + <span class="num">0.5</span>*lambda^<span class="num">2</span>*(u_old(<span class="num">1</span>:end-<span class="num">2</span>) - <span class="num">2</span>*u_old(<span class="num">2</span>:end-<span class="num">1</span>) + u_old(<span class="num">3</span>:end));
+<span class="com">%% Step 4: Regular three-level marching</span>
+<span class="kw">for</span> n = <span class="num">2</span>:Nt
+    u_new = zeros(size(u));
+    <span class="kw">for</span> i = <span class="num">2</span>:length(x)-<span class="num">1</span>
+        u_new(i) = <span class="num">2</span>*(<span class="num">1</span>-lambda^<span class="num">2</span>)*u(i) - u_old(i) + lambda^<span class="num">2</span>*(u(i-<span class="num">1</span>) + u(i+<span class="num">1</span>));
+    <span class="kw">end</span>
+    u_old = u;
+    u = u_new;
+<span class="kw">end</span>
+plot(x, u, <span class="str">'LineWidth'</span>, <span class="num">2</span>); grid on;
+xlabel(<span class="str">'x'</span>); ylabel(<span class="str">'u'</span>);
+title(<span class="str">'Explicit Wave Equation Solution'</span>);</code></pre>
+    </div></div></details>
+  </div>
+</section>
+<!-- ════════════════════════════════════════════
+     SECTION 11 — SOR / PSOR
+═════════════════════════════════════════════ -->
+<section id="psor" class="sect">
+  <div class="sect-number">11</div>
+  <h2 class="sect-title">SOR &amp; PSOR <span class="badge badge-teal">Accelerated Iteration</span><span class="badge badge-gold">Constraints</span></h2>
+  <p class="sect-subtitle">
+    Successive Over-Relaxation (SOR) accelerates Gauss-Seidel by pushing each update past its
+    Gauss-Seidel target. Projected SOR (PSOR) adds a clamp so the solution respects an inequality
+    constraint — the standard tool for obstacle and free-boundary problems.
+  </p>
+  <div class="formula-box">
+    <div class="formula-title">SOR and PSOR updates</div>
+    \[
+      T_P^{GS}=\frac{T_E+T_W+T_N+T_S+h^2S}4
+    \]
+    \[
+      T_P^{SOR}=(1-\omega)T_P^{old}+\omega T_P^{GS},
+      \qquad 0&lt;\omega&lt;2
+    \]
+    \[
+      T_P^{PSOR}=\max\left(\psi_P,\;T_P^{SOR}\right)
+    \]
+    <p>Here \(\psi_P\) is the obstacle (lower bound). Without an obstacle, PSOR reduces to plain SOR.</p>
+  </div>
+  <div class="formula-box">
+    <div class="formula-title">Optimal relaxation factor for Laplace on a square</div>
+    \[
+      \omega_{opt}=\frac{2}{1+\sin(\pi h)}
+    \]
+    <div class="eq-row">Example: \(h=0.05\Rightarrow\sin(\pi h)=0.1564\Rightarrow\omega_{opt}=2/1.1564=1.7295\)</div>
+    <p class="note">SOR with \(\omega_{opt}\) reduces the iteration count from \(O(N^2)\) (Gauss-Seidel) to \(O(N)\) — a dramatic gain on fine grids.</p>
+  </div>
+  <div class="example-card">
+    <div class="example-header"><span class="example-icon">🔁</span><div class="example-title">Worked Example — Three SOR Sweeps (ω = 1.5)</div></div>
+    <div class="problem-box"><p>The 2×2 Laplace plate from Section 03 (top = 100, other boundaries = 0; exact answer \(T_{11}=T_{21}=12.5\), \(T_{12}=T_{22}=37.5\)). Start from zero; sweep order \(T_{11},T_{21},T_{12},T_{22}\).</p></div>
+    <div class="steps">
+      <details class="step" open>
+        <summary><span class="step-num">1</span><span class="step-label">Sweep 1</span></summary>
+        <div class="step-body">
+          <div class="eq-row">\(T_{11}^{GS}=(0+0+0+0)/4=0\Rightarrow T_{11}=(1-1.5)(0)+1.5(0)=0\)</div>
+          <div class="eq-row">\(T_{21}^{GS}=0\Rightarrow T_{21}=0\)</div>
+          <div class="eq-row">\(T_{12}^{GS}=(0+0+100+0)/4=25\Rightarrow T_{12}=1.5(25)=37.5000\)</div>
+          <div class="eq-row">\(T_{22}^{GS}=(37.5+0+100+0)/4=34.375\Rightarrow T_{22}=1.5(34.375)=51.5625\)</div>
+        </div>
+      </details>
+      <details class="step" open>
+        <summary><span class="step-num">2</span><span class="step-label">Sweep 2</span></summary>
+        <div class="step-body">
+          <div class="eq-row">\(T_{11}^{GS}=(0+37.5)/4=9.375\Rightarrow T_{11}=-0.5(0)+1.5(9.375)=14.0625\)</div>
+          <div class="eq-row">\(T_{21}^{GS}=(14.0625+51.5625)/4=16.4063\Rightarrow T_{21}=1.5(16.4063)=24.6094\)</div>
+          <div class="eq-row">\(T_{12}^{GS}=(14.0625+51.5625+100)/4=41.4063\Rightarrow T_{12}=-0.5(37.5)+1.5(41.4063)=43.3594\)</div>
+          <div class="eq-row">\(T_{22}^{GS}=(24.6094+43.3594+100)/4=41.9922\Rightarrow T_{22}=-0.5(51.5625)+1.5(41.9922)=37.2070\)</div>
+        </div>
+      </details>
+      <details class="step">
+        <summary><span class="step-num">3</span><span class="step-label">Sweep 3 — oscillating in on the answer</span></summary>
+        <div class="step-body">
+          <div class="eq-row">\(T_{11}=-0.5(14.0625)+1.5(16.9922)=18.4570\)</div>
+          <div class="eq-row">\(T_{21}=-0.5(24.6094)+1.5(13.9160)=8.5693\)</div>
+          <div class="eq-row">\(T_{12}=-0.5(43.3594)+1.5(38.9160)=36.6943\)</div>
+          <div class="eq-row">\(T_{22}=-0.5(37.2070)+1.5(36.3159)=35.8704\)</div>
+          <p class="note">With \(\omega=1.5\) on this tiny grid the iterates overshoot and oscillate around \((12.5,\,12.5,\,37.5,\,37.5)\) before settling — a signature of over-relaxation beyond \(\omega_{opt}\) (which is only ≈1.17 for a 2×2 grid). On fine grids, larger \(\omega\) pays off.</p>
+        </div>
+      </details>
+    </div>
+    <h4 class="subsub">Obstacle Version — PSOR With Constraint \(T\ge15\)</h4>
+    <div class="steps">
+      <details class="step" open>
+        <summary><span class="step-num">4</span><span class="step-label">Where the constraint activates</span></summary>
+        <div class="step-body">
+          <p>The unconstrained solution has \(T_{11}=T_{21}=12.5&lt;15\), so the obstacle is <strong>active</strong> at the bottom nodes: PSOR clamps them to exactly 15.</p>
+          <p>The top nodes remain free. By symmetry \(T_{12}=T_{22}=b\), with the bottom neighbors now fixed at 15:</p>
+          <div class="eq-row">\(4b=0+b+100+15\Rightarrow 3b=115\Rightarrow b=38.3333\)</div>
+          <p>Consistency check: the unconstrained bottom value would then be \(4a=0+a+0+38.3333\Rightarrow a=12.7778&lt;15\), confirming the clamp must stay active.</p>
+          \[
+            \boxed{T_{11}=T_{21}=15.0000\;( \text{clamped}),\qquad T_{12}=T_{22}=38.3333}
+          \]
+        </div>
+      </details>
+    </div>
+    <details class="ans"><summary>▶ MATLAB Code</summary><div class="ans-body">
+    <div class="formula-box matlab-panel"><div class="formula-title">PSOR / SOR iteration with obstacle support</div>
+<pre class="matlab-code"><code><span class="com">%% PSOR / SOR iteration for Poisson-type PDEs with an optional obstacle</span>
+<span class="kw">clc</span>; <span class="kw">clear</span>; <span class="kw">close</span> <span class="kw">all</span>;
+<span class="com">%% Step 1: Grid and boundaries</span>
+N = <span class="num">30</span>;
+T = zeros(N+<span class="num">2</span>, N+<span class="num">2</span>);
+T(end,:) = <span class="num">100</span>;                 <span class="com">% top boundary hot, others zero</span>
+<span class="com">%% Step 2: Relaxation settings</span>
+h = <span class="num">1</span>/(N+<span class="num">1</span>);
+omega = <span class="num">2</span>/(<span class="num">1</span> + sin(pi*h));      <span class="com">% theoretical optimum for Laplace</span>
+fprintf(<span class="str">'Optimal omega = %.4f\n'</span>, omega)
+tol = <span class="num">1e-8</span>;
+maxIter = <span class="num">10000</span>;
+<span class="com">%% Step 3: Obstacle (set to -inf for plain SOR, or a field for PSOR)</span>
+obstacle = <span class="num">15</span>*ones(size(T));    <span class="com">% try -inf(size(T)) for unconstrained SOR</span>
+<span class="com">%% Step 4: PSOR sweeps</span>
+<span class="kw">for</span> iter = <span class="num">1</span>:maxIter
+    Told = T;
+    <span class="kw">for</span> j = <span class="num">2</span>:N+<span class="num">1</span>
+        <span class="kw">for</span> i = <span class="num">2</span>:N+<span class="num">1</span>
+            gs  = <span class="num">0.25</span>*(T(j,i-<span class="num">1</span>) + T(j,i+<span class="num">1</span>) + T(j-<span class="num">1</span>,i) + T(j+<span class="num">1</span>,i));
+            sor = (<span class="num">1</span>-omega)*T(j,i) + omega*gs;
+            T(j,i) = max(obstacle(j,i), sor);   <span class="com">% projection step</span>
+        <span class="kw">end</span>
+    <span class="kw">end</span>
+    <span class="kw">if</span> max(abs(T(:) - Told(:))) &lt; tol
+        <span class="kw">break</span>
+    <span class="kw">end</span>
+<span class="kw">end</span>
+fprintf(<span class="str">'PSOR converged in %d sweeps\n'</span>, iter)
+contourf(T, <span class="num">20</span>); colorbar; axis equal tight;
+title(<span class="str">'PSOR Solution with Obstacle T &gt;= 15'</span>);</code></pre>
+    </div></div></details>
+  </div>
+</section>
+<!-- ════════════════════════════════════════════
+     SECTION 12 — PRACTICE
+═════════════════════════════════════════════ -->
+<section id="practice" class="sect">
+  <div class="sect-number">12</div>
+  <h2 class="sect-title">Practice Problems <span class="badge badge-gold">Full Detailed Answers</span></h2>
+  <p class="sect-subtitle">Work through these independently, then reveal the fully worked answers. Every hand computation is shown; MATLAB is included where useful.</p>
+  <!-- P1 -->
+  <details class="prob">
+    <summary><span class="prob-num">P1</span>&ensp;<strong>Classification</strong> — Three Transport Equations</summary>
+    <div class="prob-body">
+      <p>Classify each PDE and state the required initial/boundary data:</p>
+      <p>(a) \(u_t=0.04u_{xx}\) &ensp; (b) \(u_{xx}+6u_{xy}+u_{yy}=0\) &ensp; (c) \(u_{xx}+u_{yy}=-q(x,y)\)</p>
+      <details class="ans"><summary>▶ Reveal Detailed Answer</summary>
+        <div class="ans-body">
+          <p><strong>(a)</strong> Rewrite with \(y\to t\): only \(u_{xx}\) appears among second derivatives, so \(A=0.04\), \(B=C=0\Rightarrow\Delta=0\): <strong>parabolic</strong>. Needs one IC \(u(x,0)\) plus two BCs. Suitable: FTCS (\(r\le0.5\)), BTCS, Crank–Nicolson, MOL.</p>
+          <p><strong>(b)</strong> \(A=1,\;B=6,\;C=1\Rightarrow\Delta=36-4=32&gt;0\): <strong>hyperbolic</strong>. Needs two ICs (value + velocity) plus BCs. Suitable: central-difference wave schemes with CFL.</p>
+          <p><strong>(c)</strong> \(A=C=1,\;B=0\Rightarrow\Delta=-4&lt;0\): <strong>elliptic</strong> (Poisson). Needs BCs on the entire closed boundary, no IC. Suitable: FDM + Gauss-Seidel/SOR or direct solve.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+  <!-- P2 -->
+  <details class="prob">
+    <summary><span class="prob-num">P2</span>&ensp;<strong>FTCS Stability</strong> — Maximum Allowable Time Step</summary>
+    <div class="prob-body">
+      <p>For FTCS with \(\alpha=0.5\), \(\Delta x=0.1\): (a) is \(\Delta t=0.015\) stable? (b) What is the largest stable \(\Delta t\)? (c) What happens in 2D with \(\Delta x=\Delta y=0.1\)?</p>
+      <details class="ans"><summary>▶ Reveal Detailed Answer</summary>
+        <div class="ans-body">
+          <p><strong>(a)</strong> \(r=\alpha\Delta t/\Delta x^2=0.5(0.015)/0.01=0.75&gt;0.5\Rightarrow\) <strong>unstable</strong>. The mode \(\xi=1-4r=-2\) doubles in magnitude (with sign flip) every step.</p>
+          <p><strong>(b)</strong> Set \(r=0.5\): \(\Delta t_{max}=\dfrac{0.5\,\Delta x^2}{\alpha}=\dfrac{0.5(0.01)}{0.5}=\boxed{0.01}\).</p>
+          <p><strong>(c)</strong> In 2D the condition is \(r_x+r_y\le0.5\). With equal spacing: \(2r\le0.5\Rightarrow \Delta t_{max}=\dfrac{\Delta x^2}{4\alpha}=\dfrac{0.01}{2}=\boxed{0.005}\) — half the 1D limit.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+  <!-- P3 -->
+  <details class="prob">
+    <summary><span class="prob-num">P3</span>&ensp;<strong>Poisson Node</strong> — Single-Node Update With a Source</summary>
+    <div class="prob-body">
+      <p>A Poisson problem has \(\nabla^2T=-20\), \(h=0.2\). The four neighbors of node \(P\) are 10, 15, 20, and 25. Find \(T_P\).</p>
+      <details class="ans"><summary>▶ Reveal Detailed Answer</summary>
+        <div class="ans-body">
+          <p>Source contribution: \(h^2S=(0.2)^2(20)=0.04(20)=0.8\).</p>
+          \[
+            T_P=\frac{T_E+T_W+T_N+T_S+h^2S}{4}
+            =\frac{10+15+20+25+0.8}{4}
+            =\frac{70.8}{4}
+            =\boxed{17.7}
+          \]
+          <p class="note">Without the source, \(T_P\) would be the plain average 17.5 — the generation lifts the node by \(h^2S/4=0.2\).</p>
+        </div>
+      </details>
+    </div>
+  </details>
+  <!-- P4 -->
+  <details class="prob">
+    <summary><span class="prob-num">P4</span>&ensp;<strong>Explicit Heat</strong> — Three Full Time Steps by Hand</summary>
+    <div class="prob-body">
+      <p>Rod with \(\alpha=2\), \(\Delta x=0.2\), \(\Delta t=0.005\). Boundaries \(T(0)=80\), \(T(1)=20\); four interior nodes initially at 40. March three FTCS steps.</p>
+      <details class="ans"><summary>▶ Reveal Detailed Answer</summary>
+        <div class="ans-body">
+          <p><strong>Stability:</strong> \(r=2(0.005)/(0.2)^2=0.01/0.04=0.25\le0.5\;\checkmark\). Rule: \(T_i^{n+1}=0.25T_{i-1}+0.5T_i+0.25T_{i+1}\).</p>
+          <p><strong>Step 1</strong> (from \([80\,|\,40,40,40,40\,|\,20]\)):</p>
+          <div class="eq-row">\(T_1=0.25(80)+0.5(40)+0.25(40)=20+20+10=50.0000\)</div>
+          <div class="eq-row">\(T_2=10+20+10=40.0000,\qquad T_3=40.0000\)</div>
+          <div class="eq-row">\(T_4=0.25(40)+0.5(40)+0.25(20)=10+20+5=35.0000\)</div>
+          <p><strong>Step 2:</strong></p>
+          <div class="eq-row">\(T_1=20+25+10=55.0000\)</div>
+          <div class="eq-row">\(T_2=12.5+20+10=42.5000\)</div>
+          <div class="eq-row">\(T_3=10+20+8.75=38.7500\)</div>
+          <div class="eq-row">\(T_4=10+17.5+5=32.5000\)</div>
+          <p><strong>Step 3:</strong></p>
+          <div class="eq-row">\(T_1=20+27.5+10.625=58.1250\)</div>
+          <div class="eq-row">\(T_2=13.75+21.25+9.6875=44.6875\)</div>
+          <div class="eq-row">\(T_3=10.625+19.375+8.125=38.1250\)</div>
+          <div class="eq-row">\(T_4=9.6875+16.25+5=30.9375\)</div>
+          \[
+            \boxed{T^3=(58.1250,\;44.6875,\;38.1250,\;30.9375)}
+          \]
+          <p class="note">Steady state is the line \(80-60x\): \((68,56,44,32)\). Every node is monotonically approaching it.</p>
+        </div>
+      </details>
+      <details class="ans"><summary>▶ MATLAB Code</summary>
+        <div class="ans-body">
+        <div class="formula-box matlab-panel"><div class="formula-title">P4 — FTCS verification script</div>
+<pre class="matlab-code"><code><span class="com">%% P4 — Explicit FTCS, three steps, four interior nodes</span>
+<span class="kw">clc</span>; <span class="kw">clear</span>;
+alpha = <span class="num">2</span>; dx = <span class="num">0.2</span>; dt = <span class="num">0.005</span>;
+r = alpha*dt/dx^<span class="num">2</span>;                 <span class="com">% = 0.25, stable</span>
+T = [<span class="num">80</span>; <span class="num">40</span>; <span class="num">40</span>; <span class="num">40</span>; <span class="num">40</span>; <span class="num">20</span>];   <span class="com">% includes boundaries</span>
+<span class="kw">for</span> n = <span class="num">1</span>:<span class="num">3</span>
+    Told = T;
+    <span class="kw">for</span> i = <span class="num">2</span>:<span class="num">5</span>
+        T(i) = r*Told(i-<span class="num">1</span>) + (<span class="num">1</span>-<span class="num">2</span>*r)*Told(i) + r*Told(i+<span class="num">1</span>);
+    <span class="kw">end</span>
+    fprintf(<span class="str">'Step %d: %.4f  %.4f  %.4f  %.4f\n'</span>, n, T(<span class="num">2</span>:<span class="num">5</span>))
+<span class="kw">end</span></code></pre>
+        </div></div>
+      </details>
+    </div>
+  </details>
+  <!-- P5 -->
+  <details class="prob">
+    <summary><span class="prob-num">P5</span>&ensp;<strong>Implicit Heat</strong> — One Step at r = 2 with the Thomas Algorithm</summary>
+    <div class="prob-body">
+      <p>A rod with \(T_0=100\), \(T_4=0\), and three interior nodes initially at 0 is stepped once with BTCS at \(r=2\) (four times the explicit limit). Solve by hand with the Thomas algorithm.</p>
+      <details class="ans"><summary>▶ Reveal Detailed Answer</summary>
+        <div class="ans-body">
+          <p><strong>System:</strong> diagonal \(=1+2r=5\), off-diagonals \(=-2\):</p>
+          \[
+          \begin{bmatrix}5&-2&0\\-2&5&-2\\0&-2&5\end{bmatrix}
+          \begin{bmatrix}T_1\\T_2\\T_3\end{bmatrix}
+          =
+          \begin{bmatrix}0+2(100)\\0\\0+2(0)\end{bmatrix}
+          =
+          \begin{bmatrix}200\\0\\0\end{bmatrix}
+          \]
+          <p><strong>Forward sweep:</strong></p>
+          <div class="eq-row">\(c_1'=-2/5=-0.4000\), \(\;d_1'=200/5=40.0000\)</div>
+          <div class="eq-row">\(m_2=5-(-2)(-0.4)=4.2000\), \(\;c_2'=-2/4.2=-0.4762\), \(\;d_2'=(0+2\cdot40)/4.2=19.0476\)</div>
+          <div class="eq-row">\(m_3=5-(-2)(-0.4762)=4.0476\), \(\;d_3'=(0+2\cdot19.0476)/4.0476=9.4118\)</div>
+          <p><strong>Back substitution:</strong></p>
+          <div class="eq-row">\(T_3=9.4118\)</div>
+          <div class="eq-row">\(T_2=19.0476+0.4762(9.4118)=23.5294\)</div>
+          <div class="eq-row">\(T_1=40.0000+0.4(23.5294)=49.4118\)</div>
+          \[
+            \boxed{T^1=(49.4118,\;23.5294,\;9.4118)}
+          \]
+          <p class="note">Smooth, monotone, bounded between the boundary values — the implicit method is perfectly well behaved at \(r=2\), where FTCS would have exploded.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+  <!-- P6 -->
+  <details class="prob">
+    <summary><span class="prob-num">P6</span>&ensp;<strong>Crank–Nicolson vs BTCS</strong> — Large Step With Discontinuous Data</summary>
+    <div class="prob-body">
+      <p>Repeat P5 with Crank–Nicolson at \(r=2\). Compare and explain the qualitative difference.</p>
+      <details class="ans"><summary>▶ Reveal Detailed Answer</summary>
+        <div class="ans-body">
+          <p><strong>CN system</strong> (\(1+r=3\) diagonal, \(-r/2=-1\) off-diagonal). RHS from \((1-r)=-1\), \(r/2=1\), all old interior values 0, plus BC at both levels: \(b_1=1(100)+1(100)=200\), \(b_2=0\), \(b_3=0\):</p>
+          \[
+          \begin{bmatrix}3&-1&0\\-1&3&-1\\0&-1&3\end{bmatrix}
+          \begin{bmatrix}T_1\\T_2\\T_3\end{bmatrix}
+          =
+          \begin{bmatrix}200\\0\\0\end{bmatrix}
+          \]
+          <p><strong>Thomas:</strong> \(c_1'=-0.3333\), \(d_1'=66.6667\); \(m_2=2.6667\), \(c_2'=-0.3750\), \(d_2'=66.6667/2.6667=25.0000\); \(m_3=2.6250\), \(d_3'=25/2.625=9.5238\).</p>
+          <div class="eq-row">Back: \(T_3=9.5238\); \(\;T_2=25+0.375(9.5238)=28.5714\); \(\;T_1=66.6667+0.3333(28.5714)=76.1905\)</div>
+          \[
+            \boxed{T_{CN}^1=(76.1905,\;28.5714,\;9.5238)}
+            \qquad\text{vs}\qquad
+            T_{BTCS}^1=(49.4118,\;23.5294,\;9.4118)
+          \]
+          <p><strong>Interpretation:</strong> CN reacts much faster near the wall (its amplification factor \(\xi\to-1\) for large \(r\) keeps information from the old level). With a discontinuous initial condition and a large step, CN can even oscillate in time near the jump, while BTCS damps everything. Rule of thumb: use BTCS (or Rannacher start-up steps) for rough initial data, CN thereafter for accuracy.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+  <!-- P7 -->
+  <details class="prob">
+    <summary><span class="prob-num">P7</span>&ensp;<strong>2D Laplace</strong> — 2×2 Grid, Four Different Boundaries, Exact Hand Solution</summary>
+    <div class="prob-body">
+      <p>Solve \(\nabla^2T=0\) on a 2×2 interior grid with boundaries: top \(=120\), bottom \(=40\), left \(=80\), right \(=0\) (°C).</p>
+      <details class="ans"><summary>▶ Reveal Detailed Answer</summary>
+        <div class="ans-body">
+          <p>Let \(a=T_{11},\,b=T_{21},\,c=T_{12},\,d=T_{22}\):</p>
+          \[
+          \begin{aligned}
+          4a-b-c&=80+40=120\\
+          4b-a-d&=0+40=40\\
+          4c-a-d&=80+120=200\\
+          4d-b-c&=0+120=120
+          \end{aligned}
+          \]
+          <div class="eq-row">Eq(3)−Eq(2): \(4c-4b=160\Rightarrow c=b+40\)</div>
+          <div class="eq-row">Eq(1)−Eq(4): \(4a-4d=0\Rightarrow a=d\)</div>
+          <div class="eq-row">Eq(2) with \(d=a\): \(4b-2a=40\Rightarrow b=10+a/2\)</div>
+          <div class="eq-row">Eq(1) with \(c=b+40\): \(4a-2b=160\Rightarrow b=2a-80\)</div>
+          <div class="eq-row">Match: \(2a-80=10+a/2\Rightarrow 1.5a=90\Rightarrow a=60\)</div>
+          <div class="eq-row">Then \(b=40,\;c=80,\;d=60\)</div>
+          \[
+            \boxed{T_{11}=60,\quad T_{21}=40,\quad T_{12}=80,\quad T_{22}=60}
+          \]
+          <p><strong>Verification of Eq(4):</strong> \(4(60)-40-80=240-120=120\;\checkmark\). Each value lies strictly between the min and max boundary temperatures (0 and 120) — the discrete maximum principle holds.</p>
+        </div>
+      </details>
+      <details class="ans"><summary>▶ MATLAB Code</summary>
+        <div class="ans-body">
+        <div class="formula-box matlab-panel"><div class="formula-title">P7 — direct 4×4 solve</div>
+<pre class="matlab-code"><code><span class="com">%% P7 — 2x2 interior Laplace, direct solve</span>
+<span class="kw">clc</span>; <span class="kw">clear</span>;
+A = [<span class="num">4</span> -<span class="num">1</span> -<span class="num">1</span>  <span class="num">0</span>;
+    -<span class="num">1</span>  <span class="num">4</span>  <span class="num">0</span> -<span class="num">1</span>;
+    -<span class="num">1</span>  <span class="num">0</span>  <span class="num">4</span> -<span class="num">1</span>;
+     <span class="num">0</span> -<span class="num">1</span> -<span class="num">1</span>  <span class="num">4</span>];
+b = [<span class="num">120</span>; <span class="num">40</span>; <span class="num">200</span>; <span class="num">120</span>];
+T = A\b;
+fprintf(<span class="str">'T11=%.4f  T21=%.4f  T12=%.4f  T22=%.4f\n'</span>, T)</code></pre>
+        </div></div>
+      </details>
+    </div>
+  </details>
+  <!-- P8 -->
+  <details class="prob">
+    <summary><span class="prob-num">P8</span>&ensp;<strong>Wave Equation</strong> — Plucked String, Two Steps by Hand</summary>
+    <div class="prob-body">
+      <p>A pinned string has \(c=1\), \(\Delta x=0.2\), \(\Delta t=0.1\). Initial shape \(u(x,0)=x(1-x)\), zero initial velocity. March two time steps.</p>
+      <details class="ans"><summary>▶ Reveal Detailed Answer</summary>
+        <div class="ans-body">
+          <p><strong>CFL:</strong> \(\lambda=1(0.1)/0.2=0.5\le1\;\checkmark\); \(\lambda^2=0.25\), \(\lambda^2/2=0.125\), \(2(1-\lambda^2)=1.5\).</p>
+          <p><strong>Initial values</strong> at \(x=0.2,0.4,0.6,0.8\): \(u^0=(0.16,\;0.24,\;0.24,\;0.16)\).</p>
+          <p><strong>First step (special formula, \(g=0\)):</strong></p>
+          <div class="eq-row">\(u_1^1=0.16+0.125(0-0.32+0.24)=0.16+0.125(-0.08)=0.1500\)</div>
+          <div class="eq-row">\(u_2^1=0.24+0.125(0.16-0.48+0.24)=0.24-0.01=0.2300\)</div>
+          <div class="eq-row">\(u_3^1=0.2300,\qquad u_4^1=0.1500\) (symmetry)</div>
+          <p><strong>Second step (three-level formula):</strong></p>
+          <div class="eq-row">\(u_1^2=1.5(0.15)-0.16+0.25(0+0.23)=0.225-0.16+0.0575=0.1225\)</div>
+          <div class="eq-row">\(u_2^2=1.5(0.23)-0.24+0.25(0.15+0.23)=0.345-0.24+0.095=0.2000\)</div>
+          <div class="eq-row">\(u_3^2=0.2000,\qquad u_4^2=0.1225\)</div>
+          \[
+            \boxed{u^2=(0.1225,\;0.2000,\;0.2000,\;0.1225)}
+          \]
+          <p class="note">The string is falling toward flat, will pass through zero, and mirror itself — the scheme with \(\lambda\le1\) will carry that oscillation without artificial damping.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+  <!-- P9 -->
+  <details class="prob">
+    <summary><span class="prob-num">P9</span>&ensp;<strong>SOR Tuning</strong> — Optimal Relaxation Factor</summary>
+    <div class="prob-body">
+      <p>A Laplace problem on a unit square is discretized with \(h=0.05\). (a) Compute \(\omega_{opt}\). (b) Roughly how much faster is optimal SOR than Gauss-Seidel?</p>
+      <details class="ans"><summary>▶ Reveal Detailed Answer</summary>
+        <div class="ans-body">
+          <p><strong>(a)</strong> \(\sin(\pi h)=\sin(0.157080)=0.156434\):</p>
+          \[
+            \omega_{opt}=\frac{2}{1+0.156434}=\frac{2}{1.156434}=\boxed{1.7295}
+          \]
+          <p><strong>(b)</strong> The asymptotic convergence rates scale as: Jacobi \(O(1/(\pi h)^2)\) sweeps per digit, Gauss-Seidel twice as fast, optimal SOR \(O(1/(\pi h))\). With \(h=0.05\) the speed-up over Gauss-Seidel is roughly a factor \(1/(\pi h)\approx6\)–\(13\) depending on the target tolerance — on this grid, hundreds of GS sweeps collapse to a few dozen SOR sweeps.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+  <!-- P10 -->
+  <details class="prob">
+    <summary><span class="prob-num">P10</span>&ensp;<strong>Method of Lines</strong> — Stiffness of the Semi-Discrete System</summary>
+    <div class="prob-body">
+      <p>The heat equation is semi-discretized with \(N=4\) interior nodes, \(\alpha=1\), \(\Delta x=0.2\). (a) Write the eigenvalues of the ODE system. (b) Compute the stiffness ratio. (c) What is the maximum stable step for MOL + forward Euler?</p>
+      <details class="ans"><summary>▶ Reveal Detailed Answer</summary>
+        <div class="ans-body">
+          <p><strong>(a)</strong> \(\lambda_k=-\dfrac{4\alpha}{\Delta x^2}\sin^2\!\left(\dfrac{k\pi}{10}\right)=-100\sin^2\!\left(\dfrac{k\pi}{10}\right)\), \(k=1..4\):</p>
+          <div class="eq-row">\(\lambda_1=-100(0.309017)^2=-9.5492\)</div>
+          <div class="eq-row">\(\lambda_2=-100(0.587785)^2=-34.5492\)</div>
+          <div class="eq-row">\(\lambda_3=-100(0.809017)^2=-65.4508\)</div>
+          <div class="eq-row">\(\lambda_4=-100(0.951057)^2=-90.4508\)</div>
+          <p><strong>(b)</strong> Stiffness ratio \(=|\lambda_4/\lambda_1|=90.4508/9.5492=\boxed{9.47}\). It grows like \(N^2\): at \(N=100\) it exceeds 4000 — genuinely stiff.</p>
+          <p><strong>(c)</strong> Forward Euler needs \(|1+\Delta t\lambda|\le1\Rightarrow\Delta t\le2/|\lambda_{max}|=2/90.4508=\boxed{0.02211}\). Note this is slightly looser than the classical FTCS bound \(\Delta x^2/(2\alpha)=0.02\) because \(\sin^2&lt;1\) on a finite grid.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+  <!-- P11 -->
+  <details class="prob">
+    <summary><span class="prob-num">P11</span>&ensp;<strong>ADI</strong> — One Full Step With Hand-Built Tridiagonal Systems</summary>
+    <div class="prob-body">
+      <p>A plate with 2×2 interior nodes has all boundaries at \(0^\circ C\), interior initially \(50^\circ C\), and \(r_x=r_y=1\). Carry out one full ADI step (x-sweep then y-sweep).</p>
+      <details class="ans"><summary>▶ Reveal Detailed Answer</summary>
+        <div class="ans-body">
+          <p><strong>x-sweep:</strong> LHS: diagonal \(1+r_x=2\), off-diagonal \(-0.5\). RHS: \(\frac{r_y}{2}(0)+(1-r_y)(50)+\frac{r_y}{2}(50)=0+0+25=25\).</p>
+          \[
+            \begin{bmatrix}2&-0.5\\-0.5&2\end{bmatrix}
+            \begin{bmatrix}T_1^*\\T_2^*\end{bmatrix}=
+            \begin{bmatrix}25\\25\end{bmatrix}
+          \]
+          <div class="eq-row">By symmetry \(T_1^*=T_2^*\): \(1.5T^*=25\Rightarrow T^*=16.6667\)</div>
+          <p><strong>y-sweep:</strong> RHS \(=\frac{r_x}{2}(0)+(1-r_x)(16.6667)+\frac{r_x}{2}(16.6667)=0+0+8.3333=8.3333\):</p>
+          <div class="eq-row">\(1.5T^{n+1}=8.3333\Rightarrow \boxed{T^{n+1}=5.5556}\) at all four nodes</div>
+          <p class="note">Amplification per full step: \(5.5556/50=0.1111=(1/3)^2\) — each half-sweep contributes a factor \(1/3\), bounded and stable even at \(r=1\), where explicit 2D FTCS (limit \(r_x+r_y\le0.5\)) would be wildly unstable.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+  <!-- P12 -->
+  <details class="prob">
+    <summary><span class="prob-num">P12</span>&ensp;<strong>PSOR</strong> — Which Constraints Are Active?</summary>
+    <div class="prob-body">
+      <p>For the 2×2 Laplace plate of Section 03 (unconstrained solution \(12.5,12.5,37.5,37.5\)), find the PSOR solution with obstacle (a) \(\psi=10\), (b) \(\psi=15\), (c) \(\psi=40\).</p>
+      <details class="ans"><summary>▶ Reveal Detailed Answer</summary>
+        <div class="ans-body">
+          <p><strong>(a)</strong> \(\psi=10\): all unconstrained values already exceed 10 → constraint inactive → solution unchanged: \((12.5,\,12.5,\,37.5,\,37.5)\).</p>
+          <p><strong>(b)</strong> \(\psi=15\): bottom nodes clamp at 15. Top nodes re-equilibrate: \(4b=0+b+100+15\Rightarrow b=38.3333\). Check: free bottom value would be \(12.7778&lt;15\) → clamp stays active. Solution: \((15,\,15,\,38.3333,\,38.3333)\).</p>
+          <p><strong>(c)</strong> \(\psi=40\): both rows clamp? Top free value with bottom = 40: \(4b=0+b+100+40\Rightarrow b=46.6667&gt;40\) → top is <strong>free</strong> at 46.6667; bottom free value would be \(4a=0+a+0+46.6667\Rightarrow a=15.5556&lt;40\) → bottom clamped at 40. Solution: \((40,\,40,\,46.6667,\,46.6667)\).</p>
+          <p class="note">PSOR finds these active sets automatically — no case analysis needed in code; the \(\max(\cdot)\) projection does all the work.</p>
+        </div>
+      </details>
+    </div>
+  </details>
+</section>
+<!-- SUMMARY -->
+<section class="sect">
+  <div class="formula-box">
+    <div class="formula-title">PDE method selection summary</div>
+    <div class="tbl-wrap">
+      <table class="comp-table">
+        <thead><tr><th>Problem</th><th>Fast first choice</th><th>Stability</th><th>Time accuracy</th><th>Main caution</th></tr></thead>
+        <tbody>
+          <tr><td>Steady Laplace / Poisson</td><td>FDM + SOR/PSOR</td><td>Always converges (diag. dominant)</td><td>—</td><td>Relaxation factor tuning</td></tr>
+          <tr><td>1D transient diffusion, quick estimate</td><td>Explicit FTCS</td><td><span class="order-pill o1">r ≤ 0.5</span></td><td>\(O(\Delta t)\)</td><td>Step-size limit; sawtooth if violated</td></tr>
+          <tr><td>1D transient diffusion, large steps</td><td>BTCS</td><td><span class="order-pill o4">Unconditional</span></td><td>\(O(\Delta t)\)</td><td>Heavy damping, low accuracy</td></tr>
+          <tr><td>1D transient diffusion, accuracy</td><td>Crank–Nicolson</td><td><span class="order-pill o4">Unconditional</span></td><td class="exact">\(O(\Delta t^2)\)</td><td>Oscillation with discontinuous ICs at large \(r\)</td></tr>
+          <tr><td>2D transient diffusion</td><td>ADI</td><td><span class="order-pill o4">Unconditional</span></td><td class="exact">\(O(\Delta t^2)\)</td><td>Consistent boundary handling in both sweeps</td></tr>
+          <tr><td>Complex / nonlinear transient PDE</td><td>Method of Lines</td><td>Depends on ODE solver</td><td>Solver-dependent</td><td>Stiffness grows like \(N^2\) — use implicit ODE solvers</td></tr>
+          <tr><td>Wave propagation</td><td>Central difference</td><td><span class="order-pill o2">CFL: λ ≤ 1</span></td><td>\(O(\Delta t^2)\)</td><td>Dispersion error; needs two ICs and a special first step</td></tr>
+          <tr><td>Constrained / obstacle problems</td><td>PSOR</td><td>Converges like SOR</td><td>—</td><td>Projection order matters inside the sweep</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+</main>
+<script>
+  const progress = document.getElementById("progress");
+  window.addEventListener("scroll", () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.body.scrollHeight - window.innerHeight;
+    const progressWidth = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progress.style.width = progressWidth + "%";
+  });
+  const sections = document.querySelectorAll("section[id]");
+  const navLinks = document.querySelectorAll(".nav-item[href^='#']");
+  window.addEventListener("scroll", () => {
+    let current = "";
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 120;
+      if (window.scrollY >= sectionTop) {
+        current = section.getAttribute("id");
+      }
+    });
+    navLinks.forEach(link => {
+      link.classList.remove("active");
+      if (link.getAttribute("href") === "#" + current) {
+        link.classList.add("active");
+      }
+    });
+  });
+</script>
+</body>
+</html>
