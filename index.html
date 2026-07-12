@@ -402,6 +402,213 @@ body{
 @media(max-width:800px){.dashboard-advanced{grid-template-columns:1fr}.dashboard-topline{justify-content:center}.dashboard-actions{justify-content:center}.quiz-setup-grid{grid-template-columns:1fr 1fr}.report-hero{grid-template-columns:1fr;text-align:center}.report-score{margin:auto}.exam-workshop-summary{grid-template-columns:1fr 1fr}.handwritten-solution{padding-left:2.7rem}.handwritten-solution::before{left:2rem}.hand-step::before{left:-2.15rem}}
 @media(max-width:520px){.dashboard-stats.advanced,.quiz-live-head,.quiz-setup-grid,.report-topic-grid,.exam-workshop-summary{grid-template-columns:1fr}.mastery-row{grid-template-columns:86px 1fr 34px}.resume-card{grid-template-columns:1fr}.handwritten-solution{font-size:.82rem;padding-right:.75rem}.scratch-table{font-size:.66rem}}
 
+
+
+/* ═══════════════════════════════════════════════════════════════
+   COMPACT DASHBOARD REVISION
+   Keeps every dashboard feature while matching the lecture width
+   and reducing vertical space for a cleaner student study view.
+═══════════════════════════════════════════════════════════════ */
+.study-dashboard.dashboard-advanced{
+  width:calc(100% - 1rem);
+  max-width:1060px;
+  grid-template-columns:112px minmax(0,1fr);
+  gap:.75rem;
+  margin:1rem auto 2.35rem;
+  padding:.78rem;
+  border-radius:14px;
+}
+.dashboard-advanced .progress-dial{
+  width:98px;
+  height:98px;
+  align-self:start;
+  margin:.1rem auto 0;
+}
+.dashboard-advanced .progress-dial::before{
+  width:74px;
+  height:74px;
+}
+.dashboard-advanced .progress-dial strong{
+  font-size:1.02rem;
+}
+.dashboard-advanced .progress-dial span{
+  max-width:62px;
+  margin:auto;
+  font-size:.54rem;
+  line-height:1.18;
+}
+.dashboard-advanced .dashboard-topline{
+  gap:.6rem;
+}
+.dashboard-advanced .dashboard-kicker{
+  font-size:.58rem;
+  margin-bottom:.05rem;
+}
+.dashboard-advanced .dashboard-topline h2{
+  font-size:1.16rem;
+  line-height:1.15;
+}
+.dashboard-advanced .dashboard-topline .note{
+  max-width:610px;
+  margin:.12rem 0 0;
+  font-size:.68rem;
+  line-height:1.35;
+}
+.dashboard-advanced .dashboard-actions{
+  gap:.3rem;
+}
+.dashboard-advanced .dash-btn{
+  padding:.34rem .52rem;
+  border-radius:7px;
+  font-size:.64rem;
+  line-height:1.25;
+}
+.dashboard-advanced .dashboard-stats.advanced{
+  gap:.38rem;
+  margin-top:.52rem;
+}
+.dashboard-advanced .stat-card{
+  min-height:49px;
+  padding:.38rem .48rem;
+  border-radius:8px;
+}
+.dashboard-advanced .stat-card strong{
+  font-size:.82rem;
+  line-height:1.15;
+}
+.dashboard-advanced .stat-card span{
+  font-size:.59rem;
+  line-height:1.18;
+}
+.dashboard-advanced .stat-card small{
+  font-size:.51rem;
+  line-height:1.1;
+  margin-top:.05rem;
+}
+.dashboard-advanced .stat-card::after{
+  width:42px;
+  height:42px;
+  right:-14px;
+  bottom:-19px;
+}
+.dashboard-advanced .dashboard-grid{
+  gap:.48rem;
+  margin-top:.5rem;
+  grid-template-columns:minmax(0,1.28fr) minmax(240px,.72fr);
+}
+.dashboard-advanced .dashboard-panel{
+  padding:.55rem .62rem;
+  border-radius:10px;
+}
+.dashboard-advanced .dashboard-panel-head{
+  gap:.45rem;
+  margin-bottom:.38rem;
+}
+.dashboard-advanced .dashboard-panel-head h3{
+  font-size:.9rem;
+  line-height:1.1;
+  margin-bottom:.04rem;
+}
+.dashboard-advanced .dashboard-panel-head span{
+  font-size:.54rem;
+  line-height:1.15;
+}
+.dashboard-advanced .resume-card{
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:.55rem;
+  padding:.48rem .55rem;
+  border-radius:8px;
+}
+.dashboard-advanced .resume-card strong{
+  font-size:.82rem;
+  line-height:1.15;
+}
+.dashboard-advanced .resume-card span{
+  font-size:.59rem;
+  line-height:1.25;
+}
+.dashboard-advanced .resume-card .run-btn{
+  padding:.43rem .62rem;
+  border-radius:7px;
+  font-size:.66rem;
+}
+.dashboard-advanced .dashboard-panel-head[style*="margin-top"]{
+  margin-top:.48rem !important;
+}
+.dashboard-advanced .mastery-bars{
+  gap:.28rem;
+}
+.dashboard-advanced .mastery-row{
+  grid-template-columns:88px minmax(0,1fr) 30px;
+  gap:.4rem;
+}
+.dashboard-advanced .mastery-row label{
+  font-size:.59rem;
+  line-height:1.1;
+}
+.dashboard-advanced .mastery-track{
+  height:6px;
+}
+.dashboard-advanced .mastery-row b{
+  font-size:.54rem;
+}
+.dashboard-advanced .goal-time{
+  font-size:1rem;
+}
+.dashboard-advanced .goal-progress{
+  height:6px;
+  margin:.38rem 0 .22rem;
+}
+.dashboard-advanced .goal-caption{
+  font-size:.54rem;
+}
+.dashboard-advanced .goal-controls{
+  gap:.25rem;
+  margin-top:.38rem !important;
+}
+.dashboard-advanced .activity-list{
+  gap:.22rem;
+  max-height:82px;
+}
+.dashboard-advanced .activity-item{
+  gap:.38rem;
+  padding:.32rem .4rem;
+  border-radius:6px;
+  font-size:.59rem;
+  line-height:1.25;
+}
+.dashboard-advanced .activity-item time{
+  font-size:.51rem;
+}
+.dashboard-advanced .activity-dot{
+  width:6px;
+  height:6px;
+  margin-top:.25rem;
+}
+@media(max-width:1100px){
+  .study-dashboard.dashboard-advanced{max-width:920px}
+  .dashboard-advanced .dashboard-stats.advanced{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .dashboard-advanced .dashboard-grid{grid-template-columns:1fr}
+  .dashboard-advanced .activity-list{max-height:70px}
+}
+@media(max-width:800px){
+  .study-dashboard.dashboard-advanced{
+    width:100%;
+    grid-template-columns:1fr;
+    padding:.7rem;
+    margin-bottom:1.8rem;
+  }
+  .dashboard-advanced .progress-dial{width:90px;height:90px}
+  .dashboard-advanced .progress-dial::before{width:68px;height:68px}
+  .dashboard-advanced .dashboard-topline{text-align:center;justify-content:center}
+  .dashboard-advanced .dashboard-topline .note{margin-inline:auto}
+}
+@media(max-width:520px){
+  .dashboard-advanced .dashboard-stats.advanced{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dashboard-advanced .dashboard-actions{justify-content:center}
+  .dashboard-advanced .mastery-row{grid-template-columns:78px minmax(0,1fr) 28px}
+}
+
 </style>
 <!-- KaTeX JS -->
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
