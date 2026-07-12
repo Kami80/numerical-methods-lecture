@@ -286,6 +286,122 @@ button{cursor:pointer}
 @media(max-width:800px){.mobile-menu{display:block}.sidebar{display:flex;position:fixed;left:-280px;transition:left .2s;box-shadow:var(--panel-shadow)}.sidebar.open{left:0}.main{padding-top:4.2rem}.study-toolbar{top:.45rem}.study-dashboard{grid-template-columns:1fr;text-align:center}.dashboard-stats{grid-template-columns:1fr 1fr}.learning-grid,.glossary-grid{grid-template-columns:1fr}.control-grid{grid-template-columns:1fr 1fr}.panel-head{flex-direction:column}.status-text{margin-left:0}.matrix-editor{grid-template-columns:repeat(4,58px)}.matrix-editor input{width:58px}.chart-card canvas{height:260px}}
 @media(max-width:520px){.control-grid{grid-template-columns:1fr}.dashboard-stats{grid-template-columns:1fr}.study-toolbar .tool-label{display:none}.hero-title{font-size:2rem}.lab-layout{display:block}.output-card{margin-top:.75rem}.matrix-editor{grid-template-columns:repeat(4,1fr)}.matrix-editor input{width:100%}}
 
+
+/* ═══════════════════════════════════════════════════════════════
+   STUDENT EDITION — LECTURE-FIRST DESIGN
+═══════════════════════════════════════════════════════════════ */
+:root{
+  --violet:#9b87f5;--cyan:#58d6ff;--card-glow:0 22px 65px rgba(2,8,23,.30);
+}
+body{
+  background-image:
+    radial-gradient(circle at 78% 5%,rgba(30,216,200,.075),transparent 26rem),
+    radial-gradient(circle at 34% 18%,rgba(240,160,32,.055),transparent 24rem),
+    linear-gradient(180deg,var(--bg),var(--bg));
+}
+.sect{position:relative}
+.sect::before{content:'';position:absolute;left:-1.7rem;top:0;width:1px;height:100%;background:linear-gradient(var(--border2),transparent 88%);opacity:.55}
+.sect-title{letter-spacing:-.025em}
+.sect-subtitle{font-size:.98rem;max-width:780px}
+.section-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.65rem;margin:-.65rem 0 1.6rem}
+.overview-item{min-height:76px;background:linear-gradient(145deg,var(--surface),color-mix(in srgb,var(--surface2) 78%,transparent));border:1px solid var(--border);border-radius:12px;padding:.72rem .82rem}
+.overview-item span{display:block;font:600 .65rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.18rem}
+.overview-item strong{display:block;font-size:.82rem;color:var(--text);line-height:1.45}
+.chapter-ribbon{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin:0 0 .85rem}
+.level-chip,.time-chip,.exam-chip{display:inline-flex;align-items:center;gap:.3rem;padding:.22rem .55rem;border-radius:999px;font:600 .66rem var(--mono);border:1px solid var(--border)}
+.level-chip{color:var(--cyan);background:rgba(88,214,255,.07)}
+.time-chip{color:var(--gold);background:rgba(240,160,32,.07)}
+.exam-chip{color:var(--violet);background:rgba(155,135,245,.08)}
+.hero{padding:4rem 0 2.8rem}
+.hero-title{font-size:clamp(2.7rem,5vw,4.35rem);max-width:900px}
+.hero-desc{font-size:1.04rem;max-width:700px}
+.hero-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.65rem;margin:1.6rem 0}
+.hero-metric{padding:.85rem .9rem;background:color-mix(in srgb,var(--surface) 88%,transparent);border:1px solid var(--border);border-radius:12px;backdrop-filter:blur(10px)}
+.hero-metric strong{display:block;font:700 1.15rem var(--mono);color:var(--gold)}
+.hero-metric span{display:block;font-size:.72rem;color:var(--muted);margin-top:.15rem}
+.route-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1.2rem 0 1.7rem}
+.route-card{position:relative;overflow:hidden;background:linear-gradient(150deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:16px;padding:1.15rem;box-shadow:var(--card-glow)}
+.route-card::after{content:'';position:absolute;width:140px;height:140px;border-radius:50%;right:-70px;top:-70px;background:radial-gradient(circle,rgba(30,216,200,.12),transparent 68%)}
+.route-card h3{font-family:var(--serif);font-size:1.3rem;margin-bottom:.35rem}
+.route-card p{font-size:.82rem;color:var(--muted)}
+.route-card ol{margin:.75rem 0 0 1.15rem;font-size:.8rem;color:var(--text)}
+.route-card li+li{margin-top:.28rem}
+.route-card .route-time{display:inline-block;margin-top:.75rem;color:var(--gold);font:600 .7rem var(--mono)}
+.study-cycle{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.55rem;margin:1rem 0}
+.cycle-step{position:relative;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:.8rem .7rem;text-align:center}
+.cycle-step:not(:last-child)::after{content:'→';position:absolute;right:-.48rem;top:50%;transform:translateY(-50%);color:var(--gold);z-index:2}
+.cycle-step b{display:block;color:var(--gold);font:700 .7rem var(--mono);margin-bottom:.25rem}
+.cycle-step span{font-size:.75rem}
+.exam-formula{display:grid;grid-template-columns:1.15fr .85fr;gap:1rem;margin:1rem 0}
+.exam-formula > div{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1rem}
+.exam-formula h4{font-family:var(--serif);font-size:1.1rem;margin-bottom:.4rem}
+.mastery-ladder{display:grid;gap:.55rem;margin:1rem 0}
+.mastery-level{display:grid;grid-template-columns:55px 1fr auto;align-items:center;gap:.8rem;padding:.7rem .8rem;background:var(--surface2);border:1px solid var(--border);border-radius:10px}
+.mastery-level .rank{font:700 .75rem var(--mono);color:var(--gold)}
+.mastery-level p{margin:0;font-size:.8rem}
+.mastery-level .check{font:600 .68rem var(--mono);color:var(--muted)}
+.problem-toolbar{display:flex;gap:.55rem;align-items:center;flex-wrap:wrap;margin:1rem 0;padding:.7rem;background:var(--surface);border:1px solid var(--border);border-radius:12px}
+.problem-toolbar select,.problem-toolbar input{background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:.5rem .65rem;outline:none}
+.problem-toolbar .count{margin-left:auto;font:600 .7rem var(--mono);color:var(--gold)}
+.challenge-problem{transition:.2s}
+.challenge-problem[hidden]{display:none}
+.challenge-problem summary{position:relative;padding-right:7rem}
+.difficulty{position:absolute;right:1rem;top:50%;transform:translateY(-50%);font:600 .64rem var(--mono);padding:.2rem .45rem;border-radius:999px;border:1px solid var(--border)}
+.difficulty.foundation{color:var(--success);background:rgba(62,232,168,.08)}
+.difficulty.intermediate{color:var(--warn);background:rgba(251,191,36,.08)}
+.difficulty.advanced{color:var(--error);background:rgba(255,107,107,.08)}
+.problem-goals{display:flex;gap:.4rem;flex-wrap:wrap;margin:.65rem 0}
+.problem-goals span{font:500 .66rem var(--mono);color:var(--muted);border:1px solid var(--border);padding:.18rem .42rem;border-radius:999px}
+.solution-roadmap{counter-reset:solstep;display:grid;gap:.55rem;margin:.8rem 0}
+.solution-roadmap > div{counter-increment:solstep;position:relative;padding:.7rem .8rem .7rem 2.7rem;background:var(--surface2);border-radius:9px;border:1px solid var(--border);font-size:.82rem}
+.solution-roadmap > div::before{content:counter(solstep);position:absolute;left:.75rem;top:.68rem;width:1.35rem;height:1.35rem;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#111;font:700 .66rem var(--mono)}
+.answer-check{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.55rem;margin:.75rem 0}
+.answer-check > div{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:.58rem}
+.answer-check span{display:block;font-size:.65rem;color:var(--muted)}
+.answer-check strong{font:600 .76rem var(--mono);color:var(--teal)}
+.convergence-layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(270px,.7fr);gap:1rem}
+.convergence-table{width:100%;border-collapse:collapse;font:400 .73rem var(--mono)}
+.convergence-table th,.convergence-table td{padding:.42rem .48rem;border-bottom:1px solid var(--border);text-align:right}
+.convergence-table th{color:var(--gold);background:var(--surface3)}
+.notes-drawer{position:fixed;top:0;right:-410px;width:min(390px,92vw);height:100vh;background:var(--surface);border-left:1px solid var(--border2);z-index:1600;box-shadow:-24px 0 60px rgba(0,0,0,.28);padding:1rem;transition:right .22s ease;display:flex;flex-direction:column}
+.notes-drawer.open{right:0}
+.notes-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
+.notes-head h3{font-family:var(--serif);font-size:1.35rem}
+.notes-close{border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:8px;padding:.35rem .55rem}
+.notes-context{font:500 .69rem var(--mono);color:var(--gold);margin:.8rem 0}
+.notes-drawer textarea{flex:1;width:100%;resize:none;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:.8rem;line-height:1.65;outline:none}
+.notes-actions{display:flex;justify-content:space-between;align-items:center;margin-top:.7rem}
+.notes-status{font-size:.7rem;color:var(--muted)}
+.back-top{position:fixed;right:1rem;bottom:1rem;width:42px;height:42px;border-radius:50%;border:1px solid var(--border2);background:var(--surface);color:var(--gold);z-index:85;box-shadow:var(--panel-shadow);opacity:0;pointer-events:none;transform:translateY(10px);transition:.2s}
+.back-top.show{opacity:1;pointer-events:auto;transform:none}
+.study-callout{display:grid;grid-template-columns:auto 1fr;gap:.8rem;align-items:start;padding:1rem 1.05rem;border:1px solid rgba(155,135,245,.25);background:linear-gradient(135deg,rgba(155,135,245,.08),rgba(30,216,200,.04));border-radius:12px;margin:1rem 0}
+.study-callout .callout-icon{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:rgba(155,135,245,.14);color:var(--violet);font-weight:700}
+.study-callout h4{font-family:var(--serif);font-size:1.05rem;margin-bottom:.2rem}
+.study-callout p{font-size:.82rem;color:var(--muted);margin:0}
+@media(max-width:900px){.hero-metrics,.route-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.study-cycle{grid-template-columns:1fr}.cycle-step:not(:last-child)::after{content:'↓';right:auto;left:50%;top:auto;bottom:-.72rem}.section-overview{grid-template-columns:1fr}.exam-formula,.convergence-layout{grid-template-columns:1fr}}
+@media(max-width:560px){.hero-metrics,.route-grid,.answer-check{grid-template-columns:1fr}.problem-toolbar .count{width:100%;margin-left:0}.difficulty{position:static;transform:none;margin-left:auto}.challenge-problem summary{padding-right:1rem;flex-wrap:wrap}}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ULTIMATE STUDENT DASHBOARD, HANDWRITTEN SOLUTIONS & QUIZ ENGINE
+═══════════════════════════════════════════════════════════════ */
+.dashboard-advanced{grid-template-columns:150px minmax(0,1fr);gap:1.15rem;padding:1.25rem;margin-bottom:4rem}
+.dashboard-main{min-width:0}.dashboard-topline{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}.dashboard-topline h2{margin:0}.dashboard-kicker{font:600 .66rem var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--teal);margin-bottom:.2rem}.dashboard-actions{display:flex;gap:.45rem;flex-wrap:wrap}.dash-btn{border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:9px;padding:.46rem .7rem;font-size:.72rem}.dash-btn:hover{border-color:var(--gold);color:var(--gold)}
+.dashboard-stats.advanced{grid-template-columns:repeat(6,minmax(0,1fr));margin-top:1rem}.stat-card{position:relative;overflow:hidden}.stat-card::after{content:'';position:absolute;right:-18px;bottom:-25px;width:58px;height:58px;border-radius:50%;background:radial-gradient(circle,rgba(30,216,200,.12),transparent 70%)}.stat-card small{display:block;font-size:.6rem;color:var(--faint);margin-top:.12rem}
+.dashboard-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr);gap:.8rem;margin-top:.9rem}.dashboard-panel{background:var(--bg);border:1px solid var(--border);border-radius:13px;padding:.85rem}.dashboard-panel h3{font-family:var(--serif);font-size:1.08rem;margin-bottom:.15rem}.dashboard-panel-head{display:flex;justify-content:space-between;gap:.7rem;align-items:center;margin-bottom:.65rem}.dashboard-panel-head span{font:600 .65rem var(--mono);color:var(--muted)}
+.resume-card{display:grid;grid-template-columns:1fr auto;gap:.8rem;align-items:center;background:linear-gradient(135deg,rgba(240,160,32,.08),rgba(30,216,200,.05));border:1px solid var(--border2);border-radius:11px;padding:.8rem}.resume-card strong{display:block;font-family:var(--serif);font-size:1rem}.resume-card span{display:block;color:var(--muted);font-size:.72rem}.resume-card a{white-space:nowrap;text-decoration:none}
+.goal-row{display:grid;grid-template-columns:1fr auto;gap:.7rem;align-items:center}.goal-time{font:700 1.35rem var(--mono);color:var(--gold)}.goal-controls{display:flex;gap:.35rem;flex-wrap:wrap}.goal-progress{height:8px;background:var(--border);border-radius:99px;overflow:hidden;margin:.65rem 0 .35rem}.goal-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--teal));transition:.25s}.goal-caption{display:flex;justify-content:space-between;font-size:.65rem;color:var(--muted)}
+.mastery-bars{display:grid;gap:.55rem}.mastery-row{display:grid;grid-template-columns:105px 1fr 38px;gap:.55rem;align-items:center}.mastery-row label{font-size:.7rem;color:var(--text)}.mastery-track{height:8px;border-radius:99px;background:var(--border);overflow:hidden}.mastery-track span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--gold));transition:.35s}.mastery-row b{font:600 .65rem var(--mono);color:var(--muted);text-align:right}.activity-list{display:grid;gap:.35rem;max-height:160px;overflow:auto}.activity-item{display:grid;grid-template-columns:auto 1fr;gap:.5rem;align-items:start;padding:.45rem .5rem;border-radius:8px;background:var(--surface2);font-size:.7rem}.activity-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);margin-top:.32rem}.activity-item time{display:block;color:var(--muted);font-size:.6rem}
+
+.handwritten-solution{--paper:#fffdf3;--line:#c9dafa;--ink:#173b72;--redink:#b12d38;position:relative;margin:1rem 0;padding:2rem 1.35rem 1.4rem 3.4rem;color:var(--ink);font-family:"Segoe Print","Bradley Hand","Comic Sans MS",cursive;font-size:.92rem;line-height:1.92;background:repeating-linear-gradient(to bottom,var(--paper) 0,var(--paper) 30px,var(--line) 31px,var(--paper) 32px);border:1px solid #d9d1b7;border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,.18);overflow:hidden}.handwritten-solution::before{content:'';position:absolute;top:0;bottom:0;left:2.55rem;width:2px;background:rgba(190,50,60,.48)}.handwritten-solution::after{content:'FULL WORKING';position:absolute;top:.45rem;right:.8rem;color:var(--redink);font:700 .62rem var(--mono);letter-spacing:.1em;transform:rotate(2deg)}.handwritten-solution .katex{color:var(--ink)}.handwritten-solution .katex-display{margin:.45rem 0!important}.hand-title{font-size:1.18rem;color:var(--redink);font-weight:700;margin:.15rem 0 .45rem;text-decoration:underline;text-decoration-style:wavy;text-underline-offset:4px}.hand-step{position:relative;margin:.8rem 0;padding:.45rem .7rem .5rem;border-radius:8px;background:rgba(255,255,255,.54);border:1px dashed rgba(23,59,114,.23)}.hand-step::before{content:attr(data-step);position:absolute;left:-2.6rem;top:.45rem;width:1.75rem;height:1.75rem;border:2px solid var(--redink);border-radius:50%;display:grid;place-items:center;color:var(--redink);font-weight:700;background:var(--paper);transform:rotate(-4deg)}.hand-note{display:inline-block;color:var(--redink);font-size:.8rem;font-weight:700;transform:rotate(-1deg);margin:.3rem 0}.hand-calc{padding:.45rem .7rem;border-left:3px solid rgba(23,59,114,.38);background:rgba(225,236,255,.38);margin:.45rem 0}.hand-final{position:relative;margin:.8rem 0 .25rem;padding:.75rem 1rem;border:3px double var(--redink);background:rgba(255,250,206,.72);font-weight:700;color:var(--ink);transform:rotate(-.2deg)}.hand-final::before{content:'FINAL';position:absolute;top:-.75rem;left:.8rem;background:var(--paper);color:var(--redink);padding:0 .4rem;font:700 .65rem var(--mono)}.hand-check{margin:.65rem 0;padding:.6rem .75rem;border:1px solid rgba(20,120,80,.35);background:rgba(210,255,230,.55);border-radius:8px}.hand-check strong{color:#08734c}.scratch-table{width:100%;border-collapse:collapse;margin:.6rem 0;font-family:"Segoe Print","Comic Sans MS",cursive;font-size:.78rem;background:rgba(255,255,255,.5)}.scratch-table th,.scratch-table td{border:1px solid rgba(23,59,114,.28);padding:.38rem .45rem;text-align:center}.scratch-table th{color:var(--redink);background:rgba(255,230,230,.5)}.crossed{position:relative;opacity:.65}.crossed::after{content:'';position:absolute;left:0;right:0;top:52%;height:2px;background:var(--redink);transform:rotate(-2deg)}.problem-solved-row{display:flex;align-items:center;justify-content:space-between;gap:.7rem;flex-wrap:wrap;margin-top:.9rem;padding-top:.7rem;border-top:1px dashed rgba(23,59,114,.28)}.problem-solved-btn{border:2px solid var(--ink);background:transparent;color:var(--ink);border-radius:999px;padding:.42rem .75rem;font-family:inherit;font-weight:700}.problem-solved-btn.solved{background:rgba(25,160,90,.13);border-color:#08734c;color:#08734c}.solution-time{color:var(--redink);font-size:.72rem}
+
+.quiz-command{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:1rem;margin-bottom:1rem}.quiz-setup,.quiz-sidecard{background:linear-gradient(145deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:15px;padding:1rem}.quiz-setup-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.65rem}.quiz-setup label{display:flex;flex-direction:column;gap:.25rem;font:600 .66rem var(--mono);color:var(--muted)}.quiz-setup select{background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:.55rem}.quiz-sidecard h3{font-family:var(--serif);font-size:1.1rem}.quiz-sidecard ul{margin:.55rem 0 0 1.05rem;color:var(--muted);font-size:.76rem}.quiz-sidecard li+li{margin-top:.3rem}.quiz-live-head{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.5rem;margin-bottom:.8rem}.quiz-live-metric{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:.5rem}.quiz-live-metric span{display:block;color:var(--muted);font-size:.61rem}.quiz-live-metric strong{font:700 .8rem var(--mono);color:var(--gold)}.quiz-meta{display:flex;gap:.4rem;flex-wrap:wrap;margin:.5rem 0 .75rem}.quiz-tag{padding:.18rem .45rem;border-radius:999px;border:1px solid var(--border);font:600 .62rem var(--mono);color:var(--teal)}.quiz-question{font-size:1.4rem}.quiz-hint{display:none;margin:.7rem 0;padding:.65rem .8rem;border-left:3px solid var(--gold);background:rgba(240,160,32,.07);font-size:.8rem}.quiz-hint.show{display:block}.quiz-feedback{padding:.2rem 0}.quiz-feedback-card{padding:.75rem .85rem;border:1px solid var(--border);border-radius:9px;background:var(--bg)}.quiz-feedback-card.correct{border-color:rgba(62,232,168,.4)}.quiz-feedback-card.wrong{border-color:rgba(255,107,107,.4)}.quiz-feedback-card a{color:var(--teal)}.quiz-nav{gap:.5rem;flex-wrap:wrap}.quiz-nav-left,.quiz-nav-right{display:flex;gap:.45rem;align-items:center}.quiz-review-toggle.active{border-color:var(--warn);color:var(--warn)}.quiz-report{display:none;margin-top:1rem}.quiz-report.show{display:block}.report-hero{display:grid;grid-template-columns:130px 1fr;gap:1rem;align-items:center;padding:1rem;background:linear-gradient(145deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:15px}.report-score{width:120px;height:120px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--teal) calc(var(--score)*1%),var(--border) 0);position:relative}.report-score::before{content:'';position:absolute;width:92px;height:92px;border-radius:50%;background:var(--surface)}.report-score strong{position:relative;font:700 1.35rem var(--mono);color:var(--teal)}.report-topic-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem;margin-top:.8rem}.report-topic{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:.55rem}.report-topic-head{display:flex;justify-content:space-between;font-size:.7rem}.report-topic-track{height:6px;background:var(--border);border-radius:99px;overflow:hidden;margin-top:.35rem}.report-topic-track span{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--teal))}.missed-list{display:grid;gap:.5rem;margin-top:.8rem}.missed-item{padding:.65rem .75rem;border:1px solid var(--border);border-radius:9px;background:var(--surface2);font-size:.78rem}.missed-item strong{color:var(--error)}
+
+.exam-workshop-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;margin:1rem 0}.workshop-stat{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:.7rem}.workshop-stat strong{display:block;font:700 1rem var(--mono);color:var(--gold)}.workshop-stat span{font-size:.68rem;color:var(--muted)}
+@media(max-width:1100px){.dashboard-stats.advanced{grid-template-columns:repeat(3,minmax(0,1fr))}.dashboard-grid{grid-template-columns:1fr}.quiz-command{grid-template-columns:1fr}.quiz-live-head{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:800px){.dashboard-advanced{grid-template-columns:1fr}.dashboard-topline{justify-content:center}.dashboard-actions{justify-content:center}.quiz-setup-grid{grid-template-columns:1fr 1fr}.report-hero{grid-template-columns:1fr;text-align:center}.report-score{margin:auto}.exam-workshop-summary{grid-template-columns:1fr 1fr}.handwritten-solution{padding-left:2.7rem}.handwritten-solution::before{left:2rem}.hand-step::before{left:-2.15rem}}
+@media(max-width:520px){.dashboard-stats.advanced,.quiz-live-head,.quiz-setup-grid,.report-topic-grid,.exam-workshop-summary{grid-template-columns:1fr}.mastery-row{grid-template-columns:86px 1fr 34px}.resume-card{grid-template-columns:1fr}.handwritten-solution{font-size:.82rem;padding-right:.75rem}.scratch-table{font-size:.66rem}}
+
 </style>
 <!-- KaTeX JS -->
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
@@ -321,6 +437,7 @@ button{cursor:pointer}
       </a>
   </div>
   <nav class="sb-nav">
+    <a class="nav-item" href="#learning-path"><span class="nav-icon">◇</span><span class="nav-label">Learning Path</span></a>
     <a class="nav-item" href="#method-choice"><span class="nav-icon">🧭</span><span class="nav-label">Method Selection</span></a>
     <a class="nav-item active" href="#gaussian-elimination"><span class="nav-icon">📋</span><span class="nav-label">gaussian-elimination</span></a>
     <a class="nav-item" href="#gauss-jordan">
@@ -340,9 +457,11 @@ button{cursor:pointer}
     <a class="nav-item" href="#fdm1d"><span class="nav-icon">📐</span><span class="nav-label">FDM — 1D</span></a>
     <a class="nav-item" href="#fdm2d"><span class="nav-icon">🌡️</span><span class="nav-label">FDM — 2D Heat</span></a>
     <a class="nav-item" href="#regression"><span class="nav-icon">📈</span><span class="nav-label">Regression</span></a>
+    <a class="nav-item" href="#convergence-lab"><span class="nav-icon">∿</span><span class="nav-label">Convergence Lab</span></a>
     <a class="nav-item" href="#interactive-labs"><span class="nav-icon">🧪</span><span class="nav-label">Interactive Labs</span></a>
     <a class="nav-item" href="#mastery-quiz"><span class="nav-icon">✅</span><span class="nav-label">Mastery Quiz</span></a>
     <a class="nav-item" href="#practice"><span class="nav-icon">📝</span><span class="nav-label">Practice Problems</span></a>
+    <a class="nav-item" href="#exam-workshop"><span class="nav-icon">◆</span><span class="nav-label">Exam Workshop</span></a>
     <a class="nav-item" href="#glossary"><span class="nav-icon">📚</span><span class="nav-label">Glossary</span></a>
   </nav>
   <div class="sb-footer">Ctrl/⌘ + K: search · progress saved locally</div>
@@ -364,6 +483,7 @@ button{cursor:pointer}
   <button class="tool-btn" id="fontSize" title="Toggle larger text">A+ <span class="tool-label">Text</span></button>
   <button class="tool-btn" id="themeMode" title="Toggle light and dark mode">◐ <span class="tool-label">Theme</span></button>
   <button class="tool-btn" id="printLecture" title="Print or save as PDF">⎙ <span class="tool-label">Print</span></button>
+  <button class="tool-btn" id="openNotes" title="Open study notes">✎ <span class="tool-label">Notes</span></button>
 </div>
 <div class="hero">
     <div class="hero-tag">Kamyab Safaei · Chemical Engineering</div>
@@ -382,27 +502,108 @@ button{cursor:pointer}
       <span class="chip">Automatic plots</span>
       <span class="chip">Mastery tracking</span>
     </div>
+    <div class="hero-metrics" aria-label="Course summary">
+      <div class="hero-metric"><strong>20</strong><span>guided lecture chapters</span></div>
+      <div class="hero-metric"><strong>29</strong><span>worked and practice problems</span></div>
+      <div class="hero-metric"><strong>7</strong><span>interactive numerical labs</span></div>
+      <div class="hero-metric"><strong>12</strong><span>full handwritten exam solutions</span></div>
+    </div>
     <div class="hero-actions">
       <a class="primary-btn" href="#interactive-labs">Launch numerical labs</a>
       <a class="secondary-btn" href="#mastery-quiz">Test your mastery</a>
     </div>
   </div>
 
-  <div class="study-dashboard" aria-label="Learning progress dashboard">
-    <div class="progress-dial" id="progressDial"><div><strong id="progressPercent">0%</strong><span>lecture complete</span></div></div>
-    <div class="dashboard-copy">
-      <h2>Your study dashboard</h2>
-      <p class="note">Mark chapters complete as you study. Progress is saved locally in your browser.</p>
-      <div class="dashboard-stats">
-        <div class="stat-card"><strong id="completedSections">0</strong><span>chapters completed</span></div>
-        <div class="stat-card"><strong id="totalSections">0</strong><span>total chapters</span></div>
-        <div class="stat-card"><strong id="quizBest">—</strong><span>best quiz score</span></div>
+  <div class="study-dashboard dashboard-advanced" aria-label="Advanced learning progress dashboard">
+    <div class="progress-dial" id="progressDial"><div><strong id="progressPercent">0%</strong><span>course mastery</span></div></div>
+    <div class="dashboard-main">
+      <div class="dashboard-topline">
+        <div><div class="dashboard-kicker">Personal learning analytics</div><h2>Your interactive study dashboard</h2><p class="note">Chapter completion, quiz performance, exam-workshop progress, study streak, notes, and daily focus are saved locally.</p></div>
+        <div class="dashboard-actions"><button class="dash-btn" id="randomIncomplete">Random incomplete chapter</button><a class="dash-btn" href="#mastery-quiz">Start smart quiz</a><button class="dash-btn" id="resetDashboard">Reset dashboard data</button></div>
+      </div>
+      <div class="dashboard-stats advanced">
+        <div class="stat-card"><strong id="completedSections">0</strong><span>chapters complete</span><small id="chapterRatio">of 0</small></div>
+        <div class="stat-card"><strong id="quizBest">—</strong><span>best quiz</span><small id="quizAttempts">0 attempts</small></div>
+        <div class="stat-card"><strong id="quizAverage">—</strong><span>quiz average</span><small>all saved attempts</small></div>
+        <div class="stat-card"><strong id="solvedProblems">0/12</strong><span>exam problems solved</span><small>self-marked</small></div>
+        <div class="stat-card"><strong id="studyStreak">0</strong><span>day study streak</span><small id="lastStudyDate">start today</small></div>
+        <div class="stat-card"><strong id="notesCount">0</strong><span>chapters with notes</span><small>saved locally</small></div>
+      </div>
+      <div class="dashboard-grid">
+        <div class="dashboard-panel">
+          <div class="dashboard-panel-head"><div><h3>Continue studying</h3><span>Resume the next unfinished chapter</span></div><span id="resumePercent">0% complete</span></div>
+          <div class="resume-card"><div><strong id="resumeTitle">Learning Path</strong><span id="resumeDescription">Start with the course learning path.</span></div><a class="run-btn" id="resumeLink" href="#learning-path">Continue</a></div>
+          <div class="dashboard-panel-head" style="margin-top:.9rem"><div><h3>Topic mastery</h3><span>Completion blended with quiz performance</span></div><span id="overallMastery">0%</span></div>
+          <div class="mastery-bars" id="masteryBars"></div>
+        </div>
+        <div class="dashboard-panel">
+          <div class="dashboard-panel-head"><div><h3>Daily focus timer</h3><span id="goalLabel">30-minute target</span></div><span class="goal-time" id="goalTime">00:00</span></div>
+          <div class="goal-progress"><span id="goalProgress"></span></div><div class="goal-caption"><span id="goalElapsed">0 min studied</span><span id="goalRemaining">30 min remaining</span></div>
+          <div class="goal-controls" style="margin-top:.65rem"><select id="goalMinutes" class="dash-btn"><option value="15">15 min</option><option value="30" selected>30 min</option><option value="45">45 min</option><option value="60">60 min</option></select><button class="dash-btn" id="goalStart">Start</button><button class="dash-btn" id="goalReset">Reset</button></div>
+          <div class="dashboard-panel-head" style="margin-top:.9rem"><div><h3>Recent activity</h3><span>Latest saved learning actions</span></div></div><div class="activity-list" id="activityList"></div>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- ====================================
        ====================================-->
+
+
+<section id="learning-path" class="sect">
+  <div class="sect-number">START</div>
+  <h2 class="sect-title">A Student-Centered Learning Path <span class="badge badge-teal">Study First</span></h2>
+  <p class="sect-subtitle">Use the lecture as a sequence of decisions and problem-solving habits rather than a collection of formulas. Select a route, follow the five-step study cycle, and finish with the exam workshop.</p>
+
+  <div class="route-grid">
+    <article class="route-card">
+      <h3>Fast Exam Review</h3>
+      <p>For students who already know the methods and need a compact, high-yield revision.</p>
+      <ol><li>Foundations and method choice</li><li>Formula boxes in each chapter</li><li>Mastery quiz</li><li>Intermediate exam problems</li></ol>
+      <span class="route-time">Suggested time: 3–4 hours</span>
+    </article>
+    <article class="route-card">
+      <h3>Full Concept Mastery</h3>
+      <p>For students learning the course carefully for the first time.</p>
+      <ol><li>Read chapter objectives</li><li>Reproduce worked steps</li><li>Run the browser laboratory</li><li>Complete one refinement check</li></ol>
+      <span class="route-time">Suggested time: 10–14 hours</span>
+    </article>
+    <article class="route-card">
+      <h3>Chemical Engineering Track</h3>
+      <p>For applying numerical methods to reactors, transport, heat transfer, and parameter estimation.</p>
+      <ol><li>Linear balance systems</li><li>Reaction ODEs and stiffness</li><li>Heat-conduction BVP/PDE models</li><li>Arrhenius regression</li></ol>
+      <span class="route-time">Suggested time: 7–9 hours</span>
+    </article>
+  </div>
+
+  <h3 class="sub">The five-step study cycle</h3>
+  <div class="study-cycle">
+    <div class="cycle-step"><b>01 · CLASSIFY</b><span>Identify IVP, BVP, PDE, algebraic system, or regression.</span></div>
+    <div class="cycle-step"><b>02 · DERIVE</b><span>Write the discrete formula before inserting numbers.</span></div>
+    <div class="cycle-step"><b>03 · COMPUTE</b><span>Show one complete numerical step with units.</span></div>
+    <div class="cycle-step"><b>04 · VERIFY</b><span>Check residual, conservation, or refined-step behavior.</span></div>
+    <div class="cycle-step"><b>05 · INTERPRET</b><span>Explain whether the answer is physically reasonable.</span></div>
+  </div>
+
+  <div class="exam-formula">
+    <div>
+      <h4>What a complete exam solution should contain</h4>
+      <div class="mastery-ladder">
+        <div class="mastery-level"><span class="rank">L1</span><p>Correct governing equation and conditions</p><span class="check">MODEL</span></div>
+        <div class="mastery-level"><span class="rank">L2</span><p>Correct numerical formula and coefficients</p><span class="check">METHOD</span></div>
+        <div class="mastery-level"><span class="rank">L3</span><p>At least one transparent calculation step</p><span class="check">WORKING</span></div>
+        <div class="mastery-level"><span class="rank">L4</span><p>Error, residual, stability, or convergence evidence</p><span class="check">VERIFY</span></div>
+        <div class="mastery-level"><span class="rank">L5</span><p>Engineering meaning, units, and limitations</p><span class="check">INTERPRET</span></div>
+      </div>
+    </div>
+    <div>
+      <h4>High-value questions to ask</h4>
+      <div class="study-callout"><div class="callout-icon">?</div><div><h4>Before solving</h4><p>What is known, what is unknown, and where are the conditions specified?</p></div></div>
+      <div class="study-callout"><div class="callout-icon">Δ</div><div><h4>During solving</h4><p>What controls accuracy and what limits the step or mesh size?</p></div></div>
+      <div class="study-callout"><div class="callout-icon">✓</div><div><h4>After solving</h4><p>Does the result satisfy the original equation, boundaries, and physics?</p></div></div>
+    </div>
+  </div>
+</section>
 
 <section id="advanced-foundations" class="sect">
   <div class="sect-number">F0</div>
@@ -9483,6 +9684,36 @@ title(<span class="str">'Gauss-Newton Convergence'</span>);</code></pre>
 </section>
 
 
+
+<section id="convergence-lab" class="sect">
+  <div class="sect-number">LAB+</div>
+  <h2 class="sect-title">Interactive Convergence Laboratory <span class="badge badge-gold">Learn by Refinement</span></h2>
+  <p class="sect-subtitle">Compare Euler, Heun RK2, midpoint RK2, and RK4 on a known solution. The laboratory calculates final error, error ratios, and observed order as the step is repeatedly halved.</p>
+
+  <div class="interactive-panel">
+    <div class="panel-head">
+      <div><h3>Step-size refinement experiment</h3><p>Model: \(y'=-a y\), \(y(0)=1\), with exact solution \(y=e^{-at}\). A reliable numerical method should show its theoretical error slope as \(h\to0\).</p></div>
+      <span class="live-pill">LIVE ANALYSIS</span>
+    </div>
+    <div class="control-grid">
+      <div class="control"><label for="convMethod">Method</label><select id="convMethod"><option value="euler">Forward Euler</option><option value="heun">Heun RK2</option><option value="midpoint">Midpoint RK2</option><option value="rk4" selected>Classical RK4</option></select></div>
+      <div class="control"><label for="convA">Decay coefficient a</label><input id="convA" type="number" value="2" min="0.01" step="0.1"></div>
+      <div class="control"><label for="convTf">Final time</label><input id="convTf" type="number" value="1" min="0.1" step="0.1"></div>
+      <div class="control"><label for="convH">Starting step h</label><input id="convH" type="number" value="0.2" min="0.0001" step="0.01"></div>
+    </div>
+    <div class="run-row"><button class="run-btn" id="runConvergence">Run refinement study</button><button class="ghost-btn" id="convExample">Load RK2 example</button><span class="status-text" id="convStatus">Ready.</span></div>
+    <div class="convergence-layout">
+      <div class="chart-card"><canvas id="convCanvas" style="height:330px" aria-label="log-log convergence chart"></canvas></div>
+      <div class="output-card">
+        <div class="metric-grid" id="convMetrics"></div>
+        <div id="convTable"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="study-callout"><div class="callout-icon">p</div><div><h4>Interpret the slope, not only the final error</h4><p>When the error behaves as \(E\approx C h^p\), halving \(h\) reduces the error by approximately \(2^p\). Thus Euler gives about 2, RK2 about 4, and RK4 about 16.</p></div></div>
+</section>
+
 <section id="interactive-labs" class="sect">
   <div class="sect-number">LAB</div>
   <h2 class="sect-title">Interactive Numerical Laboratories <span class="badge badge-teal">Runs in Browser</span></h2>
@@ -9579,14 +9810,43 @@ title(<span class="str">'Gauss-Newton Convergence'</span>);</code></pre>
 
 <section id="mastery-quiz" class="sect">
   <div class="sect-number">QUIZ</div>
-  <h2 class="sect-title">Numerical Methods Mastery Check <span class="badge badge-gold">Instant Feedback</span></h2>
-  <p class="sect-subtitle">Ten conceptual and applied questions covering method choice, error, stability, linear solvers, ODE integration, finite differences, and regression.</p>
-  <div class="quiz-shell">
+  <h2 class="sect-title">Adaptive Numerical Methods Mastery Center <span class="badge badge-gold">30-Question Bank</span></h2>
+  <p class="sect-subtitle">Build a targeted quiz by topic, difficulty, and length. Receive hints, explanations, section links, streak tracking, timed performance, topic analytics, and a saved mastery history.</p>
+
+  <div class="quiz-command" id="quizCommand">
+    <div class="quiz-setup">
+      <div class="panel-head"><div><h3>Configure your quiz</h3><p>Choose a focused revision set or a mixed exam simulation.</p></div><span class="live-pill">Adaptive bank</span></div>
+      <div class="quiz-setup-grid">
+        <label>TOPIC<select id="quizTopic"><option value="all">All topics</option><option value="foundations">Foundations & method choice</option><option value="linear">Linear systems</option><option value="ode">ODE integration</option><option value="stability">Stability & stiffness</option><option value="bvp">BVP & shooting</option><option value="fdm">Finite differences</option><option value="regression">Regression</option></select></label>
+        <label>DIFFICULTY<select id="quizDifficulty"><option value="all">Mixed difficulty</option><option value="foundation">Foundation</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select></label>
+        <label>QUESTIONS<select id="quizLength"><option value="10">10 questions</option><option value="15">15 questions</option><option value="20">20 questions</option><option value="all">All matching</option></select></label>
+      </div>
+      <div class="run-row"><button class="run-btn" id="quizStart">Generate quiz</button><button class="ghost-btn" id="quizReviewMissed">Review last missed set</button><label class="chip"><input id="quizTimerEnabled" type="checkbox" checked> timed mode</label><span class="status-text" id="quizBankStatus">30 questions available</span></div>
+    </div>
+    <aside class="quiz-sidecard"><h3>Mastery rules</h3><ul><li>Answer before opening the explanation.</li><li>Use the hint only after writing your own prediction.</li><li>Mark uncertain questions for review.</li><li>Revisit linked chapters for every error.</li><li>A score above 85% indicates exam readiness.</li></ul></aside>
+  </div>
+
+  <div class="quiz-shell" id="quizShell" hidden>
+    <div class="quiz-live-head">
+      <div class="quiz-live-metric"><span>PROGRESS</span><strong id="quizPosition">1 / 10</strong></div>
+      <div class="quiz-live-metric"><span>SCORE</span><strong id="quizScore">0</strong></div>
+      <div class="quiz-live-metric"><span>STREAK</span><strong id="quizStreak">0</strong></div>
+      <div class="quiz-live-metric"><span>TIME</span><strong id="quizTime">00:00</strong></div>
+      <div class="quiz-live-metric"><span>REVIEW</span><strong id="quizMarked">0</strong></div>
+    </div>
     <div class="quiz-progress"><span id="quizBar"></span></div>
+    <div class="quiz-meta" id="quizMeta"></div>
     <div class="quiz-question" id="quizQuestion"></div>
     <div class="quiz-options" id="quizOptions"></div>
+    <div class="run-row"><button class="ghost-btn" id="quizHintBtn">Show hint</button><button class="ghost-btn quiz-review-toggle" id="quizMarkReview">Mark for review</button><span class="status-text" id="quizConfidenceLabel">Choose the best answer, then read the explanation.</span></div>
+    <div class="quiz-hint" id="quizHint"></div>
     <div class="quiz-feedback" id="quizFeedback" aria-live="polite"></div>
-    <div class="quiz-nav"><button class="ghost-btn" id="quizRestart">Restart</button><span class="quiz-score" id="quizScore">0 / 10</span><button class="run-btn" id="quizNext">Next question</button></div>
+    <div class="quiz-nav"><div class="quiz-nav-left"><button class="ghost-btn" id="quizRestart">End and reconfigure</button></div><div class="quiz-nav-right"><button class="run-btn" id="quizNext">Next question</button></div></div>
+  </div>
+
+  <div class="quiz-report" id="quizReport">
+    <div class="report-hero"><div class="report-score" id="reportScoreDial"><strong id="reportScore">0%</strong></div><div><div class="dashboard-kicker">Attempt analysis</div><h3 id="reportTitle">Quiz complete</h3><p id="reportSummary" class="note"></p><div class="run-row"><button class="run-btn" id="reportNewQuiz">Build another quiz</button><button class="ghost-btn" id="reportReviewMissed">Review missed questions</button><a class="ghost-btn" href="#exam-workshop">Continue to exam workshop</a></div></div></div>
+    <div class="dashboard-grid"><div class="dashboard-panel"><h3>Topic performance</h3><div class="report-topic-grid" id="reportTopics"></div></div><div class="dashboard-panel"><h3>Questions to revisit</h3><div class="missed-list" id="missedList"></div></div></div>
   </div>
 </section>
 
@@ -17198,6 +17458,231 @@ title(<span class="str">'Temperature Response in Non-Isothermal CSTR'</span>);</
 
 
 
+
+<section id="exam-workshop" class="sect">
+  <div class="sect-number">EXAM</div>
+  <h2 class="sect-title">Advanced Exam Workshop <span class="badge badge-red">12 Full Handwritten Solutions</span></h2>
+  <p class="sect-subtitle">Each problem now contains a complete notebook-style answer: classification, governing formula, substitutions, intermediate calculations, final result, and a verification step. Solve first, then compare line by line.</p>
+
+  <div class="exam-workshop-summary"><div class="workshop-stat"><strong>12</strong><span>complete worked answers</span></div><div class="workshop-stat"><strong id="workshopSolvedTop">0</strong><span>problems marked solved</span></div><div class="workshop-stat"><strong>3 levels</strong><span>foundation to capstone</span></div><div class="workshop-stat"><strong>6 checks</strong><span>residual, stability, refinement, conservation, physics, units</span></div></div>
+  <div class="problem-toolbar" aria-label="Problem filters">
+    <select id="problemTopic"><option value="all">All topics</option><option value="linear">Linear systems</option><option value="ode">ODE integration</option><option value="stability">Stability and stiffness</option><option value="bvp">BVP and shooting</option><option value="fdm">Finite differences</option><option value="regression">Regression</option><option value="capstone">Capstone</option></select>
+    <select id="problemDifficulty"><option value="all">All difficulties</option><option value="foundation">Foundation</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select>
+    <button class="ghost-btn" id="randomProblem">Choose a random problem</button><button class="ghost-btn" id="openSolutions">Open visible solutions</button><button class="ghost-btn" id="closeSolutions">Close all solutions</button><span class="count" id="problemCount">12 problems</span>
+  </div>
+
+  <details class="prob challenge-problem" data-problem="A1" data-topic="linear" data-difficulty="foundation">
+    <summary><span class="prob-num">A1</span><strong>Partial Pivoting Under a Dangerous Small Pivot</strong><span class="difficulty foundation">FOUNDATION</span></summary><div class="prob-body">
+      <p>Solve by Gaussian elimination with partial pivoting:</p>\[\begin{bmatrix}10^{-4}&2&1\\1&1&-1\\2&-1&3\end{bmatrix}\begin{bmatrix}x_1\\x_2\\x_3\end{bmatrix}=\begin{bmatrix}3.0001\\1\\4\end{bmatrix}.\]
+      <div class="problem-goals"><span>row swapping</span><span>multiplier growth</span><span>back substitution</span><span>residual check</span></div>
+      <details class="ans"><summary>Reveal full handwritten answer</summary><div class="ans-body"><div class="handwritten-solution">
+        <div class="hand-title">A1 — Gaussian elimination with partial pivoting</div>
+        <div class="hand-step" data-step="1"><b>Write the augmented matrix.</b>\[\left[\begin{array}{ccc|c}0.0001&2&1&3.0001\\1&1&-1&1\\2&-1&3&4\end{array}\right]\]</div>
+        <div class="hand-step" data-step="2"><b>Choose the safest first pivot.</b><p>In column 1, compare \(|0.0001|,|1|,|2|\). The largest value is 2, so interchange \(R_1\leftrightarrow R_3\).</p>\[\left[\begin{array}{ccc|c}2&-1&3&4\\1&1&-1&1\\0.0001&2&1&3.0001\end{array}\right]\]<span class="hand-note">Without this swap, \(m_{21}=1/10^{-4}=10^4\): severe round-off growth.</span></div>
+        <div class="hand-step" data-step="3"><b>Eliminate entries below pivot 2.</b><div class="hand-calc">\[m_{21}=\frac12=0.5,\qquad R_2\leftarrow R_2-0.5R_1\]\[R_2=[0,\ 1.5,\ -2.5\mid -1]\]</div><div class="hand-calc">\[m_{31}=\frac{0.0001}{2}=0.00005,\qquad R_3\leftarrow R_3-0.00005R_1\]\[R_3=[0,\ 2.00005,\ 0.99985\mid2.9999]\]</div></div>
+        <div class="hand-step" data-step="4"><b>Pivot again in column 2.</b><p>Because \(|2.00005|>|1.5|\), swap the last two rows:</p>\[\left[\begin{array}{ccc|c}2&-1&3&4\\0&2.00005&0.99985&2.9999\\0&1.5&-2.5&-1\end{array}\right]\]</div>
+        <div class="hand-step" data-step="5"><b>Eliminate the second-column entry.</b>\[m_{32}=\frac{1.5}{2.00005}=0.7499812505\]\[R_3\leftarrow R_3-m_{32}R_2\]\[R_3=[0,\ 0,\ -3.2498687533\mid-3.2498687533]\]</div>
+        <div class="hand-step" data-step="6"><b>Back-substitute.</b>\[-3.2498687533x_3=-3.2498687533\Rightarrow x_3=1\]\[2.00005x_2+0.99985(1)=2.9999\Rightarrow x_2=1\]\[2x_1-x_2+3x_3=4\Rightarrow2x_1-1+3=4\Rightarrow x_1=1\]</div>
+        <div class="hand-final">\[\boxed{\mathbf x=[1,1,1]^T}\]</div>
+        <div class="hand-check"><strong>Residual verification:</strong>\[A\mathbf x=\begin{bmatrix}0.0001+2+1\\1+1-1\\2-1+3\end{bmatrix}=\begin{bmatrix}3.0001\\1\\4\end{bmatrix}=\mathbf b\Rightarrow\|\mathbf r\|_\infty=0.\]</div>
+        <div class="problem-solved-row"><span class="solution-time">Target exam time: 10–12 min</span><button class="problem-solved-btn" data-problem="A1">Mark A1 solved</button></div>
+      </div></div></details>
+    </div>
+  </details>
+
+  <details class="prob challenge-problem" data-problem="A2" data-topic="linear" data-difficulty="intermediate">
+    <summary><span class="prob-num">A2</span><strong>Gauss–Seidel Iteration and Residual Stopping</strong><span class="difficulty intermediate">INTERMEDIATE</span></summary><div class="prob-body">
+      <p>Starting from \(\mathbf x^{(0)}=\mathbf0\), solve until \(\|\mathbf b-A\mathbf x^{(k)}\|_\infty<10^{-5}\):</p>\[\begin{bmatrix}10&-1&2\\-1&11&-1\\2&-1&10\end{bmatrix}\mathbf x=\begin{bmatrix}6\\25\\-11\end{bmatrix}.\]
+      <div class="problem-goals"><span>diagonal dominance</span><span>new-value updates</span><span>iteration table</span><span>residual stopping</span></div>
+      <details class="ans"><summary>Reveal full handwritten answer</summary><div class="ans-body"><div class="handwritten-solution">
+        <div class="hand-title">A2 — Gauss–Seidel until the residual tolerance is met</div>
+        <div class="hand-step" data-step="1"><b>Check convergence support.</b><p>Each diagonal entry exceeds the sum of the other absolute row entries:</p>\[10>1+2,\qquad11>1+1,\qquad10>2+1.\]<span class="hand-note">Strict diagonal dominance strongly supports convergence.</span></div>
+        <div class="hand-step" data-step="2"><b>Rearrange each equation for its diagonal unknown.</b>\[x_1^{(k+1)}=\frac{6+x_2^{(k)}-2x_3^{(k)}}{10}\]\[x_2^{(k+1)}=\frac{25+x_1^{(k+1)}+x_3^{(k)}}{11}\]\[x_3^{(k+1)}=\frac{-11-2x_1^{(k+1)}+x_2^{(k+1)}}{10}\]</div>
+        <div class="hand-step" data-step="3"><b>First sweep from \((0,0,0)\).</b>\[x_1^{(1)}=\frac6{10}=0.6\]\[x_2^{(1)}=\frac{25+0.6}{11}=2.327272727\]\[x_3^{(1)}=\frac{-11-2(0.6)+2.327272727}{10}=-0.987272727\]</div>
+        <div class="hand-step" data-step="4"><b>Continue using every newly calculated value immediately.</b><table class="scratch-table"><thead><tr><th>k</th><th>\(x_1\)</th><th>\(x_2\)</th><th>\(x_3\)</th><th>\(\|r\|_\infty\)</th></tr></thead><tbody><tr><td>1</td><td>0.600000000</td><td>2.327272727</td><td>-0.987272727</td><td>4.30182</td></tr><tr><td>2</td><td>1.030181818</td><td>2.276628099</td><td>-1.078373554</td><td>1.31557×10⁻¹</td></tr><tr><td>3</td><td>1.043337521</td><td>2.269542179</td><td>-1.081713286</td><td>3.33973×10⁻³</td></tr><tr><td>4</td><td>1.043296875</td><td>2.269234872</td><td>-1.081735888</td><td>2.62104×10⁻⁴</td></tr><tr><td>5</td><td>1.043270665</td><td>2.269230434</td><td>-1.081731090</td><td>1.40341×10⁻⁵</td></tr><tr><td>6</td><td>1.043269261</td><td>2.269230743</td><td>-1.081730778</td><td>3.14461×10⁻⁷</td></tr></tbody></table></div>
+        <div class="hand-step" data-step="5"><b>Apply the stopping rule.</b><p>Iteration 5 is not sufficient because \(1.40341\times10^{-5}>10^{-5}\). Iteration 6 is accepted.</p>\[\mathbf r^{(6)}=\mathbf b-A\mathbf x^{(6)}\approx[-3.1446,\ 3.1155,\ 0]\times10^{-7}\]</div>
+        <div class="hand-final">\[\boxed{\mathbf x\approx(1.043269261,\ 2.269230743,\ -1.081730778)}\]</div>
+        <div class="hand-check"><strong>Verification:</strong> \(\|\mathbf r\|_\infty=3.14461\times10^{-7}<10^{-5}\). The residual, not merely the change between iterates, controls acceptance.</div>
+        <div class="problem-solved-row"><span class="solution-time">Target exam time: 12–15 min</span><button class="problem-solved-btn" data-problem="A2">Mark A2 solved</button></div>
+      </div></div></details>
+    </div>
+  </details>
+
+  <details class="prob challenge-problem" data-problem="A3" data-topic="ode" data-difficulty="foundation">
+    <summary><span class="prob-num">A3</span><strong>Measured Order: RK2 versus RK4</strong><span class="difficulty foundation">FOUNDATION</span></summary><div class="prob-body">
+      <p>For \(y'=-2y\), \(y(0)=1\), compute \(y(1)\) using Heun RK2 and RK4 with \(h=0.2,0.1,0.05\). Estimate the observed order.</p>
+      <details class="ans"><summary>Reveal full handwritten answer</summary><div class="ans-body"><div class="handwritten-solution">
+        <div class="hand-title">A3 — Step refinement and observed order</div>
+        <div class="hand-step" data-step="1"><b>Reference solution.</b>\[y(t)=e^{-2t}\Rightarrow y(1)=e^{-2}=0.1353352832.\]</div>
+        <div class="hand-step" data-step="2"><b>Heun RK2 recurrence.</b><p>For \(f=-2y\):</p>\[k_1=-2y_n,\qquad k_2=-2(y_n+hk_1)\]\[y_{n+1}=y_n+\frac h2(k_1+k_2)=\left(1-2h+2h^2\right)y_n.\]<p>Thus \(y(1)=R_2^N\), where \(R_2=1-2h+2h^2\) and \(N=1/h\).</p><div class="hand-calc">For \(h=0.2\): \(R_2=0.68\), \(N=5\), so \(y(1)=0.68^5=0.1453933568\).</div></div>
+        <div class="hand-step" data-step="3"><b>RK4 recurrence for this linear test equation.</b>\[R_4=1+z+\frac{z^2}{2}+\frac{z^3}{6}+\frac{z^4}{24},\qquad z=-2h,\qquad y(1)=R_4^N.\]<div class="hand-calc">For \(h=0.2\), \(z=-0.4\), \(R_4=0.6704\), hence \(y(1)=0.6704^5=0.1354160146\).</div></div>
+        <div class="hand-step" data-step="4"><b>Collect values and errors.</b><table class="scratch-table"><thead><tr><th>Method</th><th>h</th><th>\(y_h(1)\)</th><th>absolute error</th></tr></thead><tbody><tr><td>Heun RK2</td><td>0.20</td><td>0.1453933568</td><td>1.005807×10⁻²</td></tr><tr><td>Heun RK2</td><td>0.10</td><td>0.1374480313</td><td>2.112748×10⁻³</td></tr><tr><td>Heun RK2</td><td>0.05</td><td>0.1358224575</td><td>4.871743×10⁻⁴</td></tr><tr><td>RK4</td><td>0.20</td><td>0.1354160146</td><td>8.073139×10⁻⁵</td></tr><tr><td>RK4</td><td>0.10</td><td>0.1353395484</td><td>4.265194×10⁻⁶</td></tr><tr><td>RK4</td><td>0.05</td><td>0.1353355284</td><td>2.451852×10⁻⁷</td></tr></tbody></table></div>
+        <div class="hand-step" data-step="5"><b>Estimate observed order.</b>\[p\approx\log_2\left(\frac{E_h}{E_{h/2}}\right).\]<p>Using the two finest errors:</p>\[p_{RK2}=\log_2\left(\frac{2.112748\times10^{-3}}{4.871743\times10^{-4}}\right)=2.1166\]\[p_{RK4}=\log_2\left(\frac{4.265194\times10^{-6}}{2.451852\times10^{-7}}\right)=4.1207\]</div>
+        <div class="hand-final">\[\boxed{p_{RK2}\to2,\qquad p_{RK4}\to4}\]</div><div class="hand-check"><strong>Interpretation:</strong> Halving \(h\) reduces an order-2 error by about \(2^2=4\), but an order-4 error by about \(2^4=16\).</div>
+        <div class="problem-solved-row"><span class="solution-time">Target exam time: 12 min</span><button class="problem-solved-btn" data-problem="A3">Mark A3 solved</button></div>
+      </div></div></details>
+    </div>
+  </details>
+
+  <details class="prob challenge-problem" data-problem="A4" data-topic="stability" data-difficulty="intermediate">
+    <summary><span class="prob-num">A4</span><strong>Stable Physics, Unstable Numerics</strong><span class="difficulty intermediate">INTERMEDIATE</span></summary><div class="prob-body">
+      <p>A fast mode satisfies \(C'=-25C\), \(C(0)=1\). Determine the Forward-Euler stability limit and compare \(h=0.05,0.08,0.10\) s.</p>
+      <details class="ans"><summary>Reveal full handwritten answer</summary><div class="ans-body"><div class="handwritten-solution">
+        <div class="hand-title">A4 — Stability is not the same as physical decay</div>
+        <div class="hand-step" data-step="1"><b>Write the Forward-Euler update.</b>\[C_{n+1}=C_n+h(-25C_n)=(1-25h)C_n=GC_n.\]<p>The amplification factor is \(G=1-25h\).</p></div>
+        <div class="hand-step" data-step="2"><b>Apply the absolute-stability condition.</b>\[|G|=|1-25h|<1\]\[-1<1-25h<1\Rightarrow -2<-25h<0\Rightarrow\boxed{0<h<0.08\ \mathrm s}.\]</div>
+        <div class="hand-step" data-step="3"><b>Case \(h=0.05\).</b>\[G=1-25(0.05)=-0.25.\]<p>The magnitude is below 1, so the method is stable, but the sign changes each step:</p>\[1,\ -0.25,\ 0.0625,\ -0.015625,\ 0.00390625,\ldots\]<span class="hand-note">Stable, but nonphysical negative concentrations appear.</span></div>
+        <div class="hand-step" data-step="4"><b>Case \(h=0.08\).</b>\[G=1-25(0.08)=-1.\]<p>The sequence is \(1,-1,1,-1,\ldots\). The error never decays. This is the stability boundary, not acceptable damping.</p></div>
+        <div class="hand-step" data-step="5"><b>Case \(h=0.10\).</b>\[G=1-25(0.10)=-1.5.\]<p>The sequence grows in magnitude:</p>\[1,\ -1.5,\ 2.25,\ -3.375,\ 5.0625,\ldots\]</div>
+        <div class="hand-final">\[\boxed{h<0.08\ \mathrm s\text{ for stability; use }h<0.04\ \mathrm s\text{ to keep }G>0.}\]</div>
+        <div class="hand-check"><strong>Engineering conclusion:</strong> The exact solution \(e^{-25t}\) is positive and decays. An implicit method such as Backward Euler has \(G=1/(1+25h)\), which remains positive and stable for every \(h>0\).</div>
+        <div class="problem-solved-row"><span class="solution-time">Target exam time: 8–10 min</span><button class="problem-solved-btn" data-problem="A4">Mark A4 solved</button></div>
+      </div></div></details>
+    </div>
+  </details>
+
+  <details class="prob challenge-problem" data-problem="A5" data-topic="ode" data-difficulty="advanced">
+    <summary><span class="prob-num">A5</span><strong>Coupled Non-Isothermal Batch Reactor with RK4</strong><span class="difficulty advanced">ADVANCED</span></summary><div class="prob-body">
+      <p>Integrate the coupled reactor model to 120 s using RK4 and verify with a halved step:</p>\[\frac{dC_A}{dt}=-k_0e^{-E/(RT)}C_A,\qquad \frac{dT}{dt}=\frac{-\Delta H}{\rho C_p}k_0e^{-E/(RT)}C_A-k_c(T-T_a).\]
+      <p>Use \(C_A(0)=1000\), \(T(0)=350\), \(k_0=10^9\), \(E=75000\), \(-\Delta H=50000\), \(\rho C_p=4.0\times10^6\), \(k_c=0.002\), \(T_a=330\) in SI units.</p>
+      <details class="ans"><summary>Reveal full handwritten answer</summary><div class="ans-body"><div class="handwritten-solution">
+        <div class="hand-title">A5 — Vector RK4 for a non-isothermal reactor</div>
+        <div class="hand-step" data-step="1"><b>Define the vector function.</b>\[\mathbf y=\begin{bmatrix}C_A\\T\end{bmatrix},\quad k(T)=10^9\exp\left(-\frac{75000}{8.314T}\right),\quad r=k(T)C_A\]\[\mathbf f(\mathbf y)=\begin{bmatrix}-r\\0.0125r-0.002(T-330)\end{bmatrix}.\]<p>Here \(50000/(4.0\times10^6)=0.0125\ \mathrm{K\,m^3/mol}\).</p></div>
+        <div class="hand-step" data-step="2"><b>Write one vector RK4 step.</b>\[\mathbf k_1=\mathbf f(t_n,\mathbf y_n)\]\[\mathbf k_2=\mathbf f\left(t_n+\frac h2,\mathbf y_n+\frac h2\mathbf k_1\right)\]\[\mathbf k_3=\mathbf f\left(t_n+\frac h2,\mathbf y_n+\frac h2\mathbf k_2\right)\]\[\mathbf k_4=\mathbf f(t_n+h,\mathbf y_n+h\mathbf k_3)\]\[\mathbf y_{n+1}=\mathbf y_n+\frac h6(\mathbf k_1+2\mathbf k_2+2\mathbf k_3+\mathbf k_4).\]</div>
+        <div class="hand-step" data-step="3"><b>First step with \(h=0.1\) s.</b><p>At \((C_A,T)=(1000,350)\):</p>\[k(350)=10^9e^{-75000/(8.314\times350)}=0.006404107\ \mathrm{s^{-1}}\]\[\mathbf k_1=(-6.404107,\ 0.0400513)^T\]\[\mathbf k_2=(-6.403001,\ 0.0400335)^T\]\[\mathbf k_3=(-6.403001,\ 0.0400335)^T\]\[\mathbf k_4=(-6.401894,\ 0.0400157)^T\]\[\mathbf y_1=\begin{bmatrix}1000\\350\end{bmatrix}+\frac{0.1}{6}(\mathbf k_1+2\mathbf k_2+2\mathbf k_3+\mathbf k_4)=\begin{bmatrix}999.359700\\350.004003\end{bmatrix}.\]</div>
+        <div class="hand-step" data-step="4"><b>March to 120 s.</b><table class="scratch-table"><thead><tr><th>t (s)</th><th>\(C_A\) (mol m⁻³)</th><th>T (K)</th></tr></thead><tbody><tr><td>0</td><td>1000.000</td><td>350.0000</td></tr><tr><td>20</td><td>876.6128</td><td>350.7273</td></tr><tr><td>40</td><td>763.5237</td><td>351.2998</td></tr><tr><td>60</td><td>661.6671</td><td>351.7123</td></tr><tr><td>80</td><td>571.3858</td><td>351.9667</td></tr><tr><td>100</td><td>492.4758</td><td>352.0718</td></tr><tr><td>120</td><td>424.2980</td><td>352.0414</td></tr></tbody></table></div>
+        <div class="hand-step" data-step="5"><b>Half-step verification.</b><table class="scratch-table"><thead><tr><th>h (s)</th><th>\(C_A(120)\)</th><th>\(T(120)\)</th></tr></thead><tbody><tr><td>0.10</td><td>424.29798875</td><td>352.04135049</td></tr><tr><td>0.05</td><td>424.29798875</td><td>352.04135049</td></tr></tbody></table><p>The displayed values are mesh-independent to at least eight significant digits.</p></div>
+        <div class="hand-final">\[\boxed{C_A(120)=424.30\ \mathrm{mol/m^3},\qquad T(120)=352.04\ \mathrm K}\]</div>
+        <div class="hand-check"><strong>Physical interpretation:</strong> Reaction heat initially raises temperature. Later, reactant depletion lowers heat generation while cooling to \(T_a=330\) K becomes increasingly important. Concentration remains nonnegative.</div>
+        <div class="problem-solved-row"><span class="solution-time">Target exam time: 20–25 min</span><button class="problem-solved-btn" data-problem="A5">Mark A5 solved</button></div>
+      </div></div></details>
+    </div>
+  </details>
+
+  <details class="prob challenge-problem" data-problem="A6" data-topic="stability" data-difficulty="advanced">
+    <summary><span class="prob-num">A6</span><strong>Stiff Consecutive Reaction with Backward Euler</strong><span class="difficulty advanced">ADVANCED</span></summary><div class="prob-body">
+      <p>For \(A\xrightarrow{1000}B\xrightarrow{1}C\), \((A,B,C)(0)=(1,0,0)\), use Backward Euler with \(h=0.01\) s to reach \(t=1\) s.</p>
+      <details class="ans"><summary>Reveal full handwritten answer</summary><div class="ans-body"><div class="handwritten-solution">
+        <div class="hand-title">A6 — Implicit marching through a stiff kinetic system</div>
+        <div class="hand-step" data-step="1"><b>Write the ODE system.</b>\[A'=-1000A,\qquad B'=1000A-B,\qquad C'=B.\]<p>The time scales are \(10^{-3}\) s and 1 s, so the system is stiff.</p></div>
+        <div class="hand-step" data-step="2"><b>Apply Backward Euler at \(n+1\).</b>\[\frac{A_{n+1}-A_n}{h}=-1000A_{n+1}\Rightarrow A_{n+1}=\frac{A_n}{1+1000h}=\frac{A_n}{11}.\]\[\frac{B_{n+1}-B_n}{h}=1000A_{n+1}-B_{n+1}\Rightarrow B_{n+1}=\frac{B_n+1000hA_{n+1}}{1+h}.\]\[C_{n+1}=C_n+hB_{n+1}.\]</div>
+        <div class="hand-step" data-step="3"><b>First step.</b>\[A_1=\frac1{11}=0.09090909\]\[B_1=\frac{0+10(0.09090909)}{1.01}=0.90009001\]\[C_1=0+0.01(0.90009001)=0.009000900\]<p>Check: \(A_1+B_1+C_1=1.000000\).</p></div>
+        <div class="hand-step" data-step="4"><b>Second step.</b>\[A_2=\frac{0.09090909}{11}=0.0082644628\]\[B_2=\frac{0.90009001+10(0.0082644628)}{1.01}=0.9730045912\]\[C_2=0.009000900+0.01(0.9730045912)=0.0187309460.\]</div>
+        <div class="hand-step" data-step="5"><b>Continue for 100 steps.</b><table class="scratch-table"><thead><tr><th>t</th><th>A</th><th>B</th><th>C</th><th>sum</th></tr></thead><tbody><tr><td>0.01</td><td>9.09091×10⁻²</td><td>0.900090</td><td>0.009001</td><td>1.000000</td></tr><tr><td>0.10</td><td>3.85543×10⁻¹¹</td><td>0.906193</td><td>0.093807</td><td>1.000000</td></tr><tr><td>0.50</td><td>8.51855×10⁻⁵³</td><td>0.608647</td><td>0.391353</td><td>1.000000</td></tr><tr><td>1.00</td><td>7.25657×10⁻¹⁰⁵</td><td>0.370081</td><td>0.629919</td><td>1.000000</td></tr></tbody></table></div>
+        <div class="hand-step" data-step="6"><b>Compare with the exact intermediate concentration.</b>\[B(t)=\frac{k_1}{k_2-k_1}\left(e^{-k_1t}-e^{-k_2t}\right).\]\[B(1)=\frac{1000}{1-1000}(e^{-1000}-e^{-1})=0.368247689.\]<p>Backward Euler error in \(B\): \(0.370081294-0.368247689=0.001833605\).</p></div>
+        <div class="hand-final">\[\boxed{A(1)\approx7.26\times10^{-105},\quad B(1)\approx0.370081,\quad C(1)\approx0.629919}\]</div>
+        <div class="hand-check"><strong>Why implicit?</strong> Explicit Euler would require \(h<2/1000=0.002\) s for the fast mode. Backward Euler is stable at \(h=0.01\) s and exactly preserves total mass for this recurrence.</div>
+        <div class="problem-solved-row"><span class="solution-time">Target exam time: 15–18 min</span><button class="problem-solved-btn" data-problem="A6">Mark A6 solved</button></div>
+      </div></div></details>
+    </div>
+  </details>
+
+  <details class="prob challenge-problem" data-problem="A7" data-topic="bvp" data-difficulty="intermediate">
+    <summary><span class="prob-num">A7</span><strong>Shooting a Nonlinear Fin Problem</strong><span class="difficulty intermediate">INTERMEDIATE</span></summary><div class="prob-body">
+      <p>Solve \(\theta''-\theta-\theta^4=0\), \(0\le x\le1\), with \(\theta(0)=1\), \(\theta(1)=0.2\). Use shooting, RK4 with \(h=0.1\), and secant guesses \(s_0=-2\), \(s_1=-1\). Refine with \(h=0.05\).</p>
+      <details class="ans"><summary>Reveal full handwritten answer</summary><div class="ans-body"><div class="handwritten-solution">
+        <div class="hand-title">A7 — Shooting + RK4 + secant method</div>
+        <div class="hand-step" data-step="1"><b>Convert the second-order BVP to a first-order IVP.</b>\[u_1=\theta,\qquad u_2=\theta'\]\[u_1'=u_2,\qquad u_2'=u_1+u_1^4\]\[u_1(0)=1,\qquad u_2(0)=s.\]</div>
+        <div class="hand-step" data-step="2"><b>Define the shooting residual.</b>\[F(s)=u_1(1;s)-0.2.\]<p>A correct slope satisfies \(F(s)=0\).</p></div>
+        <div class="hand-step" data-step="3"><b>Integrate the two initial guesses with vector RK4.</b><table class="scratch-table"><thead><tr><th>guess</th><th>\(u_1(1)\)</th><th>\(F(s)\)</th></tr></thead><tbody><tr><td>\(s_0=-2\)</td><td>-0.694545554</td><td>-0.894545554</td></tr><tr><td>\(s_1=-1\)</td><td>0.607073792</td><td>0.407073792</td></tr></tbody></table><p>The signs differ, so the root lies between the two guesses.</p></div>
+        <div class="hand-step" data-step="4"><b>Use the secant update.</b>\[s_{j+1}=s_j-F(s_j)\frac{s_j-s_{j-1}}{F(s_j)-F(s_{j-1})}.\]<div class="hand-calc">First new slope:\[s_2=-1-0.407073792\frac{-1-(-2)}{0.407073792-(-0.894545554)}=-1.312744116.\]</div><table class="scratch-table"><thead><tr><th>j</th><th>\(s_j\)</th><th>\(F(s_j)\)</th></tr></thead><tbody><tr><td>0</td><td>-2.000000000</td><td>-8.945456×10⁻¹</td></tr><tr><td>1</td><td>-1.000000000</td><td>4.070738×10⁻¹</td></tr><tr><td>2</td><td>-1.312744116</td><td>-2.620157×10⁻²</td></tr><tr><td>3</td><td>-1.293831461</td><td>-1.114232×10⁻³</td></tr><tr><td>4</td><td>-1.292991472</td><td>2.476861×10⁻⁶</td></tr><tr><td>5</td><td>-1.292993335</td><td>-2.374909×10⁻¹⁰</td></tr></tbody></table></div>
+        <div class="hand-step" data-step="5"><b>Refine the RK4 mesh.</b><table class="scratch-table"><thead><tr><th>h</th><th>converged slope</th><th>\(\theta(1)\)</th><th>\(\theta'(1)\)</th></tr></thead><tbody><tr><td>0.10</td><td>-1.292993335</td><td>0.200000000</td><td>-0.55848581</td></tr><tr><td>0.05</td><td>-1.292972132</td><td>0.200000000</td><td>-0.55848151</td></tr><tr><td>0.025</td><td>-1.292970806</td><td>0.200000000</td><td>-0.55848124</td></tr></tbody></table></div>
+        <div class="hand-final">\[\boxed{\theta'(0)=s\approx-1.29297}\]</div>
+        <div class="hand-check"><strong>Verification:</strong> terminal residual is essentially zero, and the slope changes by only \(1.33\times10^{-6}\) when refining from \(h=0.05\) to 0.025.</div>
+        <div class="problem-solved-row"><span class="solution-time">Target exam time: 18–20 min</span><button class="problem-solved-btn" data-problem="A7">Mark A7 solved</button></div>
+      </div></div></details>
+    </div>
+  </details>
+
+  <details class="prob challenge-problem" data-problem="A8" data-topic="fdm" data-difficulty="advanced">
+    <summary><span class="prob-num">A8</span><strong>Variable-Conductivity Wall by Conservative FDM</strong><span class="difficulty advanced">ADVANCED</span></summary><div class="prob-body">
+      <p>Discretize \(\dfrac{d}{dx}(k(T)T')+q'''=0\), with \(k(T)=k_0(1+\beta T)\). Then solve the illustrative case \(L=1\), \(k_0=1\), \(\beta=0.01\), \(q'''=100\), \(T_L=100\), \(T_R=20\), using five total nodes and Picard iteration.</p>
+      <details class="ans"><summary>Reveal full handwritten answer</summary><div class="ans-body"><div class="handwritten-solution">
+        <div class="hand-title">A8 — Conservative nonlinear finite differences</div>
+        <div class="hand-step" data-step="1"><b>Integrate the flux balance over node \(i\).</b>\[\frac{k_{i+1/2}(T_{i+1}-T_i)-k_{i-1/2}(T_i-T_{i-1})}{\Delta x^2}+q'''=0.\]<p>Use arithmetic face conductivities:</p>\[k_{i+1/2}=\frac{k(T_i)+k(T_{i+1})}{2}.\]</div>
+        <div class="hand-step" data-step="2"><b>Write the linearized Picard row.</b><p>At iteration \(m\), freeze face values from \(T^{(m)}\):</p>\[k_WT_{i-1}^{(m+1)}-(k_W+k_E)T_i^{(m+1)}+k_ET_{i+1}^{(m+1)}=-q'''\Delta x^2.\]</div>
+        <div class="hand-step" data-step="3"><b>Set the mesh and initial guess.</b>\[\Delta x=\frac1{5-1}=0.25,\qquad q'''\Delta x^2=100(0.25)^2=6.25.\]\[\mathbf T^{(0)}=[100,80,60,40,20]^T.\]<p>Node conductivities are \([2.0,1.8,1.6,1.4,1.2]\); face values are \([1.9,1.7,1.5,1.3]\).</p></div>
+        <div class="hand-step" data-step="4"><b>Assemble the first Picard system for interior temperatures.</b>\[\begin{bmatrix}-3.6&1.7&0\\1.7&-3.2&1.5\\0&1.5&-2.8\end{bmatrix}\begin{bmatrix}T_1\\T_2\\T_3\end{bmatrix}=\begin{bmatrix}-1.9(100)-6.25\\-6.25\\-1.3(20)-6.25\end{bmatrix}=\begin{bmatrix}-196.25\\-6.25\\-32.25\end{bmatrix}.\]<p>Solving gives:</p>\[\mathbf T^{(1)}=[100,88.945779,72.914592,50.579246,20]^T.\]</div>
+        <div class="hand-step" data-step="5"><b>Update conductivity and repeat.</b><table class="scratch-table"><thead><tr><th>iteration</th><th>\(T_1\)</th><th>\(T_2\)</th><th>\(T_3\)</th><th>\(\|\Delta T\|_\infty\)</th></tr></thead><tbody><tr><td>1</td><td>88.945779</td><td>72.914592</td><td>50.579246</td><td>12.9146</td></tr><tr><td>2</td><td>88.343031</td><td>72.359162</td><td>50.615537</td><td>6.02748×10⁻¹</td></tr><tr><td>3</td><td>88.346207</td><td>72.333913</td><td>50.580910</td><td>3.46264×10⁻²</td></tr><tr><td>4</td><td>88.348175</td><td>72.336918</td><td>50.582135</td><td>3.00554×10⁻³</td></tr><tr><td>6</td><td>88.348082</td><td>72.336879</td><td>50.582203</td><td>9.62×10⁻⁶</td></tr><tr><td>10</td><td>88.348082</td><td>72.336879</td><td>50.582203</td><td>7.95×10⁻¹¹</td></tr></tbody></table></div>
+        <div class="hand-final">\[\boxed{\mathbf T\approx[100,\ 88.348082,\ 72.336879,\ 50.582203,\ 20]^T}\]</div>
+        <div class="hand-check"><strong>Verification:</strong> the final nonlinear residual is about \(1.6\times10^{-10}\). The conservative face-flux form is preferred because heat flux leaving one control interval enters the next with the opposite sign.</div>
+        <div class="problem-solved-row"><span class="solution-time">Target exam time: 20 min</span><button class="problem-solved-btn" data-problem="A8">Mark A8 solved</button></div>
+      </div></div></details>
+    </div>
+  </details>
+
+  <details class="prob challenge-problem" data-problem="A9" data-topic="fdm" data-difficulty="advanced">
+    <summary><span class="prob-num">A9</span><strong>2D Heat Equation with a Convective Boundary</strong><span class="difficulty advanced">ADVANCED</span></summary><div class="prob-body">
+      <p>At the east edge of a rectangular plate, \(-k\,\partial T/\partial x=h_c(T-T_\infty)\). Derive a second-order ghost-node relation and the modified Laplace stencil.</p>
+      <details class="ans"><summary>Reveal full handwritten answer</summary><div class="ans-body"><div class="handwritten-solution">
+        <div class="hand-title">A9 — Ghost node for a Robin boundary condition</div>
+        <div class="hand-step" data-step="1"><b>Label the east boundary node \(P\), west neighbor \(W\), and ghost node \(G\).</b><p>The ghost is one spacing outside the plate, so the centered derivative at \(P\) is second-order:</p>\[\left.\frac{\partial T}{\partial x}\right|_P\approx\frac{T_G-T_W}{2\Delta x}.\]</div>
+        <div class="hand-step" data-step="2"><b>Apply the convection condition.</b>\[-k\frac{T_G-T_W}{2\Delta x}=h_c(T_P-T_\infty).\]<p>Define \(Bi=h_c\Delta x/k\). Then:</p>\[T_G-T_W=-2Bi(T_P-T_\infty)\]\[\boxed{T_G=T_W-2Bi(T_P-T_\infty)}.\]</div>
+        <div class="hand-step" data-step="3"><b>Write the five-point Laplace equation at boundary node \(P\).</b>\[T_G+T_W+T_N+T_S-4T_P=0.\]</div>
+        <div class="hand-step" data-step="4"><b>Substitute the ghost relation.</b>\[T_W-2Bi(T_P-T_\infty)+T_W+T_N+T_S-4T_P=0\]\[2T_W+T_N+T_S-(4+2Bi)T_P+2BiT_\infty=0.\]</div>
+        <div class="hand-step" data-step="5"><b>Write the matrix-ready row.</b>\[\boxed{(4+2Bi)T_P-2T_W-T_N-T_S=2BiT_\infty}.\]<p>Compared with an interior row, convection increases the diagonal coefficient and introduces an ambient-temperature source on the right-hand side.</p></div>
+        <div class="hand-final">\[\boxed{a_P=4+2Bi,\quad a_W=-2,\quad a_N=a_S=-1,\quad b=2BiT_\infty}\]</div>
+        <div class="hand-check"><strong>Limit checks:</strong> as \(h_c\to0\), \(Bi\to0\) and the condition becomes insulated; as \(h_c\to\infty\), the boundary is driven toward \(T_\infty\).</div>
+        <div class="problem-solved-row"><span class="solution-time">Target exam time: 10–12 min</span><button class="problem-solved-btn" data-problem="A9">Mark A9 solved</button></div>
+      </div></div></details>
+    </div>
+  </details>
+
+  <details class="prob challenge-problem" data-problem="A10" data-topic="regression" data-difficulty="intermediate">
+    <summary><span class="prob-num">A10</span><strong>Arrhenius Regression and Residual Diagnosis</strong><span class="difficulty intermediate">INTERMEDIATE</span></summary><div class="prob-body">
+      <p>Fit \(k=Ae^{-E/(RT)}\) to the data:</p><div class="tbl-wrap"><table class="dtbl"><thead><tr><th>T (K)</th><th>k (s⁻¹)</th></tr></thead><tbody><tr><td>320</td><td>0.0262898</td></tr><tr><td>340</td><td>0.0886980</td></tr><tr><td>360</td><td>0.2614325</td></tr><tr><td>380</td><td>0.6876859</td></tr><tr><td>400</td><td>1.6421681</td></tr></tbody></table></div>
+      <details class="ans"><summary>Reveal full handwritten answer</summary><div class="ans-body"><div class="handwritten-solution">
+        <div class="hand-title">A10 — Linearized Arrhenius regression</div>
+        <div class="hand-step" data-step="1"><b>Transform the model.</b>\[\ln k=\ln A-\frac{E}{R}\frac1T.\]<p>For easier numbers, define \(x=1000/T\), \(y=\ln k\). Then:</p>\[y=b+mx,\qquad m=-\frac{E}{1000R},\qquad b=\ln A.\]</div>
+        <div class="hand-step" data-step="2"><b>Create the transformed table.</b><table class="scratch-table"><thead><tr><th>T</th><th>\(x=1000/T\)</th><th>\(y=\ln k\)</th></tr></thead><tbody><tr><td>320</td><td>3.125000</td><td>-3.638575</td></tr><tr><td>340</td><td>2.941176</td><td>-2.422518</td></tr><tr><td>360</td><td>2.777778</td><td>-1.341579</td></tr><tr><td>380</td><td>2.631579</td><td>-0.374423</td></tr><tr><td>400</td><td>2.500000</td><td>0.496017</td></tr></tbody></table></div>
+        <div class="hand-step" data-step="3"><b>Use least-squares formulas.</b>\[m=\frac{n\sum xy-\sum x\sum y}{n\sum x^2-(\sum x)^2},\qquad b=\bar y-m\bar x.\]<p>From the table:</p>\[\sum x=13.9755332,\quad\sum y=-7.2810782,\quad\sum x^2=39.3074012,\quad\sum xy=-21.9674899.\]\[m=-6.615347606,\qquad b=17.034386383.\]</div>
+        <div class="hand-step" data-step="4"><b>Recover physical parameters.</b>\[E=-1000Rm=-1000(8.314)(-6.615347606)=55000\ \mathrm{J/mol}.\]\[A=e^b=e^{17.034386383}=2.50\times10^7\ \mathrm{s^{-1}}.\]</div>
+        <div class="hand-step" data-step="5"><b>State the fitted model.</b>\[\boxed{k=2.50\times10^7\exp\left(-\frac{55000}{8.314T}\right)\ \mathrm{s^{-1}}}.\]</div>
+        <div class="hand-final">\[\boxed{E=55.0\ \mathrm{kJ/mol},\qquad A=2.50\times10^7\ \mathrm{s^{-1}}}\]</div>
+        <div class="hand-check"><strong>Residual diagnosis:</strong> curvature versus \(1/T\) suggests mechanism change or non-Arrhenius behavior; a funnel-shaped spread suggests nonconstant variance and motivates weighted regression. Also inspect influential high-temperature points.</div>
+        <div class="problem-solved-row"><span class="solution-time">Target exam time: 12–15 min</span><button class="problem-solved-btn" data-problem="A10">Mark A10 solved</button></div>
+      </div></div></details>
+    </div>
+  </details>
+
+  <details class="prob challenge-problem" data-problem="A11" data-topic="regression" data-difficulty="advanced">
+    <summary><span class="prob-num">A11</span><strong>Estimate Reaction Order Without Misleading Linearization</strong><span class="difficulty advanced">ADVANCED</span></summary><div class="prob-body">
+      <p>For \(dC/dt=-kC^n\), estimate \((k,n)\) on the original concentration scale using \(C(0)=2\) and data \((t,C)=(0,2.0000),(1,1.3612),(2,0.98594),(3,0.74688),(4,0.58530),(5,0.47100)\).</p>
+      <details class="ans"><summary>Reveal full handwritten answer</summary><div class="ans-body"><div class="handwritten-solution">
+        <div class="hand-title">A11 — Nonlinear least squares on the measured scale</div>
+        <div class="hand-step" data-step="1"><b>Keep the original response variable.</b><p>Do not fit a transformed line because transforming \(C\) changes the residual weighting. Minimize:</p>\[S(k,n)=\sum_{i=1}^{6}\left[C_i^{obs}-C(t_i;k,n)\right]^2,\qquad k>0.\]</div>
+        <div class="hand-step" data-step="2"><b>Use the integrated model inside the optimizer.</b><p>For \(n\ne1\):</p>\[C(t;k,n)=\left[C_0^{1-n}+(n-1)kt\right]^{1/(1-n)}.\]<p>For \(n=1\): \(C=C_0e^{-kt}\). This closed form is equivalent to using an accurate ODE solver at all sampling times.</p></div>
+        <div class="hand-step" data-step="3"><b>Choose bounds and a starting estimate.</b>\[0<k<5,\qquad0.2<n<3,\qquad(k,n)^{(0)}=(0.20,1.20).\]<p>At every trial pair, calculate six model concentrations, residuals \(r_i=C_i^{obs}-C_i^{model}\), and \(S=\mathbf r^T\mathbf r\).</p></div>
+        <div class="hand-step" data-step="4"><b>Iterate with a nonlinear least-squares method.</b><table class="scratch-table"><thead><tr><th>trial</th><th>k</th><th>n</th><th>SSE</th></tr></thead><tbody><tr><td>initial</td><td>0.2000</td><td>1.2000</td><td>large</td></tr><tr><td>updated</td><td>0.286</td><td>1.43</td><td>reduced</td></tr><tr><td>updated</td><td>0.2997</td><td>1.497</td><td>small</td></tr><tr><td>converged</td><td>0.299998</td><td>1.500073</td><td>3.27×10⁻¹⁰</td></tr></tbody></table></div>
+        <div class="hand-step" data-step="5"><b>Compare fitted values and residuals.</b><table class="scratch-table"><thead><tr><th>t</th><th>observed</th><th>model</th><th>residual</th></tr></thead><tbody><tr><td>0</td><td>2.000000</td><td>2.000000</td><td>0</td></tr><tr><td>1</td><td>1.361200</td><td>1.361211</td><td>-1.13×10⁻⁵</td></tr><tr><td>2</td><td>0.985940</td><td>0.985926</td><td>1.37×10⁻⁵</td></tr><tr><td>3</td><td>0.746880</td><td>0.746881</td><td>-5.58×10⁻⁷</td></tr><tr><td>4</td><td>0.585300</td><td>0.585302</td><td>-1.63×10⁻⁶</td></tr><tr><td>5</td><td>0.471000</td><td>0.471003</td><td>-2.99×10⁻⁶</td></tr></tbody></table></div>
+        <div class="hand-final">\[\boxed{k\approx0.3000,\qquad n\approx1.5001}\]</div>
+        <div class="hand-check"><strong>Defend the estimate:</strong> residuals are tiny and alternate around zero; repeat from several initial guesses, inspect the \((k,n)\) confidence region, and use weighted residuals if measurement variance changes with concentration.</div>
+        <div class="problem-solved-row"><span class="solution-time">Target exam time: 18–20 min</span><button class="problem-solved-btn" data-problem="A11">Mark A11 solved</button></div>
+      </div></div></details>
+    </div>
+  </details>
+
+  <details class="prob challenge-problem" data-problem="A12" data-topic="capstone" data-difficulty="advanced">
+    <summary><span class="prob-num">A12</span><strong>Capstone: Nonlinear Catalytic Pellet + Film Resistance</strong><span class="difficulty advanced">ADVANCED</span></summary><div class="prob-body">
+      <p>Design a complete numerical solution for</p>\[\frac1{r^2}\frac{d}{dr}\left(r^2D_e\frac{dC}{dr}\right)-kC^n=0,\quad C'(0)=0,\quad -D_eC'(R)=k_f(C_b-C_s),\quad C(R)=C_s.\]
+      <details class="ans"><summary>Reveal full handwritten answer</summary><div class="ans-body"><div class="handwritten-solution">
+        <div class="hand-title">A12 — Full numerical architecture and defense</div>
+        <div class="hand-step" data-step="1"><b>Classify the model.</b><p>This is a nonlinear steady spherical BVP coupled to an algebraic film-flux boundary. Unknowns are all nodal concentrations, including surface concentration.</p></div>
+        <div class="hand-step" data-step="2"><b>Use a radial mesh and conservative fluxes.</b>\[r_i=i\Delta r,\qquad i=0,\ldots,N,\qquad \Delta r=R/N.\]<p>For interior nodes:</p>\[\frac{D_e}{r_i^2\Delta r^2}\left[r_{i+1/2}^2(C_{i+1}-C_i)-r_{i-1/2}^2(C_i-C_{i-1})\right]-kC_i^n=0.\]</div>
+        <div class="hand-step" data-step="3"><b>Treat the center without dividing by zero.</b><p>Using spherical symmetry and the limit of the Laplacian:</p>\[\left.\frac1{r^2}\frac{d}{dr}\left(r^2\frac{dC}{dr}\right)\right|_{r=0}=3C''(0).\]<p>A second-order center row is:</p>\[6D_e\frac{C_1-C_0}{\Delta r^2}-kC_0^n=0.\]</div>
+        <div class="hand-step" data-step="4"><b>Use the film balance as the surface equation.</b><p>With a second-order backward derivative:</p>\[-D_e\frac{3C_N-4C_{N-1}+C_{N-2}}{2\Delta r}=k_f(C_b-C_N).\]<span class="hand-note">Do not prescribe \(C_N\); it is determined by the coupled resistance balance.</span></div>
+        <div class="hand-step" data-step="5"><b>Assemble the nonlinear residual vector.</b>\[\mathbf F(\mathbf C)=\mathbf0,\qquad \mathbf C=[C_0,C_1,\ldots,C_N]^T.\]<p>Start from a physical guess such as \(C_i=C_b\). Apply damped Newton:</p>\[J(\mathbf C^{(m)})\Delta\mathbf C=-\mathbf F(\mathbf C^{(m)})\]\[\mathbf C^{(m+1)}=\mathbf C^{(m)}+\alpha\Delta\mathbf C,\qquad0<\alpha\le1.\]<p>Reduce \(\alpha\) if any concentration becomes negative or the residual increases.</p></div>
+        <div class="hand-step" data-step="6"><b>Exploit matrix structure.</b><p>The Jacobian is sparse and nearly tridiagonal, with a modified center and surface row. Store it sparsely and solve each Newton correction with a sparse direct or Krylov method.</p></div>
+        <div class="hand-step" data-step="7"><b>Compute engineering outputs.</b>\[N_A=4\pi R^2k_f(C_b-C_N)\]\[\eta=\frac{\int_0^R4\pi r^2kC(r)^n\,dr}{\frac43\pi R^3kC_N^n}.\]<p>Internal reaction consumption and external film transfer must agree.</p></div>
+        <div class="hand-step" data-step="8"><b>Verification hierarchy.</b><table class="scratch-table"><thead><tr><th>check</th><th>acceptance evidence</th></tr></thead><tbody><tr><td>nonlinear convergence</td><td>\(\|F\|_\infty<\varepsilon_F\) and \(\|\Delta C\|_\infty<\varepsilon_C\)</td></tr><tr><td>flux continuity</td><td>pellet surface flux = film flux</td></tr><tr><td>physical bounds</td><td>\(0\le C_i\le C_b\)</td></tr><tr><td>mesh independence</td><td>repeat with \(N,2N,4N\)</td></tr><tr><td>limiting case 1</td><td>\(k\to0\Rightarrow C\approx C_b\)</td></tr><tr><td>limiting case 2</td><td>\(k_f\to\infty\Rightarrow C_N\to C_b\)</td></tr><tr><td>limiting case 3</td><td>small Thiele modulus \(\Rightarrow\eta\to1\)</td></tr></tbody></table></div>
+        <div class="hand-final">\[\boxed{\text{Conservative radial FDM}+\text{film boundary}+\text{damped Newton}+\text{sparse solve}+\text{mesh/flux validation}}\]</div>
+        <div class="hand-check"><strong>Exam defense:</strong> This architecture respects spherical geometry, couples internal and external mass-transfer resistance, preserves flux continuity, handles nonlinearity, and supplies independent verification evidence.</div>
+        <div class="problem-solved-row"><span class="solution-time">Target exam time: 20–25 min</span><button class="problem-solved-btn" data-problem="A12">Mark A12 solved</button></div>
+      </div></div></details>
+    </div>
+  </details>
+</section>
+
 <section id="glossary" class="sect">
   <div class="sect-number">G</div>
   <h2 class="sect-title">Compact Numerical Methods Glossary</h2>
@@ -17219,6 +17704,15 @@ title(<span class="str">'Temperature Response in Non-Isothermal CSTR'</span>);</
 </section>
 
 </main>
+
+
+<aside class="notes-drawer" id="notesDrawer" aria-label="Study notes">
+  <div class="notes-head"><h3>Study Notes</h3><button class="notes-close" id="closeNotes" aria-label="Close notes">Close</button></div>
+  <div class="notes-context" id="notesContext">General lecture notes</div>
+  <textarea id="notesText" placeholder="Write definitions, mistakes, formulas to memorize, or questions to revisit…"></textarea>
+  <div class="notes-actions"><span class="notes-status" id="notesStatus">Saved locally in this browser.</span><button class="run-btn" id="clearNotes">Clear</button></div>
+</aside>
+<button class="back-top" id="backTop" aria-label="Back to top">↑</button>
 
 <script>
 (() => {
@@ -17295,11 +17789,134 @@ title(<span class="str">'Temperature Response in Non-Isothermal CSTR'</span>);</
     const wrap=document.createElement('div');wrap.className='section-completion';
     const b=document.createElement('button');b.className='complete-btn';b.dataset.section=sec.id;b.textContent='Mark chapter complete';
     if(completed.has(sec.id)){b.classList.add('done');b.textContent='✓ Chapter completed'}
-    b.addEventListener('click',()=>{completed.has(sec.id)?completed.delete(sec.id):completed.add(sec.id);localStorage.setItem(completionKey,JSON.stringify([...completed]));b.classList.toggle('done');b.textContent=completed.has(sec.id)?'✓ Chapter completed':'Mark chapter complete';updateDashboard()});
+    b.addEventListener('click',()=>{const adding=!completed.has(sec.id);adding?completed.add(sec.id):completed.delete(sec.id);localStorage.setItem(completionKey,JSON.stringify([...completed]));b.classList.toggle('done');b.textContent=completed.has(sec.id)?'✓ Chapter completed':'Mark chapter complete';if(adding)addActivity(`Completed chapter: ${$('.sect-title',sec)?.childNodes[0]?.textContent.trim()||sec.id}`,'chapter');updateDashboard()});
     wrap.appendChild(b);sec.appendChild(wrap);
   });
-  function updateDashboard(){const n=sections.length,c=[...completed].filter(id=>sections.some(s=>s.id===id)).length,p=n?Math.round(c/n*100):0;$('#completedSections').textContent=c;$('#totalSections').textContent=n;$('#progressPercent').textContent=p+'%';$('#progressDial').style.setProperty('--p',p);const best=localStorage.getItem('nm-quiz-best');$('#quizBest').textContent=best?best+'/10':'—'}
-  updateDashboard();
+  const solvedKey='nm-solved-exam-v3';
+  const solvedProblemsSet=new Set(JSON.parse(localStorage.getItem(solvedKey)||'[]'));
+  const activityKey='nm-activity-v3',studyDaysKey='nm-study-days-v3';
+  function localDay(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+  function addStudyDay(){const days=new Set(JSON.parse(localStorage.getItem(studyDaysKey)||'[]'));days.add(localDay());localStorage.setItem(studyDaysKey,JSON.stringify([...days].sort()));}
+  function addActivity(text,type='study'){const list=JSON.parse(localStorage.getItem(activityKey)||'[]');list.unshift({text,type,time:Date.now()});localStorage.setItem(activityKey,JSON.stringify(list.slice(0,12)));addStudyDay();renderActivity();}
+  function streakCount(){const days=new Set(JSON.parse(localStorage.getItem(studyDaysKey)||'[]'));let count=0,d=new Date();while(days.has(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`)){count++;d.setDate(d.getDate()-1)}return count;}
+  function quizHistory(){return JSON.parse(localStorage.getItem('nm-quiz-history-v3')||'[]')}
+  function topicForSection(id){if(['advanced-foundations','method-choice','learning-path','glossary'].includes(id))return'Foundations';if(['gaussian-elimination','gauss-jordan','gauss-seidel'].includes(id))return'Linear systems';if(['taylor','rk2','rk3','rk4','convergence-lab'].includes(id))return'ODE methods';if(['shooting','fdm1d','fdm2d'].includes(id))return'BVP & FDM';if(id==='regression')return'Regression';if(['interactive-labs','mastery-quiz','practice','exam-workshop'].includes(id))return'Application';return'Foundations'}
+  function renderActivity(){const box=$('#activityList');if(!box)return;const list=JSON.parse(localStorage.getItem(activityKey)||'[]');box.innerHTML=list.length?list.slice(0,6).map(a=>`<div class="activity-item"><span class="activity-dot"></span><div>${escapeHtml(a.text)}<time>${new Date(a.time).toLocaleString([], {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</time></div></div>`).join(''):'<div class="activity-item"><span class="activity-dot"></span><div>No saved activity yet.<time>Complete a chapter or quiz to begin.</time></div></div>'}
+  function noteCount(){let n=0;for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k?.startsWith('nm-note-')&&localStorage.getItem(k)?.trim())n++}return n}
+  function updateDashboard(){
+    const n=sections.length,c=[...completed].filter(id=>sections.some(s=>s.id===id)).length,p=n?Math.round(c/n*100):0;
+    $('#completedSections').textContent=c;$('#totalSections')&&($('#totalSections').textContent=n);$('#chapterRatio').textContent=`of ${n}`;$('#progressPercent').textContent=p+'%';$('#progressDial').style.setProperty('--p',p);$('#resumePercent').textContent=p+'% complete';
+    const hist=quizHistory(),best=hist.length?Math.max(...hist.map(x=>x.percent)):0,avg=hist.length?Math.round(hist.reduce((s,x)=>s+x.percent,0)/hist.length):0;
+    $('#quizBest').textContent=hist.length?best+'%':'—';$('#quizAverage').textContent=hist.length?avg+'%':'—';$('#quizAttempts').textContent=`${hist.length} attempt${hist.length===1?'':'s'}`;
+    $('#solvedProblems').textContent=`${solvedProblemsSet.size}/12`;$('#workshopSolvedTop')&&($('#workshopSolvedTop').textContent=solvedProblemsSet.size);$('#studyStreak').textContent=streakCount();$('#lastStudyDate').textContent=streakCount()?'active through today':'start today';$('#notesCount').textContent=noteCount();
+    const next=sections.find(s=>!completed.has(s.id))||sections[0],title=$('.sect-title',next)?.childNodes[0]?.textContent.trim()||next.id;$('#resumeTitle').textContent=completed.size>=n?'Review completed course':title;$('#resumeDescription').textContent=completed.size>=n?'All chapters are marked complete. Use the quiz or exam workshop for retention.':`Next unfinished chapter: ${title}.`;$('#resumeLink').href='#'+(completed.size>=n?'mastery-quiz':next.id);
+    const topics=['Foundations','Linear systems','ODE methods','BVP & FDM','Regression','Application'],quizTopicMap={'foundations':'Foundations','linear':'Linear systems','ode':'ODE methods','stability':'ODE methods','bvp':'BVP & FDM','fdm':'BVP & FDM','regression':'Regression'};const latest=hist.at(-1),scores={};if(latest?.topics)Object.entries(latest.topics).forEach(([k,v])=>{const name=quizTopicMap[k];if(name)scores[name]=v.percent});
+    const mastery=topics.map(name=>{const group=sections.filter(s=>topicForSection(s.id)===name),cp=group.length?100*group.filter(s=>completed.has(s.id)).length/group.length:0,qp=scores[name]??cp;return{name,pct:Math.round(.65*cp+.35*qp)}});const overall=Math.round(mastery.reduce((s,x)=>s+x.pct,0)/mastery.length);$('#overallMastery').textContent=overall+'%';$('#masteryBars').innerHTML=mastery.map(x=>`<div class="mastery-row"><label>${x.name}</label><div class="mastery-track"><span style="width:${x.pct}%"></span></div><b>${x.pct}%</b></div>`).join('');renderActivity();
+  }
+  $('#randomIncomplete')?.addEventListener('click',()=>{const pool=sections.filter(s=>!completed.has(s.id));const target=(pool.length?pool:sections)[Math.floor(Math.random()*(pool.length||sections.length))];target.scrollIntoView({behavior:'smooth'});target.classList.add('flash-found');setTimeout(()=>target.classList.remove('flash-found'),1500)});
+  $('#resetDashboard')?.addEventListener('click',()=>{if(!confirm('Reset chapter completion, quiz history, exam-problem marks, timer, and activity? Notes will be kept.'))return;[completionKey,solvedKey,'nm-quiz-history-v3',activityKey,studyDaysKey,'nm-goal-v3'].forEach(k=>localStorage.removeItem(k));completed.clear();solvedProblemsSet.clear();$$('.complete-btn').forEach(b=>{b.classList.remove('done');b.textContent='Mark chapter complete'});location.reload()});
+  let goalTimer=null,goalState=JSON.parse(localStorage.getItem('nm-goal-v3')||'null')||{minutes:30,elapsed:0,running:false,last:0};
+  function saveGoal(){localStorage.setItem('nm-goal-v3',JSON.stringify(goalState))}function syncGoal(){if(goalState.running&&goalState.last){goalState.elapsed+=Math.max(0,(Date.now()-goalState.last)/1000);goalState.last=Date.now();saveGoal()}const total=goalState.minutes*60,pct=Math.min(100,goalState.elapsed/total*100),rem=Math.max(0,total-goalState.elapsed);$('#goalMinutes').value=String(goalState.minutes);$('#goalTime').textContent=`${String(Math.floor(goalState.elapsed/60)).padStart(2,'0')}:${String(Math.floor(goalState.elapsed%60)).padStart(2,'0')}`;$('#goalProgress').style.width=pct+'%';$('#goalElapsed').textContent=`${Math.floor(goalState.elapsed/60)} min studied`;$('#goalRemaining').textContent=rem?`${Math.ceil(rem/60)} min remaining`:'Daily goal complete';$('#goalLabel').textContent=`${goalState.minutes}-minute target`;$('#goalStart').textContent=goalState.running?'Pause':'Start';if(pct>=100&&goalState.running){goalState.running=false;saveGoal();addActivity(`Completed ${goalState.minutes}-minute study goal`,'goal')}}
+  function startGoalTicker(){clearInterval(goalTimer);if(goalState.running)goalTimer=setInterval(syncGoal,1000)}$('#goalStart')?.addEventListener('click',()=>{syncGoal();goalState.running=!goalState.running;goalState.last=goalState.running?Date.now():0;saveGoal();startGoalTicker();syncGoal();if(goalState.running)addActivity('Started the study focus timer','timer')});$('#goalReset')?.addEventListener('click',()=>{goalState.elapsed=0;goalState.running=false;goalState.last=0;saveGoal();startGoalTicker();syncGoal()});$('#goalMinutes')?.addEventListener('change',e=>{goalState.minutes=+e.target.value;goalState.elapsed=0;goalState.running=false;goalState.last=0;saveGoal();startGoalTicker();syncGoal()});syncGoal();startGoalTicker();updateDashboard();
+
+  /* Chapter metadata — adds lecture objectives and study guidance */
+  const chapterMeta={
+    'learning-path':['Orientation','No prerequisites','20 min','Exam strategy'],
+    'advanced-foundations':['Core','Algebra and calculus','45 min','High yield'],
+    'method-choice':['Core','Problem classification','30 min','High yield'],
+    'gaussian-elimination':['Core','Linear algebra','60 min','Frequent exam topic'],
+    'gauss-jordan':['Core','Row operations','40 min','Procedure'],
+    'gauss-seidel':['Intermediate','Linear systems','55 min','Convergence'],
+    'taylor':['Core','Differentiation','45 min','Error analysis'],
+    'rk2':['Core','ODE basics','50 min','Hand calculation'],
+    'rk3':['Intermediate','RK stages','45 min','Comparison'],
+    'rk4':['Core','ODE systems','75 min','Essential'],
+    'shooting':['Advanced','RK4 and root finding','65 min','BVP'],
+    'fdm1d':['Core','Taylor expansion','60 min','Essential'],
+    'fdm2d':['Advanced','FDM 1D and matrices','75 min','PDE'],
+    'regression':['Core','Statistics basics','60 min','Data analysis'],
+    'convergence-lab':['Core','Error definitions','30 min','Verification'],
+    'interactive-labs':['Applied','All core chapters','50 min','Hands-on'],
+    'mastery-quiz':['Assessment','Core chapters','20–35 min','Adaptive self-check'],
+    'practice':['Practice','Method chapters','120 min','Exam practice'],
+    'exam-workshop':['Advanced','Entire lecture','180 min','Full exam preparation'],
+    'glossary':['Review','None','15 min','Rapid recall']
+  };
+  sections.forEach(sec=>{
+    const data=chapterMeta[sec.id]||['Study','Previous chapter','30 min','Review'];
+    const subtitle=$('.sect-subtitle',sec); if(!subtitle||$('.section-overview',sec))return;
+    const ribbon=document.createElement('div');ribbon.className='chapter-ribbon';ribbon.innerHTML=`<span class="level-chip">${data[0]}</span><span class="time-chip">${data[2]}</span><span class="exam-chip">${data[3]}</span>`;
+    subtitle.before(ribbon);
+    const overview=document.createElement('div');overview.className='section-overview';overview.innerHTML=`<div class="overview-item"><span>Learning objective</span><strong>${chapterObjective(sec.id)}</strong></div><div class="overview-item"><span>Prerequisite</span><strong>${data[1]}</strong></div><div class="overview-item"><span>Study task</span><strong>${chapterTask(sec.id)}</strong></div>`;
+    subtitle.after(overview);
+  });
+  function chapterObjective(id){const m={
+    'learning-path':'Plan an efficient route through the course.',
+    'advanced-foundations':'Judge accuracy, convergence, conditioning, and stability.',
+    'method-choice':'Match each mathematical structure to a suitable method.',
+    'gaussian-elimination':'Solve dense linear systems robustly with pivoting.',
+    'gauss-jordan':'Reduce an augmented matrix to reduced row-echelon form.',
+    'gauss-seidel':'Build and assess a convergent stationary iteration.',
+    'taylor':'Construct high-order updates from analytical derivatives.',
+    'rk2':'Use two slope evaluations to achieve second-order accuracy.',
+    'rk3':'Understand third-order staging and accuracy-cost tradeoffs.',
+    'rk4':'Integrate nonlinear scalar and coupled ODE systems accurately.',
+    'shooting':'Convert a boundary-value problem into a root-finding IVP sequence.',
+    'fdm1d':'Convert spatial derivatives into an algebraic nodal system.',
+    'fdm2d':'Assemble and solve a two-dimensional heat-conduction stencil.',
+    'regression':'Estimate model parameters and diagnose residual behavior.',
+    'convergence-lab':'Measure numerical order through systematic refinement.',
+    'interactive-labs':'Experiment with solvers and interpret live numerical output.',
+    'mastery-quiz':'Identify conceptual gaps before attempting long problems.',
+    'practice':'Build procedural fluency across chemical-engineering examples.',
+    'exam-workshop':'Defend method choice, computation, verification, and interpretation.',
+    'glossary':'Recall essential terminology quickly and accurately.'};return m[id]||'Understand and apply the numerical method.'}
+  function chapterTask(id){const m={
+    'learning-path':'Choose one route and write a study schedule.',
+    'advanced-foundations':'Explain error versus residual in your own words.',
+    'method-choice':'Classify three unseen engineering models.',
+    'gaussian-elimination':'Perform one pivot and one elimination stage by hand.',
+    'gauss-jordan':'Track every elementary row operation.',
+    'gauss-seidel':'Compute iterations until a residual tolerance is met.',
+    'taylor':'Derive at least two higher derivatives.',
+    'rk2':'Calculate one complete step and compare with Euler.',
+    'rk3':'Check the role of every intermediate stage.',
+    'rk4':'Solve one coupled system and run a half-step check.',
+    'shooting':'Plot terminal residual versus guessed slope.',
+    'fdm1d':'Assemble one interior row and one boundary-modified row.',
+    'fdm2d':'Number the nodes before assembling the matrix.',
+    'regression':'Plot residuals after fitting.',
+    'convergence-lab':'Run three methods and compare observed slopes.',
+    'interactive-labs':'Change one parameter and explain the resulting trend.',
+    'mastery-quiz':'Review every incorrect answer immediately.',
+    'practice':'Solve before revealing each answer.',
+    'exam-workshop':'Complete four filtered problems under timed conditions.',
+    'glossary':'Create a ten-term recall list.'};return m[id]||'Complete one worked example and one verification check.'}
+
+  /* Notes drawer */
+  const notesDrawer=$('#notesDrawer'),notesText=$('#notesText'),notesContext=$('#notesContext');
+  let noteChapter='general';
+  const loadNote=()=>{notesText.value=localStorage.getItem('nm-note-'+noteChapter)||'';notesContext.textContent=noteChapter==='general'?'General lecture notes':($('.sect-title',$('#'+noteChapter))?.textContent.trim()||noteChapter)};
+  $('#openNotes')?.addEventListener('click',()=>{let current=sections[0]?.id||'general';for(const sec of sections)if(scrollY>=sec.offsetTop-180)current=sec.id;noteChapter=current;loadNote();notesDrawer.classList.add('open');setTimeout(()=>notesText.focus(),150)});
+  $('#closeNotes')?.addEventListener('click',()=>notesDrawer.classList.remove('open'));
+  let noteTimer;notesText?.addEventListener('input',()=>{clearTimeout(noteTimer);$('#notesStatus').textContent='Saving…';noteTimer=setTimeout(()=>{localStorage.setItem('nm-note-'+noteChapter,notesText.value);$('#notesStatus').textContent='Saved locally in this browser.'},300)});
+  $('#clearNotes')?.addEventListener('click',()=>{notesText.value='';localStorage.removeItem('nm-note-'+noteChapter);$('#notesStatus').textContent='Note cleared.'});
+
+  /* Back to top */
+  const backTop=$('#backTop');
+  addEventListener('scroll',()=>backTop?.classList.toggle('show',scrollY>700),{passive:true});
+  backTop?.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+
+  /* Exam workshop filtering and solved-problem tracking */
+  const challengeProblems=$$('.challenge-problem');
+  function filterProblems(){const topic=$('#problemTopic')?.value||'all',level=$('#problemDifficulty')?.value||'all';let visible=0;challengeProblems.forEach(p=>{const show=(topic==='all'||p.dataset.topic===topic)&&(level==='all'||p.dataset.difficulty===level);p.hidden=!show;if(show)visible++});if($('#problemCount'))$('#problemCount').textContent=`${visible} problem${visible===1?'':'s'}`}
+  function syncSolvedButtons(){$$('.problem-solved-btn').forEach(b=>{const yes=solvedProblemsSet.has(b.dataset.problem);b.classList.toggle('solved',yes);b.textContent=yes?`✓ ${b.dataset.problem} solved`:`Mark ${b.dataset.problem} solved`});updateDashboard()}
+  $$('.problem-solved-btn').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.problem,adding=!solvedProblemsSet.has(id);adding?solvedProblemsSet.add(id):solvedProblemsSet.delete(id);localStorage.setItem(solvedKey,JSON.stringify([...solvedProblemsSet]));if(adding)addActivity(`Solved exam-workshop problem ${id}`,'problem');syncSolvedButtons()}));
+  challengeProblems.forEach(p=>p.querySelector('.ans')?.addEventListener('toggle',e=>{if(e.target.open){localStorage.setItem('nm-last-exam-problem',p.dataset.problem);addStudyDay()}}));
+  $('#problemTopic')?.addEventListener('change',filterProblems);$('#problemDifficulty')?.addEventListener('change',filterProblems);
+  $('#randomProblem')?.addEventListener('click',()=>{const visible=challengeProblems.filter(p=>!p.hidden);if(!visible.length)return;const p=visible[Math.floor(Math.random()*visible.length)];challengeProblems.forEach(x=>x.open=false);p.open=true;p.scrollIntoView({behavior:'smooth',block:'center'});p.classList.add('flash-found');setTimeout(()=>p.classList.remove('flash-found'),1500)});
+  $('#openSolutions')?.addEventListener('click',()=>{challengeProblems.filter(p=>!p.hidden).forEach(p=>{p.open=true;const a=p.querySelector('.ans');if(a)a.open=true})});
+  $('#closeSolutions')?.addEventListener('click',()=>{$$('.challenge-problem .ans').forEach(x=>x.open=false);challengeProblems.forEach(x=>x.open=false)});filterProblems();syncSolvedButtons();
 
   /* Canvas utilities */
   function css(name){return getComputedStyle(document.body).getPropertyValue(name).trim()}
@@ -17388,33 +18005,79 @@ title(<span class="str">'Temperature Response in Non-Isothermal CSTR'</span>);</
   $('#loadArrhenius')?.addEventListener('click',()=>{$('#regData').value='0.00310,-3.12\n0.00300,-2.78\n0.00290,-2.41\n0.00280,-2.05\n0.00270,-1.63\n0.00260,-1.20';runRegression()});
   function runRegression(){const rows=$('#regData').value.split(/\n+/).map(r=>r.trim().split(/[;,\s]+/).map(Number)).filter(r=>r.length>=2&&r.every(Number.isFinite));if(rows.length<2){$('#regStatus').textContent='Enter at least two valid x,y pairs.';return}const n=rows.length,sx=rows.reduce((s,r)=>s+r[0],0),sy=rows.reduce((s,r)=>s+r[1],0),sxx=rows.reduce((s,r)=>s+r[0]**2,0),sxy=rows.reduce((s,r)=>s+r[0]*r[1],0),den=n*sxx-sx*sx;if(Math.abs(den)<1e-18){$('#regStatus').textContent='All x values are identical.';return}const m=(n*sxy-sx*sy)/den,b=(sy-m*sx)/n,ybar=sy/n,pred=rows.map(r=>m*r[0]+b),res=rows.map((r,i)=>r[1]-pred[i]),sse=res.reduce((s,v)=>s+v*v,0),sst=rows.reduce((s,r)=>s+(r[1]-ybar)**2,0),r2=1-sse/sst,rmse=Math.sqrt(sse/n),xmin=Math.min(...rows.map(r=>r[0])),xmax=Math.max(...rows.map(r=>r[0]));lastRegSeries=[{name:'Data',data:rows.map(r=>({x:r[0],y:r[1]})),points:true,width:0},{name:'Fit',data:[{x:xmin,y:m*xmin+b},{x:xmax,y:m*xmax+b}]}];drawPlot($('#regCanvas'),lastRegSeries,{xLabel:'x',yLabel:'y',title:'Linear least-squares fit',points:true});$('#regMetrics').innerHTML=metric('Slope',fmt(m,8))+metric('Intercept',fmt(b,8))+metric('R²',fmt(r2,7))+metric('RMSE',fmt(rmse,6));$('#regEquation').innerHTML=`<div class="formula-box" style="margin:.5rem 0"><div class="formula-title">Best-fit model</div>\[\hat y=${fmt(m,8)}x${b>=0?'+':''}${fmt(b,8)}\]</div><table class="mini-table"><thead><tr><th>x</th><th>y</th><th>ŷ</th><th>residual</th></tr></thead><tbody>${rows.map((r,i)=>`<tr><td>${fmt(r[0],6)}</td><td>${fmt(r[1],6)}</td><td>${fmt(pred[i],6)}</td><td>${fmt(res[i],5)}</td></tr>`).join('')}</tbody></table>`;if(window.renderMathInElement)renderMathInElement($('#regEquation'),{delimiters:[{left:'\\[',right:'\\]',display:true}]});$('#regStatus').textContent=`Fitted ${n} observations by ordinary least squares.`}
 
-  /* Quiz */
-  const quiz=[
-    {q:'A batch-reactor model is a smooth, non-stiff IVP and high accuracy is required. Which is the best default among the lecture methods?',o:['Gauss–Jordan','RK4','FDM 2D','Linear regression'],a:1,e:'RK4 is a high-order general-purpose explicit solver for non-stiff initial-value problems.'},
-    {q:'For an order-p one-step method, the global truncation error usually scales as:',o:['O(h⁻ᵖ)','O(hᵖ)','O(hᵖ⁺¹) only','Independent of h'],a:1,e:'The local error is commonly O(h^{p+1}), while accumulation gives global error O(h^p).'},
-    {q:'Why is partial pivoting used in Gaussian elimination?',o:['To force diagonal dominance','To reduce division by small pivots and improve robustness','To make A symmetric','To calculate eigenvalues'],a:1,e:'Swapping in the largest available pivot reduces amplification of round-off and avoids zero pivots.'},
-    {q:'Forward Euler applied to y′=λy has amplification factor:',o:['e^{hλ}','1+hλ','1/(1−hλ)','1−h²λ'],a:1,e:'Euler gives y_{n+1}=y_n+hλy_n=(1+hλ)y_n.'},
-    {q:'A boundary-value problem specifies y(0) and y(1). What is a suitable approach?',o:['Use RK4 directly without another condition','Shooting method or finite differences','Only regression','Only Taylor expansion at x=1'],a:1,e:'Shooting supplies the missing initial slope; FDM solves the nodal boundary-value system directly.'},
-    {q:'A small residual ‖b−Ax̂‖ always guarantees a small solution error.',o:['True','False'],a:1,e:'False. An ill-conditioned matrix can convert small data or residual perturbations into a large solution error.'},
-    {q:'The standard five-point stencil for the 2D Laplace equation uses:',o:['Only east and west nodes','Four orthogonal neighbors and the center','Eight diagonal neighbors only','Time levels n and n+1'],a:1,e:'For equal spacing: T_E+T_W+T_N+T_S−4T_P=0.'},
-    {q:'What is the strongest numerical verification step?',o:['Use more decimal places','Repeat with a refined step or mesh and estimate convergence','Accept a smooth-looking graph','Use the same method twice'],a:1,e:'Refinement and convergence analysis directly test discretization sensitivity.'},
-    {q:'A stiff kinetic model is usually better handled by:',o:['A very large explicit Euler step','An implicit stiff solver','Linear regression','Gauss–Jordan only'],a:1,e:'Implicit methods have larger stability regions and avoid the severe explicit stability restriction.'},
-    {q:'In regression, residuals are:',o:['Observed minus predicted responses','Exact minus truncation error','Only measurement units','Matrix pivots'],a:0,e:'Residual r_i=y_i−ŷ_i is the discrepancy minimized or diagnosed during model fitting.'}
+
+  /* Convergence laboratory */
+  let lastConvSeries=null;
+  $('#runConvergence')?.addEventListener('click',runConvergence);
+  $('#convExample')?.addEventListener('click',()=>{$('#convMethod').value='heun';$('#convA').value=2;$('#convTf').value=1;$('#convH').value=.2;runConvergence()});
+  function runConvergence(){
+    const method=$('#convMethod')?.value,a=+$('#convA')?.value,tf=+$('#convTf')?.value,h0=+$('#convH')?.value;
+    if(!(a>0&&tf>0&&h0>0)){if($('#convStatus'))$('#convStatus').textContent='Use positive a, final time, and step size.';return}
+    const f=(t,y)=>-a*y,exact=Math.exp(-a*tf),rows=[];
+    for(let j=0;j<5;j++){
+      const h=h0/2**j,data=integrate(f,0,tf,1,h,method,0,0),yn=data.at(-1).y,err=Math.abs(yn-exact);
+      rows.push({h,yn,err,p:NaN});
+    }
+    for(let j=1;j<rows.length;j++)rows[j].p=Math.log(rows[j-1].err/rows[j].err)/Math.log(2);
+    const plotRows=rows.filter(r=>r.err>0).map(r=>({x:Math.log10(r.h),y:Math.log10(r.err)}));
+    lastConvSeries=[{name:'log₁₀(error)',data:plotRows,points:true}];
+    drawPlot($('#convCanvas'),lastConvSeries,{xLabel:'log₁₀(h)',yLabel:'log₁₀(error)',title:'Observed convergence slope',points:true});
+    const finest=rows.at(-1),orders=rows.slice(1).map(r=>r.p).filter(Number.isFinite),pavg=orders.length?orders.slice(-2).reduce((x,y)=>x+y,0)/Math.min(2,orders.length):NaN;
+    $('#convMetrics').innerHTML=metric('Exact y(tf)',fmt(exact,8))+metric('Finest error',fmt(finest.err,5))+metric('Observed p',fmt(pavg,5))+metric('Refinements',rows.length);
+    $('#convTable').innerHTML=`<table class="convergence-table"><thead><tr><th>h</th><th>y(tf)</th><th>|error|</th><th>p</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${fmt(r.h,5)}</td><td>${fmt(r.yn,8)}</td><td>${fmt(r.err,5)}</td><td>${Number.isFinite(r.p)?fmt(r.p,4):'—'}</td></tr>`).join('')}</tbody></table>`;
+    const expected=method==='euler'?1:method==='rk4'?4:2;$('#convStatus').textContent=`Expected order ${expected}; finest observed estimate ${fmt(pavg,4)}.`;
+  }
+
+  /* Advanced adaptive quiz engine */
+  const quizBank=[
+    {topic:'foundations',difficulty:'foundation',section:'advanced-foundations',q:String.raw`Which statement correctly distinguishes error from residual?`,o:[String.raw`Error measures distance from the exact solution; residual measures imbalance in the original equation.`,String.raw`They are always identical.`,String.raw`Residual exists only for ODEs.`,String.raw`Error can always be computed without an exact solution.`],a:0,h:'Think about substituting an approximate answer back into the original model.',e:String.raw`For a linear system, \(r=b-A\hat x\) is computable without knowing the exact solution. A small residual does not guarantee small error when the problem is ill-conditioned.`},
+    {topic:'foundations',difficulty:'foundation',section:'advanced-foundations',q:String.raw`For a global order-\(p\) method, halving \(h\) should reduce the asymptotic error by approximately:`,o:[String.raw`2`,String.raw`\(2^p\)`,String.raw`\(p^2\)`,String.raw`No predictable factor`],a:1,h:'Use E(h)=Ch^p.',e:String.raw`\(E(h)/E(h/2)\approx h^p/(h/2)^p=2^p\).`},
+    {topic:'foundations',difficulty:'intermediate',section:'advanced-foundations',q:String.raw`Richardson extrapolation combines \(y_h\) and \(y_{h/2}\) mainly to:`,o:['Estimate a matrix inverse','Cancel the leading truncation-error term','Guarantee stability for any step','Fit experimental data'],a:1,h:'Assume both approximations contain the same leading coefficient C.',e:String.raw`For known order \(p\), \(y_{ext}=y_{h/2}+(y_{h/2}-y_h)/(2^p-1)\) removes the dominant \(Ch^p\) term.`},
+    {topic:'foundations',difficulty:'intermediate',section:'method-choice',q:'A smooth non-stiff reactor IVP requires a reliable general-purpose explicit method. Best default?',o:['Gauss–Jordan','Classical RK4','2D FDM','Linear regression'],a:1,h:'Classify the problem before choosing the method.',e:'RK4 is designed for non-stiff initial-value ODEs and does not require analytical higher derivatives.'},
+    {topic:'linear',difficulty:'foundation',section:'gaussian-elimination',q:'Why is partial pivoting used in Gaussian elimination?',o:['To create symmetry','To reduce division by small pivots and round-off amplification','To force every matrix to be diagonally dominant','To calculate eigenvalues'],a:1,h:'Consider the multiplier created by dividing by a tiny pivot.',e:'Partial pivoting swaps in the largest available absolute entry in the current column, avoiding zero or dangerously small pivots.'},
+    {topic:'linear',difficulty:'intermediate',section:'gaussian-elimination',q:String.raw`If \(A\) is ill-conditioned, which statement is safest?`,o:['A tiny residual always means a tiny solution error','Input perturbations may produce large changes in the solution','Pivoting makes the condition number exactly one','More printed digits remove conditioning'],a:1,h:'Conditioning belongs to the mathematical problem, not just the algorithm.',e:'An ill-conditioned system is intrinsically sensitive. Stable algorithms reduce numerical damage but cannot remove problem sensitivity.'},
+    {topic:'linear',difficulty:'foundation',section:'gauss-jordan',q:'The defining final form of Gauss–Jordan elimination is:',o:['Upper triangular form only','Reduced row-echelon form','A diagonal dominance test','A time-marching recurrence'],a:1,h:'Every pivot becomes one and all other entries in its column become zero.',e:'Gauss–Jordan eliminates both below and above pivots to produce reduced row-echelon form.'},
+    {topic:'linear',difficulty:'foundation',section:'gauss-seidel',q:'What distinguishes Gauss–Seidel from Jacobi iteration?',o:['It uses newly updated components immediately','It never needs an initial guess','It is a direct method','It always converges'],a:0,h:'Look at which iteration index appears in each component update.',e:'Gauss–Seidel immediately reuses new values within the same sweep, often improving convergence relative to Jacobi.'},
+    {topic:'linear',difficulty:'intermediate',section:'gauss-seidel',q:String.raw`A robust stopping rule for an iterative linear solver should include:`,o:[String.raw`Only the iteration count`,String.raw`Only \(\|x^{k+1}-x^k\|\)`,String.raw`The residual norm \(\|b-Ax^k\|\)`,String.raw`The determinant only`],a:2,h:'Ask whether the computed vector actually satisfies the original equations.',e:'The residual directly measures equation imbalance. It is often combined with a relative iterate-change criterion.'},
+    {topic:'linear',difficulty:'advanced',section:'gauss-seidel',q:'Strict diagonal dominance is best described as:',o:['Necessary and sufficient for every iterative method','A useful sufficient condition for convergence in many Gauss–Seidel systems','Equivalent to symmetry','A guarantee of good conditioning'],a:1,h:'It is helpful, but not the only route to convergence.',e:'Strict diagonal dominance is a common sufficient convergence condition, but convergent systems need not be diagonally dominant.'},
+    {topic:'ode',difficulty:'foundation',section:'taylor',q:'Main practical weakness of high-order Taylor methods?',o:['They cannot solve scalar ODEs','They require increasingly complicated analytical derivatives','They are always unstable','They need a matrix inverse every step'],a:1,h:'What must be calculated beyond y′?',e:'Taylor methods become impractical when repeated total derivatives of a nonlinear model are lengthy or unavailable.'},
+    {topic:'ode',difficulty:'foundation',section:'rk2',q:'Heun RK2 obtains second-order accuracy by:',o:['Using one slope only','Averaging beginning and predicted-end slopes','Using four midpoint slopes','Solving an implicit nonlinear equation'],a:1,h:'Predict, evaluate again, then correct.',e:'Heun uses k1 at the start, predicts an endpoint, evaluates k2 there, and averages the two slopes.'},
+    {topic:'ode',difficulty:'intermediate',section:'rk4',q:String.raw`Classical RK4 has global truncation error:`,o:[String.raw`\(O(h)\)`,String.raw`\(O(h^2)\)`,String.raw`\(O(h^4)\)`,String.raw`\(O(h^5)\)`],a:2,h:'Local and global orders differ by one power for a one-step method.',e:String.raw`RK4 has local truncation error \(O(h^5)\) and global truncation error \(O(h^4)\).`},
+    {topic:'ode',difficulty:'intermediate',section:'rk4',q:'For a coupled ODE system, a correct RK stage must:',o:['Update each variable using slopes from unrelated stage states','Evaluate every component derivative at the same stage state','Hold temperature fixed while concentration changes','Use scalar formulas independently with different times'],a:1,h:'A vector stage represents one common predicted state.',e:'Every derivative component must be evaluated consistently at the same time and vector state; otherwise the formal RK order is lost.'},
+    {topic:'ode',difficulty:'advanced',section:'convergence-lab',q:'Observed order estimates are unreliable on very coarse meshes mainly because:',o:['Asymptotic error behavior may not yet dominate','Exact solutions cease to exist','Floating point is always zero','The method changes order permanently'],a:0,h:'The model E=Ch^p is an asymptotic approximation.',e:'Higher-order terms can dominate on coarse meshes. Refine until the estimated order stabilizes near the theoretical value.'},
+    {topic:'stability',difficulty:'foundation',section:'advanced-foundations',q:String.raw`Forward Euler applied to \(y'=\lambda y\) has amplification factor:`,o:[String.raw`\(e^{h\lambda}\)`,String.raw`\(1+h\lambda\)`,String.raw`\(1/(1-h\lambda)\)`,String.raw`\(1-h^2\lambda\)`],a:1,h:'Insert f=λy into y(n+1)=y(n)+hf(n).',e:String.raw`The update is \(y_{n+1}=(1+h\lambda)y_n\). Stability requires \(|1+h\lambda|<1\).`},
+    {topic:'stability',difficulty:'intermediate',section:'advanced-foundations',q:String.raw`For \(y'=-25y\), Forward Euler is stable for:`,o:[String.raw`h>0.08`,String.raw`0<h<0.08`,String.raw`All h`,String.raw`Only h=0.08`],a:1,h:'Solve |1−25h|<1.',e:String.raw`\(-1<1-25h<1\) gives \(0<h<0.08\). At h=0.08 the amplification factor is −1, so errors do not decay.`},
+    {topic:'stability',difficulty:'intermediate',section:'advanced-foundations',q:'A stiff system is characterized primarily by:',o:['No initial condition','Widely separated time scales that restrict explicit stability','A singular matrix only','Random measurement noise'],a:1,h:'The slow solution may look smooth while a fast mode controls step size.',e:'Stiffness makes explicit solvers take very small steps for stability, even when accuracy would permit much larger steps.'},
+    {topic:'stability',difficulty:'advanced',section:'advanced-foundations',q:String.raw`Backward Euler applied to \(y'=\lambda y\) has amplification factor:`,o:[String.raw`1+h\lambda`,String.raw`1/(1-h\lambda)`,String.raw`e^{h\lambda}`,String.raw`1-h\lambda`],a:1,h:'The derivative is evaluated at n+1.',e:String.raw`\(y_{n+1}=y_n+h\lambda y_{n+1}\Rightarrow y_{n+1}=y_n/(1-h\lambda)\).`},
+    {topic:'bvp',difficulty:'foundation',section:'shooting',q:'A shooting method converts a BVP into:',o:['A regression problem only','A sequence of IVPs plus root finding','A matrix eigenvalue problem only','A Monte Carlo simulation'],a:1,h:'Guess the missing initial slope and inspect the terminal boundary error.',e:'Shooting guesses missing initial data, integrates an IVP, and adjusts the guess until the far boundary is satisfied.'},
+    {topic:'bvp',difficulty:'intermediate',section:'shooting',q:'When can simple shooting be unreliable?',o:['When terminal values are highly sensitive to the initial slope','Whenever RK4 is used','When the BVP is linear','When both boundaries are known'],a:0,h:'Imagine nearby slopes producing radically different trajectories.',e:'Sensitive or unstable IVPs amplify small slope errors. Multiple shooting or direct finite differences may be more robust.'},
+    {topic:'fdm',difficulty:'foundation',section:'fdm1d',q:String.raw`The standard centered approximation to \(T''(x_i)\) is:`,o:[String.raw`(T_{i+1}-T_i)/h`,String.raw`(T_{i-1}-2T_i+T_{i+1})/h^2`,String.raw`(T_{i+1}+T_i)/2`,String.raw`T_i/h^2`],a:1,h:'Use one node on each side of i.',e:String.raw`Taylor expansion gives the second-order centered formula \((T_{i-1}-2T_i+T_{i+1})/h^2\).`},
+    {topic:'fdm',difficulty:'foundation',section:'fdm2d',q:'The equal-spacing five-point Laplace stencil uses:',o:['Four orthogonal neighbors and the center','Only diagonal neighbors','Two time levels only','A fitted regression line'],a:0,h:'East, west, north, south, and P.',e:String.raw`The stencil is \(T_E+T_W+T_N+T_S-4T_P=0\).`},
+    {topic:'fdm',difficulty:'intermediate',section:'fdm2d',q:'A ghost node is primarily used to:',o:['Delete a boundary condition','Represent derivative boundary conditions while retaining a centered stencil','Guarantee a diagonal matrix','Replace all interior nodes'],a:1,h:'It is an artificial point outside the physical domain.',e:'A ghost value is eliminated using a Neumann or Robin boundary relation, producing a modified boundary equation.'},
+    {topic:'fdm',difficulty:'advanced',section:'fdm1d',q:'Why use face conductivities in variable-k diffusion?',o:['To preserve conservative flux exchange between neighboring cells','To avoid all nonlinear iteration','To make temperature dimensionless','To remove boundary conditions'],a:0,h:'Flux leaving one interval should enter the adjacent interval.',e:'Face-based fluxes impose equal and opposite intercell transfer, preserving discrete conservation even when conductivity varies.'},
+    {topic:'fdm',difficulty:'advanced',section:'fdm2d',q:'The strongest evidence of mesh independence is:',o:['A smooth color map','Two solutions on the same mesh','Negligible change in key outputs under systematic refinement','Using many decimal places'],a:2,h:'Compare N, 2N, and possibly 4N.',e:'Mesh independence requires refinement evidence, ideally with an error norm or observed convergence rate.'},
+    {topic:'regression',difficulty:'foundation',section:'regression',q:'A regression residual is:',o:['Observed response minus predicted response','Exact derivative minus step size','A pivot multiplier','The independent variable'],a:0,h:'It is the vertical discrepancy on a response plot.',e:String.raw`\(r_i=y_i-\hat y_i\). Residual patterns are used to assess model adequacy and error assumptions.`},
+    {topic:'regression',difficulty:'intermediate',section:'regression',q:String.raw`For \(\ln k=\ln A-E(1/T)/R\), the fitted slope m gives:`,o:[String.raw`E=mR`,String.raw`E=-mR`,String.raw`A=-mR`,String.raw`E=e^m`],a:1,h:'The Arrhenius line slopes downward when activation energy is positive.',e:String.raw`With x=1/T, \(m=-E/R\), hence \(E=-mR\), while \(A=e^b\).`},
+    {topic:'regression',difficulty:'intermediate',section:'regression',q:'A curved residual pattern after an Arrhenius fit most strongly suggests:',o:['Perfect model agreement','Systematic model inadequacy or mechanism change','A zero activation energy automatically','No need for further analysis'],a:1,h:'Random residuals should fluctuate around zero without structure.',e:'Curvature is systematic structure and may indicate multiple mechanisms, temperature-dependent parameters, or an incorrect model form.'},
+    {topic:'regression',difficulty:'advanced',section:'regression',q:'Why can nonlinear fitting on the original measurement scale be preferable to linearization?',o:['It preserves the intended measurement-error model','It always gives a closed-form solution','It eliminates parameter correlation','It makes residuals exactly zero'],a:0,h:'Transforming the response changes how discrepancies are weighted.',e:'Log or reciprocal transformations alter residual variance and weighting. Original-scale nonlinear least squares can better match the actual measurement process.'}
   ];
-  let qi=0,score=0,answered=false;
-  function renderQuiz(){const q=quiz[qi];answered=false;$('#quizQuestion').textContent=`${qi+1}. ${q.q}`;$('#quizOptions').innerHTML=q.o.map((o,i)=>`<button class="quiz-option" data-i="${i}">${String.fromCharCode(65+i)}. ${o}</button>`).join('');$('#quizFeedback').textContent='';$('#quizBar').style.width=`${qi/quiz.length*100}%`;$('#quizScore').textContent=`${score} / ${quiz.length}`;$$('.quiz-option').forEach(b=>b.addEventListener('click',()=>answerQuiz(+b.dataset.i)))}
-  function answerQuiz(i){if(answered)return;answered=true;const q=quiz[qi];$$('.quiz-option').forEach((b,j)=>{b.disabled=true;if(j===q.a)b.classList.add('correct');else if(j===i)b.classList.add('wrong')});if(i===q.a){score++;$('#quizFeedback').innerHTML=`<strong style="color:var(--success)">Correct.</strong> ${q.e}`}else $('#quizFeedback').innerHTML=`<strong style="color:var(--error)">Not correct.</strong> ${q.e}`;$('#quizScore').textContent=`${score} / ${quiz.length}`}
-  $('#quizNext')?.addEventListener('click',()=>{if(!answered){$('#quizFeedback').textContent='Choose an answer before continuing.';return}if(qi<quiz.length-1){qi++;renderQuiz()}else{const best=Math.max(score,+(localStorage.getItem('nm-quiz-best')||0));localStorage.setItem('nm-quiz-best',best);$('#quizBar').style.width='100%';$('#quizQuestion').textContent=`Quiz complete: ${score} / ${quiz.length}`;$('#quizOptions').innerHTML='';$('#quizFeedback').innerHTML=score>=8?'<strong style="color:var(--success)">Strong mastery.</strong> Review only the topics you missed.':'Review the relevant lecture sections and run the interactive labs again.';$('#quizNext').disabled=true;updateDashboard()}});
-  $('#quizRestart')?.addEventListener('click',()=>{qi=0;score=0;$('#quizNext').disabled=false;renderQuiz()});
-  renderQuiz();
+  let activeQuiz=[],qIndex=0,qScore=0,qStreak=0,qMaxStreak=0,qAnswered=false,qAnswers=[],qMarked=new Set(),quizStartTime=0,quizTimer=null,lastMissed=[];
+  const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
+  function renderMathDynamic(root){if(window.renderMathInElement)renderMathInElement(root,{delimiters:[{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}],throwOnError:false})}
+  function startQuiz(useMissed=false){const topic=$('#quizTopic').value,diff=$('#quizDifficulty').value,len=$('#quizLength').value;let pool=useMissed&&lastMissed.length?lastMissed.map(i=>quizBank[i]):quizBank.filter(q=>(topic==='all'||q.topic===topic)&&(diff==='all'||q.difficulty===diff));if(!pool.length){$('#quizBankStatus').textContent='No questions match this combination.';return}activeQuiz=shuffle(pool);if(len!=='all'&&!useMissed)activeQuiz=activeQuiz.slice(0,Math.min(+len,activeQuiz.length));qIndex=0;qScore=0;qStreak=0;qMaxStreak=0;qAnswers=[];qMarked.clear();quizStartTime=Date.now();$('#quizCommand').hidden=true;$('#quizShell').hidden=false;$('#quizReport').classList.remove('show');$('#quizNext').disabled=false;renderQuizQuestion();clearInterval(quizTimer);if($('#quizTimerEnabled').checked)quizTimer=setInterval(updateQuizTime,1000);updateQuizTime();addActivity(`Started a ${activeQuiz.length}-question mastery quiz`,'quiz')}
+  function updateQuizTime(){const sec=Math.floor((Date.now()-quizStartTime)/1000);$('#quizTime').textContent=`${String(Math.floor(sec/60)).padStart(2,'0')}:${String(sec%60).padStart(2,'0')}`}
+  function renderQuizQuestion(){const q=activeQuiz[qIndex];qAnswered=false;$('#quizPosition').textContent=`${qIndex+1} / ${activeQuiz.length}`;$('#quizScore').textContent=`${qScore} / ${qIndex}`;$('#quizStreak').textContent=qStreak;$('#quizMarked').textContent=qMarked.size;$('#quizBar').style.width=`${qIndex/activeQuiz.length*100}%`;$('#quizMeta').innerHTML=`<span class="quiz-tag">${q.topic.toUpperCase()}</span><span class="quiz-tag">${q.difficulty.toUpperCase()}</span><a class="quiz-tag" href="#${q.section}">OPEN CHAPTER</a>`;$('#quizQuestion').innerHTML=`${qIndex+1}. ${q.q}`;$('#quizOptions').innerHTML=q.o.map((o,i)=>`<button class="quiz-option" data-i="${i}">${String.fromCharCode(65+i)}. ${o}</button>`).join('');$('#quizHint').classList.remove('show');$('#quizHint').innerHTML=`<strong>Hint:</strong> ${q.h}`;$('#quizFeedback').innerHTML='';$('#quizMarkReview').classList.toggle('active',qMarked.has(qIndex));$('#quizMarkReview').textContent=qMarked.has(qIndex)?'✓ Marked for review':'Mark for review';$$('.quiz-option').forEach(b=>b.addEventListener('click',()=>answerQuiz(+b.dataset.i)));renderMathDynamic($('#quizShell'))}
+  function answerQuiz(i){if(qAnswered)return;qAnswered=true;const q=activeQuiz[qIndex],correct=i===q.a;qAnswers.push({q,chosen:i,correct});$$('.quiz-option').forEach((b,j)=>{b.disabled=true;if(j===q.a)b.classList.add('correct');else if(j===i)b.classList.add('wrong')});if(correct){qScore++;qStreak++;qMaxStreak=Math.max(qMaxStreak,qStreak)}else qStreak=0;$('#quizScore').textContent=`${qScore} / ${qIndex+1}`;$('#quizStreak').textContent=qStreak;$('#quizFeedback').innerHTML=`<div class="quiz-feedback-card ${correct?'correct':'wrong'}"><strong style="color:var(--${correct?'success':'error'})">${correct?'Correct.':'Not correct.'}</strong> ${q.e}<br><a href="#${q.section}">Review the related lecture chapter →</a></div>`;renderMathDynamic($('#quizFeedback'));addStudyDay()}
+  function finishQuiz(){clearInterval(quizTimer);const seconds=Math.floor((Date.now()-quizStartTime)/1000),percent=Math.round(qScore/activeQuiz.length*100),topics={};qAnswers.forEach(a=>{topics[a.q.topic]??={correct:0,total:0};topics[a.q.topic].total++;if(a.correct)topics[a.q.topic].correct++});Object.values(topics).forEach(v=>v.percent=Math.round(100*v.correct/v.total));const hist=quizHistory();hist.push({date:Date.now(),percent,score:qScore,total:activeQuiz.length,seconds,maxStreak:qMaxStreak,topics});localStorage.setItem('nm-quiz-history-v3',JSON.stringify(hist.slice(-30)));lastMissed=qAnswers.map((a,i)=>!a.correct?quizBank.indexOf(a.q):-1).filter(i=>i>=0);localStorage.setItem('nm-last-missed-v3',JSON.stringify(lastMissed));$('#quizShell').hidden=true;$('#quizReport').classList.add('show');$('#reportScore').textContent=percent+'%';$('#reportScoreDial').style.setProperty('--score',percent);$('#reportTitle').textContent=percent>=85?'Exam-ready mastery':percent>=70?'Good progress with targeted gaps':'Rebuild the foundations before timed practice';$('#reportSummary').textContent=`${qScore} of ${activeQuiz.length} correct · ${Math.floor(seconds/60)}m ${seconds%60}s · maximum streak ${qMaxStreak} · ${qMarked.size} marked for review.`;$('#reportTopics').innerHTML=Object.entries(topics).map(([k,v])=>`<div class="report-topic"><div class="report-topic-head"><span>${k}</span><b>${v.correct}/${v.total} · ${v.percent}%</b></div><div class="report-topic-track"><span style="width:${v.percent}%"></span></div></div>`).join('');const missed=qAnswers.filter(a=>!a.correct);$('#missedList').innerHTML=missed.length?missed.map(a=>`<div class="missed-item"><strong>${a.q.topic.toUpperCase()}</strong><br>${a.q.q}<br><a href="#${a.q.section}">Review chapter</a></div>`).join(''):'<div class="missed-item"><strong>No missed questions.</strong><br>Move to the advanced exam workshop.</div>';renderMathDynamic($('#quizReport'));addActivity(`Completed mastery quiz: ${percent}% (${qScore}/${activeQuiz.length})`,'quiz');updateDashboard()}
+  $('#quizStart')?.addEventListener('click',()=>startQuiz(false));$('#quizReviewMissed')?.addEventListener('click',()=>{lastMissed=JSON.parse(localStorage.getItem('nm-last-missed-v3')||'[]');if(!lastMissed.length){$('#quizBankStatus').textContent='No saved missed-question set yet.';return}startQuiz(true)});$('#quizHintBtn')?.addEventListener('click',()=>$('#quizHint').classList.toggle('show'));$('#quizMarkReview')?.addEventListener('click',()=>{qMarked.has(qIndex)?qMarked.delete(qIndex):qMarked.add(qIndex);$('#quizMarked').textContent=qMarked.size;$('#quizMarkReview').classList.toggle('active',qMarked.has(qIndex));$('#quizMarkReview').textContent=qMarked.has(qIndex)?'✓ Marked for review':'Mark for review'});$('#quizNext')?.addEventListener('click',()=>{if(!qAnswered){$('#quizFeedback').innerHTML='<div class="quiz-feedback-card wrong">Choose an answer before continuing.</div>';return}if(qIndex<activeQuiz.length-1){qIndex++;renderQuizQuestion()}else finishQuiz()});$('#quizRestart')?.addEventListener('click',()=>{clearInterval(quizTimer);$('#quizShell').hidden=true;$('#quizCommand').hidden=false;$('#quizReport').classList.remove('show')});$('#reportNewQuiz')?.addEventListener('click',()=>{$('#quizReport').classList.remove('show');$('#quizCommand').hidden=false});$('#reportReviewMissed')?.addEventListener('click',()=>{if(lastMissed.length)startQuiz(true)});$('#quizBankStatus').textContent=`${quizBank.length} questions available`;
 
   /* Initialization and responsive redraw */
-  function redrawAll(){if(lastOdeSeries)drawPlot($('#odeCanvas'),lastOdeSeries,{xLabel:'t',yLabel:'y',title:presetInfo[$('#odePreset').value].label});if(lastFdmSeries)drawPlot($('#fdmCanvas'),lastFdmSeries,{xLabel:'x',yLabel:'T',title:'1D steady conduction'});if(lastHeat)drawHeat(lastHeat);if(lastRegSeries)drawPlot($('#regCanvas'),lastRegSeries,{xLabel:'x',yLabel:'y',title:'Linear least-squares fit',points:true})}
+  function redrawAll(){if(lastConvSeries)drawPlot($('#convCanvas'),lastConvSeries,{xLabel:'log₁₀(h)',yLabel:'log₁₀(error)',title:'Observed convergence slope',points:true});if(lastOdeSeries)drawPlot($('#odeCanvas'),lastOdeSeries,{xLabel:'t',yLabel:'y',title:presetInfo[$('#odePreset').value].label});if(lastFdmSeries)drawPlot($('#fdmCanvas'),lastFdmSeries,{xLabel:'x',yLabel:'T',title:'1D steady conduction'});if(lastHeat)drawHeat(lastHeat);if(lastRegSeries)drawPlot($('#regCanvas'),lastRegSeries,{xLabel:'x',yLabel:'y',title:'Linear least-squares fit',points:true})}
   let resizeTimer;addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(redrawAll,180)});
-  runOde();solveLinearLab();runFdm();runHeat();runRegression();
+  runOde();solveLinearLab();runFdm();runHeat();runRegression();runConvergence();
 
   /* Keyboard shortcuts */
-  document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();searchInput.focus()}if(e.key==='Escape'){searchResults.classList.remove('show');$('.sidebar')?.classList.remove('open')}});
+  document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();searchInput.focus()}if(e.key==='Escape'){searchResults.classList.remove('show');$('.sidebar')?.classList.remove('open');notesDrawer?.classList.remove('open')}});
 })();
 </script>
 
