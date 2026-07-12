@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Numerical Methods for ODEs — ChemE Lecture</title>
+<title>Interactive Numerical Methods Masterclass — Chemical Engineering</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600&family=DM+Mono:ital,wght@0,400;0,500&display=swap" rel="stylesheet">
@@ -238,6 +238,54 @@ p{margin-bottom:.5rem}
   .two-col,.formula-grid{grid-template-columns:1fr}
   .hero-title{font-size:2.2rem}
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   ENHANCED INTERACTIVE STUDY SYSTEM
+═══════════════════════════════════════════════════════════════ */
+:root{--panel-shadow:0 20px 55px rgba(0,0,0,.22);--radius:14px}
+body.light-mode{
+  --bg:#f4f7fc;--surface:#ffffff;--surface2:#eef3fb;--surface3:#e3eaf7;
+  --border:#d4deee;--border2:#a9b9d5;--text:#17233d;--muted:#586b8e;--faint:#c1cbe0;
+  --gold:#bd6b00;--gold2:#945300;--teal:#047d76;--teal2:#065f5b;
+  --success:#087b50;--error:#c83434;--warn:#9b6500;--panel-shadow:0 18px 50px rgba(39,58,93,.12)
+}
+body.focus-mode .sidebar{display:none}
+body.focus-mode .main{max-width:100%;padding-inline:clamp(1.2rem,5vw,7rem)}
+body.large-text{font-size:17px}
+::selection{background:rgba(30,216,200,.25);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.mobile-menu{display:none;position:fixed;top:.75rem;left:.75rem;z-index:1002;width:42px;height:42px;border-radius:10px;border:1px solid var(--border2);background:var(--surface);color:var(--text);box-shadow:var(--panel-shadow)}
+.study-toolbar{position:sticky;top:.55rem;z-index:90;max-width:1060px;margin:0 auto 1.5rem;padding:.65rem;display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:14px;box-shadow:var(--panel-shadow)}
+.tool-btn{border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:9px;padding:.5rem .72rem;font-size:.78rem;transition:.15s}
+.tool-btn:hover,.tool-btn.active{border-color:var(--gold);color:var(--gold);transform:translateY(-1px)}
+.search-wrap{position:relative;flex:1;min-width:220px}.search-wrap input{width:100%;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:9px;padding:.52rem 2.2rem .52rem .8rem;outline:none}.search-wrap input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(30,216,200,.1)}
+.search-count{position:absolute;right:.7rem;top:50%;transform:translateY(-50%);font:600 .7rem var(--mono);color:var(--muted)}
+.search-results{display:none;position:absolute;top:calc(100% + .5rem);left:0;right:0;max-height:320px;overflow:auto;background:var(--surface);border:1px solid var(--border2);border-radius:10px;box-shadow:var(--panel-shadow);padding:.35rem;z-index:120}.search-results.show{display:block}.search-hit{display:block;width:100%;text-align:left;border:0;background:transparent;color:var(--text);padding:.62rem .7rem;border-radius:7px;font-size:.8rem}.search-hit:hover{background:var(--surface2)}.search-hit small{display:block;color:var(--muted);margin-top:.15rem}
+.hero{position:relative}.hero::after{content:'';position:absolute;inset:-3rem -5rem auto auto;width:300px;height:300px;background:radial-gradient(circle,rgba(30,216,200,.12),transparent 70%);pointer-events:none}
+.hero-actions{display:flex;flex-wrap:wrap;gap:.65rem;margin-top:1.35rem}.primary-btn,.secondary-btn{border-radius:10px;padding:.68rem 1rem;font-weight:600;border:1px solid transparent}.primary-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#111827}.secondary-btn{background:var(--surface2);border-color:var(--border2);color:var(--text)}
+.study-dashboard{display:grid;grid-template-columns:160px 1fr;gap:1rem;margin:1.5rem 0 4rem;padding:1.2rem;background:linear-gradient(145deg,var(--surface),var(--surface2));border:1px solid var(--border);border-radius:18px;box-shadow:var(--panel-shadow)}
+.progress-dial{--p:0;display:grid;place-items:center;width:126px;height:126px;margin:auto;border-radius:50%;background:conic-gradient(var(--teal) calc(var(--p)*1%),var(--border) 0);position:relative}.progress-dial::before{content:'';position:absolute;width:96px;height:96px;border-radius:50%;background:var(--surface)}.progress-dial strong,.progress-dial span{position:relative;z-index:1}.progress-dial strong{font:700 1.4rem var(--mono);color:var(--teal)}.progress-dial span{display:block;font-size:.65rem;color:var(--muted);text-align:center}
+.dashboard-copy h2{font-family:var(--serif);font-size:1.45rem;margin-bottom:.35rem}.dashboard-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin-top:.8rem}.stat-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:.65rem .8rem}.stat-card strong{display:block;color:var(--gold);font:700 1rem var(--mono)}.stat-card span{font-size:.7rem;color:var(--muted)}
+.section-completion{display:flex;justify-content:flex-end;margin-top:1.5rem}.complete-btn{border:1px solid var(--border2);background:var(--surface2);color:var(--muted);border-radius:999px;padding:.42rem .8rem;font-size:.76rem}.complete-btn.done{background:rgba(62,232,168,.12);border-color:rgba(62,232,168,.4);color:var(--success)}
+.learning-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin:1.2rem 0}.learning-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;transition:.2s}.learning-card:hover{transform:translateY(-3px);border-color:var(--border2);box-shadow:var(--panel-shadow)}.learning-card h4{font-family:var(--serif);font-size:1.1rem;margin-bottom:.35rem}.learning-card p{font-size:.82rem;color:var(--muted)}
+.interactive-panel{background:linear-gradient(145deg,var(--surface),var(--surface2));border:1px solid var(--border2);border-radius:18px;padding:1.25rem;margin:1.5rem 0;box-shadow:var(--panel-shadow)}.panel-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;margin-bottom:1rem}.panel-head h3{font-family:var(--serif);font-size:1.45rem}.panel-head p{font-size:.82rem;color:var(--muted);max-width:620px}.live-pill{white-space:nowrap;border:1px solid rgba(62,232,168,.3);background:rgba(62,232,168,.08);color:var(--success);border-radius:100px;padding:.25rem .58rem;font:500 .68rem var(--mono)}
+.control-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.75rem;margin:.8rem 0}.control{display:flex;flex-direction:column;gap:.25rem}.control label{font-size:.7rem;color:var(--muted);font-family:var(--mono)}.control input,.control select,.control textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:.55rem .62rem;outline:none}.control textarea{min-height:130px;resize:vertical}.control input:focus,.control select:focus,.control textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(30,216,200,.08)}
+.run-row{display:flex;gap:.55rem;align-items:center;flex-wrap:wrap;margin:.85rem 0}.run-btn{border:0;border-radius:9px;background:linear-gradient(135deg,var(--teal),#12a9a0);color:#041513;font-weight:700;padding:.62rem .9rem}.ghost-btn{border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--text);padding:.58rem .8rem}.status-text{font-size:.76rem;color:var(--muted);margin-left:auto}
+.lab-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:1rem}.chart-card,.output-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:.8rem}.chart-card canvas{width:100%;height:320px;display:block;border-radius:8px}.output-card{overflow:auto;max-height:360px}.metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem;margin-bottom:.7rem}.metric{background:var(--surface2);border-radius:8px;padding:.55rem}.metric span{display:block;color:var(--muted);font-size:.65rem}.metric strong{font:600 .82rem var(--mono);color:var(--gold)}
+.mini-table{width:100%;border-collapse:collapse;font:400 .72rem var(--mono)}.mini-table th,.mini-table td{border-bottom:1px solid var(--border);padding:.38rem .45rem;text-align:right}.mini-table th{position:sticky;top:0;background:var(--surface3);color:var(--gold)}
+.matrix-editor{display:grid;grid-template-columns:repeat(4,70px);gap:.4rem;justify-content:start}.matrix-editor input{text-align:center;background:var(--bg);border:1px solid var(--border);border-radius:7px;color:var(--text);padding:.5rem .25rem;width:70px}.matrix-editor input:nth-child(4n){border-left-color:var(--gold)}.solver-steps{font:400 .75rem var(--mono);white-space:pre-wrap;line-height:1.75;color:var(--text)}
+.heat-canvas{image-rendering:pixelated;min-height:360px}.legend-bar{height:10px;border-radius:10px;background:linear-gradient(90deg,#1a237e,#0077b6,#00b4d8,#90e0ef,#ffe66d,#ff7b00,#b71c1c);margin:.55rem 0 .25rem}.legend-labels{display:flex;justify-content:space-between;font:.65rem var(--mono);color:var(--muted)}
+.quiz-shell{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:1.25rem}.quiz-progress{height:7px;background:var(--border);border-radius:9px;overflow:hidden;margin-bottom:1rem}.quiz-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--teal));transition:.25s}.quiz-question{font-family:var(--serif);font-size:1.3rem;margin-bottom:1rem}.quiz-options{display:grid;gap:.55rem}.quiz-option{border:1px solid var(--border);background:var(--surface2);color:var(--text);border-radius:9px;padding:.72rem .85rem;text-align:left}.quiz-option:hover{border-color:var(--border2)}.quiz-option.correct{border-color:var(--success);background:rgba(62,232,168,.1)}.quiz-option.wrong{border-color:var(--error);background:rgba(255,107,107,.1)}.quiz-feedback{min-height:3rem;margin-top:.8rem;font-size:.85rem}.quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:.8rem}.quiz-score{font:600 .78rem var(--mono);color:var(--gold)}
+.glossary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}.term-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.85rem}.term-card dt{font-weight:700;color:var(--gold)}.term-card dd{font-size:.82rem;color:var(--muted);margin-top:.2rem}
+.copy-equation,.copy-code{position:absolute;top:.55rem;right:.55rem;border:1px solid var(--border);background:var(--surface2);color:var(--muted);border-radius:7px;padding:.28rem .48rem;font-size:.66rem;z-index:3}.formula-box{padding-top:2.6rem}.formula-title{position:absolute;top:.8rem;left:1.5rem}.code-box,.matlab-code{position:relative}.copy-code{top:.55rem;right:4.8rem}.flash-found{animation:flashFound 1.5s ease}@keyframes flashFound{0%,100%{box-shadow:none}35%{box-shadow:0 0 0 5px rgba(240,160,32,.3)}}
+.skip-link{position:fixed;left:1rem;top:-50px;background:var(--gold);color:#111;padding:.5rem .8rem;border-radius:0 0 8px 8px;z-index:2000}.skip-link:focus{top:0}
+@media print{.sidebar,.study-toolbar,.mobile-menu,#progress,.section-completion,.hero-actions,.run-row,.copy-equation,.copy-code{display:none!important}.main{max-width:100%;padding:0}.sect{break-inside:avoid-page;margin-bottom:2.5rem}.interactive-panel{box-shadow:none}.sect-title{color:#000}.sect-subtitle,p,td{color:#222!important}body{background:#fff;color:#000}}
+@media(max-width:1050px){.control-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.learning-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lab-layout{grid-template-columns:1fr}.output-card{max-height:300px}}
+@media(max-width:800px){.mobile-menu{display:block}.sidebar{display:flex;position:fixed;left:-280px;transition:left .2s;box-shadow:var(--panel-shadow)}.sidebar.open{left:0}.main{padding-top:4.2rem}.study-toolbar{top:.45rem}.study-dashboard{grid-template-columns:1fr;text-align:center}.dashboard-stats{grid-template-columns:1fr 1fr}.learning-grid,.glossary-grid{grid-template-columns:1fr}.control-grid{grid-template-columns:1fr 1fr}.panel-head{flex-direction:column}.status-text{margin-left:0}.matrix-editor{grid-template-columns:repeat(4,58px)}.matrix-editor input{width:58px}.chart-card canvas{height:260px}}
+@media(max-width:520px){.control-grid{grid-template-columns:1fr}.dashboard-stats{grid-template-columns:1fr}.study-toolbar .tool-label{display:none}.hero-title{font-size:2rem}.lab-layout{display:block}.output-card{margin-top:.75rem}.matrix-editor{grid-template-columns:repeat(4,1fr)}.matrix-editor input{width:100%}}
+
 </style>
 <!-- KaTeX JS -->
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
@@ -258,16 +306,18 @@ p{margin-bottom:.5rem}
 </head>
 <body>
 
+<a class="skip-link" href="#main-content">Skip to lecture content</a>
 <div id="progress"></div>
+<button class="mobile-menu" id="mobileMenu" aria-label="Toggle navigation">☰</button>
 
 <!-- ─────────── SIDEBAR ─────────── -->
 <aside class="sidebar">
   <div class="sb-header">
     <div class="sb-title">Numerical Methods<br>for ODEs</div>
     <div class="sb-sub">ChemE · Year 4 · Problem-Solving Session</div>
-    <a class="nav-item" href="pde.html">
-        <span class="nav-icon">🌊</span>
-        <span class="nav-label">PDE Methods Page</span>
+    <a class="nav-item" href="#advanced-foundations">
+        <span class="nav-icon">🧠</span>
+        <span class="nav-label">Core Analysis</span>
       </a>
   </div>
   <nav class="sb-nav">
@@ -290,32 +340,155 @@ p{margin-bottom:.5rem}
     <a class="nav-item" href="#fdm1d"><span class="nav-icon">📐</span><span class="nav-label">FDM — 1D</span></a>
     <a class="nav-item" href="#fdm2d"><span class="nav-icon">🌡️</span><span class="nav-label">FDM — 2D Heat</span></a>
     <a class="nav-item" href="#regression"><span class="nav-icon">📈</span><span class="nav-label">Regression</span></a>
+    <a class="nav-item" href="#interactive-labs"><span class="nav-icon">🧪</span><span class="nav-label">Interactive Labs</span></a>
+    <a class="nav-item" href="#mastery-quiz"><span class="nav-icon">✅</span><span class="nav-label">Mastery Quiz</span></a>
     <a class="nav-item" href="#practice"><span class="nav-icon">📝</span><span class="nav-label">Practice Problems</span></a>
+    <a class="nav-item" href="#glossary"><span class="nav-icon">📚</span><span class="nav-label">Glossary</span></a>
   </nav>
-  <div class="sb-footer">Click any step box to expand it</div>
+  <div class="sb-footer">Ctrl/⌘ + K: search · progress saved locally</div>
 </aside>
 
 <!-- ─────────── MAIN ─────────── -->
-<main class="main">
+<main class="main" id="main-content">
 
 <!-- HERO -->
+<div class="study-toolbar" role="toolbar" aria-label="Study tools">
+  <div class="search-wrap">
+    <input id="lectureSearch" type="search" placeholder="Search concepts, formulas, examples…" aria-label="Search lecture">
+    <span class="search-count" id="searchCount">0</span>
+    <div class="search-results" id="searchResults"></div>
+  </div>
+  <button class="tool-btn" id="expandAll" title="Expand all worked steps">▾ <span class="tool-label">Expand</span></button>
+  <button class="tool-btn" id="collapseAll" title="Collapse all worked steps">▴ <span class="tool-label">Collapse</span></button>
+  <button class="tool-btn" id="focusMode" title="Toggle focus mode">◫ <span class="tool-label">Focus</span></button>
+  <button class="tool-btn" id="fontSize" title="Toggle larger text">A+ <span class="tool-label">Text</span></button>
+  <button class="tool-btn" id="themeMode" title="Toggle light and dark mode">◐ <span class="tool-label">Theme</span></button>
+  <button class="tool-btn" id="printLecture" title="Print or save as PDF">⎙ <span class="tool-label">Print</span></button>
+</div>
 <div class="hero">
     <div class="hero-tag">Kamyab Safaei · Chemical Engineering</div>
-    <h1 class="hero-title">Numerical Methods for ODEs<br><span>Step by Step</span></h1>
+    <h1 class="hero-title">Computational Numerical Methods<br><span>Interactive Masterclass</span></h1>
     <p class="hero-desc">
       I’m Kamyab Safaei, a Chemical Engineering M.Sc. student at University of Tehran.
-      This lecture-style guide covers Taylor Series, Runge–Kutta (RK2/RK3/RK4), the Shooting Method, and
-      Finite Difference Methods (1D &amp; 2D) with full hand calculations.
+      This complete engineering lecture combines linear-system solvers, error and stability analysis,
+      Taylor and Runge–Kutta methods, boundary-value techniques, finite differences, regression,
+      worked chemical-engineering examples, MATLAB implementations, and live browser laboratories.
     </p>
     <div class="hero-chips">
         
       <span class="chip">kamyabsafaie80@gmail.com</span>
       <span class="chip">09928582327</span>
+      <span class="chip">Interactive solvers</span>
+      <span class="chip">Automatic plots</span>
+      <span class="chip">Mastery tracking</span>
+    </div>
+    <div class="hero-actions">
+      <a class="primary-btn" href="#interactive-labs">Launch numerical labs</a>
+      <a class="secondary-btn" href="#mastery-quiz">Test your mastery</a>
+    </div>
+  </div>
+
+  <div class="study-dashboard" aria-label="Learning progress dashboard">
+    <div class="progress-dial" id="progressDial"><div><strong id="progressPercent">0%</strong><span>lecture complete</span></div></div>
+    <div class="dashboard-copy">
+      <h2>Your study dashboard</h2>
+      <p class="note">Mark chapters complete as you study. Progress is saved locally in your browser.</p>
+      <div class="dashboard-stats">
+        <div class="stat-card"><strong id="completedSections">0</strong><span>chapters completed</span></div>
+        <div class="stat-card"><strong id="totalSections">0</strong><span>total chapters</span></div>
+        <div class="stat-card"><strong id="quizBest">—</strong><span>best quiz score</span></div>
+      </div>
     </div>
   </div>
 
   <!-- ====================================
        ====================================-->
+
+<section id="advanced-foundations" class="sect">
+  <div class="sect-number">F0</div>
+  <h2 class="sect-title">Foundations of Numerical Analysis <span class="badge badge-gold">Essential</span></h2>
+  <p class="sect-subtitle">The concepts that determine whether a numerical answer is trustworthy: error, convergence, stability, conditioning, stiffness, and adaptive computation.</p>
+
+  <div class="learning-grid">
+    <article class="learning-card"><h4>Accuracy</h4><p>How close the computed solution is to the exact or reference solution.</p></article>
+    <article class="learning-card"><h4>Stability</h4><p>Whether numerical perturbations decay, remain bounded, or grow during computation.</p></article>
+    <article class="learning-card"><h4>Efficiency</h4><p>The accuracy obtained per function evaluation, memory unit, and computation time.</p></article>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-title">Error measures</div>
+    \[
+      E_t=y_{\mathrm{true}}-y_{\mathrm{approx}},\qquad
+      E_a=y_i-y_{i-1}
+    \]
+    \[
+      \varepsilon_t=\left|\frac{E_t}{y_{\mathrm{true}}}\right|\times100\%,\qquad
+      \varepsilon_a=\left|\frac{y_i-y_{i-1}}{y_i}\right|\times100\%
+    \]
+    <p>For vector problems, use a norm such as \(\lVert\mathbf e\rVert_2\) or \(\lVert\mathbf e\rVert_\infty\). A residual is different from an error:</p>
+    \[
+      \mathbf r=\mathbf b-\mathbf A\hat{\mathbf x}
+    \]
+    <p>A small residual is necessary, but for an ill-conditioned matrix it does not always guarantee a small solution error.</p>
+  </div>
+
+  <div class="two-col">
+    <div class="info-box"><strong>Local truncation error</strong><br>The error introduced in one step, assuming the previous value is exact. For an order-\(p\) one-step method, it is commonly \(O(h^{p+1})\).</div>
+    <div class="info-box"><strong>Global truncation error</strong><br>The accumulated error at a fixed final time. For an order-\(p\) method, it is commonly \(O(h^p)\).</div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-title">Experimental order of convergence</div>
+    <p>When the exact solution is unknown, solve using \(h\), \(h/2\), and \(h/4\). The observed order is estimated by:</p>
+    \[
+      p\approx\log_2\left(\frac{\lVert y_h-y_{h/2}\rVert}{\lVert y_{h/2}-y_{h/4}\rVert}\right)
+    \]
+    <p>Richardson extrapolation can improve a solution:</p>
+    \[
+      y_{\mathrm{ext}}\approx y_{h/2}+\frac{y_{h/2}-y_h}{2^p-1}
+    \]
+  </div>
+
+  <h3 class="sub">Stability and stiffness</h3>
+  <div class="example-card">
+    <div class="example-header"><span class="example-icon">⚖</span><div class="example-title">Test equation: \(y'=\lambda y\)</div></div>
+    <p>For Forward Euler, \(y_{n+1}=(1+h\lambda)y_n\). Stability requires:</p>
+    \[
+      |1+h\lambda|<1
+    \]
+    <p>For real negative \(\lambda\), this becomes \(0<h<2/|\lambda|\). A physically decaying process can therefore become numerically oscillatory or explosive when the step is too large.</p>
+    <div class="warn-box"><strong>Stiff system:</strong> a model containing widely separated time scales. Explicit RK methods may need tiny steps even when the slow solution changes gradually. Backward Euler, trapezoidal methods, BDF methods, or dedicated stiff solvers are then preferred.</div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-title">Implicit methods for stiff equations</div>
+    <div class="formula-grid">
+      <div class="formula-cell"><div class="formula-cell-label">Backward Euler</div>\[y_{n+1}=y_n+h f(t_{n+1},y_{n+1})\]</div>
+      <div class="formula-cell"><div class="formula-cell-label">Trapezoidal rule</div>\[y_{n+1}=y_n+\frac h2\left[f_n+f_{n+1}\right]\]</div>
+    </div>
+    <p>Because \(y_{n+1}\) appears inside \(f\), a nonlinear equation may need Newton iteration:</p>
+    \[
+      y^{(k+1)}=y^{(k)}-\frac{g(y^{(k)})}{g'(y^{(k)})}
+    \]
+  </div>
+
+  <h3 class="sub">Adaptive step size</h3>
+  <p>Embedded Runge–Kutta methods compute two solutions of different orders in the same step. Their difference estimates the local error. A common update is:</p>
+  \[
+    h_{\mathrm{new}}=s h\left(\frac{\mathrm{tol}}{\mathrm{err}}\right)^{1/(p+1)}
+  \]
+  <p>where \(s\) is a safety factor, often near \(0.8\)–\(0.9\). Reduce \(h\) where the solution changes rapidly and enlarge it where the solution is smooth.</p>
+
+  <h3 class="sub">Reliable engineering workflow</h3>
+  <div class="steps">
+    <details class="step" open><summary><span class="step-num">1</span><span class="step-label">Define the mathematical model and units</span></summary><div class="step-body">Confirm state variables, parameters, signs, units, initial/boundary conditions, and physically admissible ranges.</div></details>
+    <details class="step"><summary><span class="step-num">2</span><span class="step-label">Classify the problem</span></summary><div class="step-body">Identify linear/nonlinear, IVP/BVP, ODE/PDE, steady/transient, stiff/non-stiff, and sparse/dense structure.</div></details>
+    <details class="step"><summary><span class="step-num">3</span><span class="step-label">Choose method and resolution</span></summary><div class="step-body">Select a method compatible with stability and accuracy requirements. Define time step, spatial mesh, tolerances, and stopping criteria.</div></details>
+    <details class="step"><summary><span class="step-num">4</span><span class="step-label">Verify numerics</span></summary><div class="step-body">Perform step or mesh refinement, compare methods, inspect residuals, estimate order, and check conservation laws.</div></details>
+    <details class="step"><summary><span class="step-num">5</span><span class="step-label">Validate physics</span></summary><div class="step-body">Compare with analytical limits, experimental data, published correlations, and physically expected trends.</div></details>
+  </div>
+</section>
+
   <section id="method-choice" class="sect">
     <div class="sect-number">00</div>
   
@@ -9309,6 +9482,114 @@ title(<span class="str">'Gauss-Newton Convergence'</span>);</code></pre>
   </div>
 </section>
 
+
+<section id="interactive-labs" class="sect">
+  <div class="sect-number">LAB</div>
+  <h2 class="sect-title">Interactive Numerical Laboratories <span class="badge badge-teal">Runs in Browser</span></h2>
+  <p class="sect-subtitle">Change parameters, run the algorithms, inspect tables and plots, and connect formulas to numerical behavior. No MATLAB installation is required.</p>
+
+  <div class="interactive-panel" id="methodSelectorPanel">
+    <div class="panel-head"><div><h3>Method-selection assistant</h3><p>Describe the mathematical structure and receive a justified method recommendation.</p></div><span class="live-pill">Decision engine</span></div>
+    <div class="control-grid">
+      <div class="control"><label for="selSource">INPUT TYPE</label><select id="selSource"><option value="equation">Differential equation</option><option value="linear">Linear algebraic system</option><option value="data">Experimental data</option></select></div>
+      <div class="control"><label for="selDimension">STRUCTURE</label><select id="selDimension"><option value="ivp">ODE — initial value</option><option value="bvp">ODE — boundary value</option><option value="pde1">1D spatial equation</option><option value="pde2">2D spatial equation</option></select></div>
+      <div class="control"><label for="selStiff">TIME-SCALE BEHAVIOR</label><select id="selStiff"><option value="nostiff">Non-stiff / unknown</option><option value="stiff">Stiff or strongly separated scales</option></select></div>
+      <div class="control"><label for="selGoal">PRIMARY GOAL</label><select id="selGoal"><option value="accuracy">High accuracy</option><option value="simple">Hand calculation / simplicity</option><option value="speed">Low computational cost</option></select></div>
+    </div>
+    <div class="output-card" id="methodRecommendation" aria-live="polite"></div>
+  </div>
+
+  <div class="interactive-panel" id="odeLab">
+    <div class="panel-head"><div><h3>ODE solver and stability explorer</h3><p>Compare Euler, Heun RK2, midpoint RK2, and classical RK4 for representative chemical-engineering models.</p></div><span class="live-pill">Live integration</span></div>
+    <div class="control-grid">
+      <div class="control"><label for="odePreset">MODEL</label><select id="odePreset"><option value="decay">First-order decay: y′ = −ky</option><option value="logistic">Logistic growth</option><option value="cooling">Newton cooling</option><option value="quadratic">Second-order reaction</option><option value="forced">Forced linear system</option></select></div>
+      <div class="control"><label for="odeMethod">METHOD</label><select id="odeMethod"><option value="euler">Forward Euler</option><option value="heun">Heun RK2</option><option value="midpoint">Midpoint RK2</option><option value="rk4" selected>Classical RK4</option></select></div>
+      <div class="control"><label for="odeY0">INITIAL y₀</label><input id="odeY0" type="number" step="any" value="1"></div>
+      <div class="control"><label for="odeH">STEP h</label><input id="odeH" type="number" min="0.0001" step="any" value="0.2"></div>
+      <div class="control"><label for="odeT0">START t₀</label><input id="odeT0" type="number" step="any" value="0"></div>
+      <div class="control"><label for="odeTf">FINAL t</label><input id="odeTf" type="number" step="any" value="5"></div>
+      <div class="control"><label for="odeP1">PARAMETER 1</label><input id="odeP1" type="number" step="any" value="1"></div>
+      <div class="control"><label for="odeP2">PARAMETER 2</label><input id="odeP2" type="number" step="any" value="10"></div>
+    </div>
+    <div class="run-row"><button class="run-btn" id="runOde">Run solver</button><button class="ghost-btn" id="refineOde">Halve step and compare</button><span class="status-text" id="odeStatus"></span></div>
+    <div class="lab-layout">
+      <div class="chart-card"><canvas id="odeCanvas" width="900" height="440" aria-label="ODE solution plot"></canvas></div>
+      <div class="output-card"><div class="metric-grid" id="odeMetrics"></div><div id="odeTable"></div></div>
+    </div>
+  </div>
+
+  <div class="interactive-panel" id="linearLab">
+    <div class="panel-head"><div><h3>3 × 3 linear-system laboratory</h3><p>Edit the augmented matrix and solve using direct or iterative algorithms. The residual verifies the answer.</p></div><span class="live-pill">Pivoting + iteration</span></div>
+    <div class="control-grid">
+      <div class="control"><label for="linearMethod">ALGORITHM</label><select id="linearMethod"><option value="gaussian">Gaussian elimination</option><option value="jordan">Gauss–Jordan</option><option value="jacobi">Jacobi iteration</option><option value="seidel">Gauss–Seidel</option></select></div>
+      <div class="control"><label for="linearTol">TOLERANCE</label><input id="linearTol" type="number" value="0.000001" step="any"></div>
+      <div class="control"><label for="linearMax">MAX ITERATIONS</label><input id="linearMax" type="number" value="100" min="1"></div>
+      <div class="control"><label>PRESET</label><select id="matrixPreset"><option value="classic">Classic exact system</option><option value="diagonal">Diagonally dominant</option><option value="ill">Nearly ill-conditioned</option></select></div>
+    </div>
+    <div class="matrix-editor" id="matrixEditor" aria-label="Augmented matrix editor"></div>
+    <div class="run-row"><button class="run-btn" id="runLinear">Solve system</button><button class="ghost-btn" id="checkDominance">Check diagonal dominance</button><span class="status-text" id="linearStatus"></span></div>
+    <div class="lab-layout"><div class="output-card"><div class="metric-grid" id="linearMetrics"></div><div id="linearSolution"></div></div><div class="output-card"><div class="solver-steps" id="linearSteps"></div></div></div>
+  </div>
+
+  <div class="interactive-panel" id="fdmLab">
+    <div class="panel-head"><div><h3>1D conduction finite-difference laboratory</h3><p>Solve \(d^2T/dx^2+S=0\) on \(0\le x\le L\) with prescribed end temperatures and study mesh refinement.</p></div><span class="live-pill">Mesh solver</span></div>
+    <div class="control-grid">
+      <div class="control"><label for="fdmTL">LEFT T</label><input id="fdmTL" type="number" value="100" step="any"></div>
+      <div class="control"><label for="fdmTR">RIGHT T</label><input id="fdmTR" type="number" value="20" step="any"></div>
+      <div class="control"><label for="fdmSource">SOURCE S</label><input id="fdmSource" type="number" value="40" step="any"></div>
+      <div class="control"><label for="fdmLength">LENGTH L</label><input id="fdmLength" type="number" value="1" min="0.001" step="any"></div>
+      <div class="control"><label for="fdmNodes">TOTAL NODES</label><input id="fdmNodes" type="number" value="11" min="3" max="101"></div>
+      <div class="control"><label for="fdmConductivity">CONDUCTIVITY SCALE</label><input id="fdmConductivity" type="number" value="1" min="0.0001" step="any"></div>
+    </div>
+    <div class="run-row"><button class="run-btn" id="runFdm">Solve temperature field</button><button class="ghost-btn" id="refineFdm">Double grid resolution</button><span class="status-text" id="fdmStatus"></span></div>
+    <div class="lab-layout"><div class="chart-card"><canvas id="fdmCanvas" width="900" height="420" aria-label="FDM temperature plot"></canvas></div><div class="output-card"><div class="metric-grid" id="fdmMetrics"></div><div id="fdmTable"></div></div></div>
+  </div>
+
+  <div class="interactive-panel" id="heatLab">
+    <div class="panel-head"><div><h3>2D steady heat-map laboratory</h3><p>Iteratively solve Laplace's equation on a plate. Boundary temperatures immediately reshape the field.</p></div><span class="live-pill">Gauss–Seidel field solver</span></div>
+    <div class="control-grid">
+      <div class="control"><label for="heatTop">TOP T</label><input id="heatTop" type="number" value="100"></div>
+      <div class="control"><label for="heatRight">RIGHT T</label><input id="heatRight" type="number" value="25"></div>
+      <div class="control"><label for="heatBottom">BOTTOM T</label><input id="heatBottom" type="number" value="0"></div>
+      <div class="control"><label for="heatLeft">LEFT T</label><input id="heatLeft" type="number" value="75"></div>
+      <div class="control"><label for="heatGrid">GRID SIZE</label><input id="heatGrid" type="number" min="5" max="60" value="25"></div>
+      <div class="control"><label for="heatTol">TOLERANCE</label><input id="heatTol" type="number" step="any" value="0.001"></div>
+    </div>
+    <div class="run-row"><button class="run-btn" id="runHeat">Solve 2D plate</button><span class="status-text" id="heatStatus"></span></div>
+    <div class="chart-card"><canvas class="heat-canvas" id="heatCanvas" width="780" height="520" aria-label="2D temperature heat map"></canvas><div class="legend-bar"></div><div class="legend-labels"><span>cold</span><span>temperature</span><span>hot</span></div></div>
+  </div>
+
+  <div class="interactive-panel" id="regressionLab">
+    <div class="panel-head"><div><h3>Regression and residual laboratory</h3><p>Paste \(x,y\) pairs, fit a linear model, and inspect \(R^2\), RMSE, residuals, and the fitted line.</p></div><span class="live-pill">Data fitting</span></div>
+    <div class="lab-layout">
+      <div>
+        <div class="control"><label for="regData">DATA: ONE x,y PAIR PER LINE</label><textarea id="regData">0,1.02
+1,2.94
+2,5.15
+3,6.91
+4,9.10
+5,10.96</textarea></div>
+        <div class="run-row"><button class="run-btn" id="runRegression">Fit linear model</button><button class="ghost-btn" id="loadArrhenius">Load Arrhenius example</button><span class="status-text" id="regStatus"></span></div>
+        <div class="output-card"><div class="metric-grid" id="regMetrics"></div><div id="regEquation"></div></div>
+      </div>
+      <div class="chart-card"><canvas id="regCanvas" width="720" height="440" aria-label="Regression plot"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<section id="mastery-quiz" class="sect">
+  <div class="sect-number">QUIZ</div>
+  <h2 class="sect-title">Numerical Methods Mastery Check <span class="badge badge-gold">Instant Feedback</span></h2>
+  <p class="sect-subtitle">Ten conceptual and applied questions covering method choice, error, stability, linear solvers, ODE integration, finite differences, and regression.</p>
+  <div class="quiz-shell">
+    <div class="quiz-progress"><span id="quizBar"></span></div>
+    <div class="quiz-question" id="quizQuestion"></div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="quiz-feedback" id="quizFeedback" aria-live="polite"></div>
+    <div class="quiz-nav"><button class="ghost-btn" id="quizRestart">Restart</button><span class="quiz-score" id="quizScore">0 / 10</span><button class="run-btn" id="quizNext">Next question</button></div>
+  </div>
+</section>
+
 <!-- ════════════════════════════════════════════
      SECTION 13 — PRACTICE PROBLEMS
 ═════════════════════════════════════════════ -->
@@ -16917,38 +17198,224 @@ title(<span class="str">'Temperature Response in Non-Isothermal CSTR'</span>);</
 
 
 
+<section id="glossary" class="sect">
+  <div class="sect-number">G</div>
+  <h2 class="sect-title">Compact Numerical Methods Glossary</h2>
+  <p class="sect-subtitle">Core terms used throughout the lecture, summarized for rapid exam review.</p>
+  <dl class="glossary-grid">
+    <div class="term-card"><dt>Consistency</dt><dd>The discrete equation approaches the differential equation as the step or mesh spacing approaches zero.</dd></div>
+    <div class="term-card"><dt>Convergence</dt><dd>The numerical solution approaches the exact solution as resolution increases.</dd></div>
+    <div class="term-card"><dt>Stability</dt><dd>Errors and perturbations remain controlled during the computation.</dd></div>
+    <div class="term-card"><dt>Condition number</dt><dd>A measure of sensitivity of a problem's solution to perturbations in input data.</dd></div>
+    <div class="term-card"><dt>Pivoting</dt><dd>Row exchanges used to avoid zero or dangerously small pivots in elimination.</dd></div>
+    <div class="term-card"><dt>Residual</dt><dd>The imbalance left after substituting an approximate solution into the original equation.</dd></div>
+    <div class="term-card"><dt>Truncation error</dt><dd>Error caused by replacing an infinite mathematical process with a finite approximation.</dd></div>
+    <div class="term-card"><dt>Round-off error</dt><dd>Error caused by finite-precision storage and arithmetic.</dd></div>
+    <div class="term-card"><dt>Stiffness</dt><dd>Presence of widely separated time scales that restrict explicit time steps.</dd></div>
+    <div class="term-card"><dt>Mesh independence</dt><dd>A solution changes negligibly after further spatial-grid refinement.</dd></div>
+    <div class="term-card"><dt>Norm</dt><dd>A scalar measure of vector or matrix magnitude, used to quantify errors and residuals.</dd></div>
+    <div class="term-card"><dt>Regression</dt><dd>Estimation of model parameters by minimizing discrepancy between predictions and observations.</dd></div>
+  </dl>
+</section>
+
 </main>
 
 <script>
-  const progress = document.getElementById("progress");
+(() => {
+  "use strict";
+  const $ = (s, root=document) => root.querySelector(s);
+  const $$ = (s, root=document) => [...root.querySelectorAll(s)];
+  const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+  const fmt = (v,d=6) => Number.isFinite(v) ? Number(v).toPrecision(d).replace(/(?:\.0+|(?:(\.\d*?)0+))$/,'$1') : '—';
 
-  window.addEventListener("scroll", () => {
-    const scrollTop = window.scrollY;
-    const docHeight = document.body.scrollHeight - window.innerHeight;
-    const progressWidth = (scrollTop / docHeight) * 100;
-    progress.style.width = progressWidth + "%";
+  /* Scroll progress and active navigation */
+  const progress = $('#progress');
+  const sections = $$('section[id]');
+  const navLinks = $$('.nav-item[href^="#"]');
+  const updateScroll = () => {
+    const docHeight = Math.max(1, document.body.scrollHeight - innerHeight);
+    progress.style.width = `${clamp(scrollY/docHeight*100,0,100)}%`;
+    let current = sections[0]?.id || '';
+    for (const section of sections) if (scrollY >= section.offsetTop - 150) current = section.id;
+    navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + current));
+  };
+  addEventListener('scroll', updateScroll, {passive:true});
+  updateScroll();
+
+  /* Mobile navigation */
+  $('#mobileMenu')?.addEventListener('click', () => $('.sidebar')?.classList.toggle('open'));
+  navLinks.forEach(a => a.addEventListener('click', () => $('.sidebar')?.classList.remove('open')));
+
+  /* Study toolbar */
+  $('#expandAll')?.addEventListener('click', () => $$('details').forEach(d => d.open = true));
+  $('#collapseAll')?.addEventListener('click', () => $$('details').forEach(d => d.open = false));
+  $('#focusMode')?.addEventListener('click', e => { document.body.classList.toggle('focus-mode'); e.currentTarget.classList.toggle('active'); });
+  $('#fontSize')?.addEventListener('click', e => { document.body.classList.toggle('large-text'); e.currentTarget.classList.toggle('active'); });
+  $('#themeMode')?.addEventListener('click', e => {
+    document.body.classList.toggle('light-mode');
+    e.currentTarget.classList.toggle('active');
+    localStorage.setItem('nm-theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+    redrawAll();
   });
+  if(localStorage.getItem('nm-theme') === 'light') document.body.classList.add('light-mode');
+  $('#printLecture')?.addEventListener('click', () => print());
 
-  const sections = document.querySelectorAll("section[id]");
-  const navLinks = document.querySelectorAll(".nav-item[href^='#']");
+  /* Lecture search */
+  const searchInput = $('#lectureSearch'), searchResults = $('#searchResults'), searchCount = $('#searchCount');
+  const searchable = sections.map(sec => ({sec, title: $('.sect-title',sec)?.textContent.trim() || sec.id, text: sec.textContent.replace(/\s+/g,' ').trim()}));
+  function renderSearch(){
+    const q = searchInput.value.trim().toLowerCase();
+    if(q.length < 2){ searchResults.classList.remove('show'); searchResults.innerHTML=''; searchCount.textContent='0'; return; }
+    const hits = searchable.filter(x => x.text.toLowerCase().includes(q)).slice(0,12);
+    searchCount.textContent = hits.length;
+    searchResults.innerHTML = hits.map((x,i) => `<button class="search-hit" data-hit="${i}"><strong>${escapeHtml(x.title)}</strong><small>${escapeHtml(snippet(x.text,q))}</small></button>`).join('') || '<div class="search-hit">No matching chapter found.</div>';
+    searchResults.classList.add('show');
+    $$('.search-hit[data-hit]',searchResults).forEach((b,i) => b.addEventListener('click',() => {
+      const target = hits[i].sec; searchResults.classList.remove('show'); target.scrollIntoView({behavior:'smooth',block:'start'}); target.classList.add('flash-found'); setTimeout(()=>target.classList.remove('flash-found'),1600);
+    }));
+  }
+  function snippet(text,q){ const i=text.toLowerCase().indexOf(q); const a=Math.max(0,i-45), b=Math.min(text.length,i+q.length+80); return (a?'…':'')+text.slice(a,b)+(b<text.length?'…':''); }
+  function escapeHtml(s){ return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+  searchInput?.addEventListener('input',renderSearch);
+  document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap')) searchResults?.classList.remove('show')});
 
-  window.addEventListener("scroll", () => {
-    let current = "";
-
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop - 120;
-      if (window.scrollY >= sectionTop) {
-        current = section.getAttribute("id");
-      }
-    });
-
-    navLinks.forEach(link => {
-      link.classList.remove("active");
-      if (link.getAttribute("href") === "#" + current) {
-        link.classList.add("active");
-      }
-    });
+  /* Copy equations and code */
+  $$('.formula-box').forEach((box,i)=>{
+    if(box.querySelector('.copy-equation')) return;
+    const b=document.createElement('button'); b.className='copy-equation'; b.textContent='Copy formula'; b.title='Copy formula text';
+    b.addEventListener('click',async()=>{ const txt=box.innerText.replace('Copy formula','').trim(); await safeCopy(txt); b.textContent='Copied'; setTimeout(()=>b.textContent='Copy formula',1000); }); box.appendChild(b);
   });
+  $$('pre').forEach(pre=>{ if(pre.querySelector('.copy-code')) return; pre.style.position='relative'; const b=document.createElement('button'); b.className='copy-code'; b.textContent='Copy code'; b.addEventListener('click',async()=>{await safeCopy(pre.innerText.replace('Copy code','').trim());b.textContent='Copied';setTimeout(()=>b.textContent='Copy code',1000)});pre.appendChild(b); });
+  async function safeCopy(text){ try{await navigator.clipboard.writeText(text)}catch{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()} }
+
+  /* Completion tracking */
+  const completionKey='nm-completed-v2';
+  const completed=new Set(JSON.parse(localStorage.getItem(completionKey)||'[]'));
+  sections.forEach(sec=>{
+    const wrap=document.createElement('div');wrap.className='section-completion';
+    const b=document.createElement('button');b.className='complete-btn';b.dataset.section=sec.id;b.textContent='Mark chapter complete';
+    if(completed.has(sec.id)){b.classList.add('done');b.textContent='✓ Chapter completed'}
+    b.addEventListener('click',()=>{completed.has(sec.id)?completed.delete(sec.id):completed.add(sec.id);localStorage.setItem(completionKey,JSON.stringify([...completed]));b.classList.toggle('done');b.textContent=completed.has(sec.id)?'✓ Chapter completed':'Mark chapter complete';updateDashboard()});
+    wrap.appendChild(b);sec.appendChild(wrap);
+  });
+  function updateDashboard(){const n=sections.length,c=[...completed].filter(id=>sections.some(s=>s.id===id)).length,p=n?Math.round(c/n*100):0;$('#completedSections').textContent=c;$('#totalSections').textContent=n;$('#progressPercent').textContent=p+'%';$('#progressDial').style.setProperty('--p',p);const best=localStorage.getItem('nm-quiz-best');$('#quizBest').textContent=best?best+'/10':'—'}
+  updateDashboard();
+
+  /* Canvas utilities */
+  function css(name){return getComputedStyle(document.body).getPropertyValue(name).trim()}
+  function prepCanvas(canvas){const rect=canvas.getBoundingClientRect();const dpr=Math.min(2,devicePixelRatio||1);const w=Math.max(320,Math.round(rect.width*dpr)),h=Math.max(240,Math.round((parseFloat(getComputedStyle(canvas).height)||canvas.height)*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);return {ctx,w:w/dpr,h:h/dpr}}
+  function drawPlot(canvas,series,{xLabel='x',yLabel='y',title='',points=false}={}){
+    if(!canvas||!series?.length)return;const {ctx,w,h}=prepCanvas(canvas);ctx.clearRect(0,0,w,h);ctx.fillStyle=css('--bg');ctx.fillRect(0,0,w,h);
+    const all=series.flatMap(s=>s.data).filter(p=>Number.isFinite(p.x)&&Number.isFinite(p.y));if(!all.length)return;
+    let xmin=Math.min(...all.map(p=>p.x)),xmax=Math.max(...all.map(p=>p.x)),ymin=Math.min(...all.map(p=>p.y)),ymax=Math.max(...all.map(p=>p.y));if(xmax===xmin){xmax++;xmin--}if(ymax===ymin){ymax++;ymin--}const px=(xmax-xmin)*.06,py=(ymax-ymin)*.1;xmin-=px;xmax+=px;ymin-=py;ymax+=py;
+    const m={l:58,r:18,t:38,b:48},X=x=>m.l+(x-xmin)/(xmax-xmin)*(w-m.l-m.r),Y=y=>h-m.b-(y-ymin)/(ymax-ymin)*(h-m.t-m.b);
+    ctx.strokeStyle=css('--border');ctx.lineWidth=1;ctx.font='11px '+css('--mono');ctx.fillStyle=css('--muted');ctx.textAlign='center';
+    for(let i=0;i<=5;i++){const x=xmin+(xmax-xmin)*i/5,xx=X(x);ctx.beginPath();ctx.moveTo(xx,m.t);ctx.lineTo(xx,h-m.b);ctx.stroke();ctx.fillText(fmt(x,3),xx,h-m.b+18)}ctx.textAlign='right';for(let i=0;i<=5;i++){const y=ymin+(ymax-ymin)*i/5,yy=Y(y);ctx.beginPath();ctx.moveTo(m.l,yy);ctx.lineTo(w-m.r,yy);ctx.stroke();ctx.fillText(fmt(y,3),m.l-7,yy+4)}
+    const colors=[css('--teal'),css('--gold'),css('--error'),'#60a5fa','#c084fc'];series.forEach((s,si)=>{ctx.strokeStyle=s.color||colors[si%colors.length];ctx.fillStyle=ctx.strokeStyle;ctx.lineWidth=s.width||2;ctx.setLineDash(s.dash||[]);ctx.beginPath();s.data.forEach((p,i)=>{if(i)ctx.lineTo(X(p.x),Y(p.y));else ctx.moveTo(X(p.x),Y(p.y))});ctx.stroke();ctx.setLineDash([]);if(points||s.points){s.data.forEach(p=>{ctx.beginPath();ctx.arc(X(p.x),Y(p.y),2.6,0,Math.PI*2);ctx.fill()})}});
+    ctx.fillStyle=css('--text');ctx.font='600 13px '+css('--sans');ctx.textAlign='center';ctx.fillText(title,w/2,18);ctx.fillStyle=css('--muted');ctx.font='11px '+css('--mono');ctx.fillText(xLabel,(m.l+w-m.r)/2,h-10);ctx.save();ctx.translate(14,(m.t+h-m.b)/2);ctx.rotate(-Math.PI/2);ctx.fillText(yLabel,0,0);ctx.restore();
+    let lx=m.l;series.forEach((s,si)=>{ctx.fillStyle=s.color||colors[si%colors.length];ctx.fillRect(lx,m.t-16,14,3);ctx.fillStyle=css('--muted');ctx.textAlign='left';ctx.fillText(s.name,lx+19,m.t-11);lx+=ctx.measureText(s.name).width+52});
+  }
+
+  /* Method selector */
+  const methodControls=['selSource','selDimension','selStiff','selGoal'].map(id=>$('#'+id));
+  methodControls.forEach(c=>c?.addEventListener('change',recommendMethod));
+  function recommendMethod(){
+    const source=$('#selSource').value,dim=$('#selDimension').value,stiff=$('#selStiff').value,goal=$('#selGoal').value;let method='',reason='',checks=[];
+    if(source==='data'){method='Regression';reason='The unknowns are model parameters inferred from observations, so minimize residuals rather than march a differential equation.';checks=['Plot data first','Choose linear or nonlinear model','Inspect residuals and confidence'];}
+    else if(source==='linear'){method=goal==='speed'?'Gauss–Seidel or a sparse iterative solver':'Gaussian elimination with partial pivoting';reason='The problem is already algebraic. Direct elimination is robust for small dense systems; iterative methods scale better for large sparse systems.';checks=['Scale equations','Check conditioning','Verify residual ‖b−Ax‖'];}
+    else if(dim==='bvp'){method='Shooting + RK4, or finite differences';reason='Boundary data are specified at different locations. Shooting converts the BVP to an IVP; finite differences solve all nodes simultaneously.';checks=['Test sensitivity to initial slope','Use FDM when shooting is unstable','Refine mesh'];}
+    else if(dim==='pde1'||dim==='pde2'){method=dim==='pde1'?'1D finite differences':'2D finite differences / finite volumes';reason='The field varies spatially, so replace derivatives with local stencils and solve the resulting algebraic system.';checks=['Apply boundary conditions carefully','Check mesh independence','Use sparse storage'];}
+    else if(stiff==='stiff'){method='Implicit stiff solver (Backward Euler, BDF, Rosenbrock)';reason='Widely separated time scales make explicit stability limits restrictive.';checks=['Use Jacobian information if available','Control absolute and relative tolerance','Check positivity and conservation'];}
+    else if(goal==='simple'){method='Heun RK2 or Taylor method';reason='Both are transparent enough for hand calculation; Taylor is best only when higher derivatives remain simple.';checks=['Show every slope evaluation','Estimate truncation error','Compare against smaller h'];}
+    else if(goal==='speed'){method='RK2 or adaptive RK method';reason='RK2 reduces evaluations; adaptive integration spends work only where the solution changes rapidly.';checks=['Set tolerances','Monitor rejected steps','Verify with refinement'];}
+    else {method='Classical RK4 or adaptive RK45';reason='These methods give strong accuracy for general non-stiff IVPs without analytical higher derivatives.';checks=['Run a half-step comparison','Inspect stability','Preserve physical bounds'];}
+    $('#methodRecommendation').innerHTML=`<h4 style="color:var(--gold);margin-bottom:.35rem">Recommended: ${method}</h4><p>${reason}</p><div class="run-row">${checks.map(x=>`<span class="chip">${x}</span>`).join('')}</div>`;
+  }
+  recommendMethod();
+
+  /* ODE lab */
+  let lastOdeSeries=null;
+  const presetInfo={
+    decay:{label:'First-order decay',defaults:[1,0,5,.2,1,10],f:(t,y,p1)=>-p1*y,exact:(t,y0,t0,p1)=>y0*Math.exp(-p1*(t-t0)),stability:(h,p1)=>Math.abs(1-h*p1)<1?'Euler stable for this decay step':'Euler unstable: reduce h below '+fmt(2/Math.abs(p1),4)},
+    logistic:{label:'Logistic growth',defaults:[.5,0,10,.2,1,10],f:(t,y,r,K)=>r*y*(1-y/K),exact:(t,y0,t0,r,K)=>K/(1+((K-y0)/y0)*Math.exp(-r*(t-t0))),stability:()=> 'Nonlinear stability depends on state and step size'},
+    cooling:{label:'Newton cooling',defaults:[100,0,5,.2,.8,20],f:(t,y,k,Ta)=>-k*(y-Ta),exact:(t,y0,t0,k,Ta)=>Ta+(y0-Ta)*Math.exp(-k*(t-t0)),stability:(h,k)=>Math.abs(1-h*k)<1?'Euler stable for the homogeneous mode':'Euler unstable: reduce h below '+fmt(2/Math.abs(k),4)},
+    quadratic:{label:'Second-order reaction',defaults:[1,0,5,.1,1,0],f:(t,y,k)=>-k*y*y,exact:(t,y0,t0,k)=>y0/(1+k*y0*(t-t0)),stability:()=> 'Use positivity and refinement checks for nonlinear decay'},
+    forced:{label:'Forced linear system',defaults:[0,0,10,.1,1,2],f:(t,y,a,w)=>-a*y+Math.sin(w*t),exact:null,stability:(h,a)=>Math.abs(1-h*a)<1?'Euler stable for homogeneous mode':'Euler homogeneous mode unstable'}
+  };
+  $('#odePreset')?.addEventListener('change',()=>{const d=presetInfo[$('#odePreset').value].defaults;['odeY0','odeT0','odeTf','odeH','odeP1','odeP2'].forEach((id,i)=>$('#'+id).value=d[i]);runOde()});
+  $('#runOde')?.addEventListener('click',runOde);
+  $('#refineOde')?.addEventListener('click',()=>{$('#odeH').value=Number($('#odeH').value)/2;runOde(true)});
+  function integrate(f,t0,tf,y0,h,method,p1,p2){const data=[{x:t0,y:y0}],n=Math.ceil((tf-t0)/h);let t=t0,y=y0;for(let i=0;i<n;i++){const hs=Math.min(h,tf-t);if(hs<=0)break;let yn;if(method==='euler')yn=y+hs*f(t,y,p1,p2);else if(method==='heun'){const k1=f(t,y,p1,p2),k2=f(t+hs,y+hs*k1,p1,p2);yn=y+hs*(k1+k2)/2}else if(method==='midpoint'){const k1=f(t,y,p1,p2),k2=f(t+hs/2,y+hs*k1/2,p1,p2);yn=y+hs*k2}else{const k1=f(t,y,p1,p2),k2=f(t+hs/2,y+hs*k1/2,p1,p2),k3=f(t+hs/2,y+hs*k2/2,p1,p2),k4=f(t+hs,y+hs*k3,p1,p2);yn=y+hs*(k1+2*k2+2*k3+k4)/6}t+=hs;y=yn;data.push({x:t,y});if(!Number.isFinite(y)||Math.abs(y)>1e12)break}return data}
+  function runOde(refined=false){
+    const key=$('#odePreset').value,info=presetInfo[key],method=$('#odeMethod').value,y0=+$('#odeY0').value,t0=+$('#odeT0').value,tf=+$('#odeTf').value,h=+$('#odeH').value,p1=+$('#odeP1').value,p2=+$('#odeP2').value;if(!(tf>t0&&h>0)){ $('#odeStatus').textContent='Final time must exceed start time and h must be positive.';return }
+    const num=integrate(info.f,t0,tf,y0,h,method,p1,p2);const exact=info.exact?num.map(p=>({x:p.x,y:info.exact(p.x,y0,t0,p1,p2)})):[];let maxErr=NaN,finalErr=NaN;if(exact.length){const errs=num.map((p,i)=>Math.abs(p.y-exact[i].y));maxErr=Math.max(...errs);finalErr=errs.at(-1)}
+    const half=integrate(info.f,t0,tf,y0,h/2,method,p1,p2);const selfErr=Math.abs(num.at(-1).y-half.at(-1).y);lastOdeSeries=[{name:method.toUpperCase(),data:num,points:true},...(exact.length?[{name:'Exact',data:exact,dash:[6,4]}]:[])];drawPlot($('#odeCanvas'),lastOdeSeries,{xLabel:'t',yLabel:'y',title:info.label});
+    $('#odeMetrics').innerHTML=metric('Final y',fmt(num.at(-1).y))+metric('Steps',num.length-1)+metric('Max |error|',fmt(maxErr))+metric('Half-step difference',fmt(selfErr));
+    $('#odeTable').innerHTML=`<table class="mini-table"><thead><tr><th>t</th><th>numerical</th>${exact.length?'<th>exact</th><th>|error|</th>':''}</tr></thead><tbody>${num.slice(0,80).map((p,i)=>`<tr><td>${fmt(p.x,5)}</td><td>${fmt(p.y,7)}</td>${exact.length?`<td>${fmt(exact[i].y,7)}</td><td>${fmt(Math.abs(p.y-exact[i].y),4)}</td>`:''}</tr>`).join('')}</tbody></table>`;
+    $('#odeStatus').textContent=`${info.stability(h,p1)}. ${refined?'Step refined. ':''}Estimated endpoint self-error: ${fmt(selfErr,4)}.`;
+  }
+  function metric(name,value){return `<div class="metric"><span>${name}</span><strong>${value}</strong></div>`}
+
+  /* Linear systems */
+  const matrixPresets={classic:[[2,1,-1,8],[-3,-1,2,-11],[-2,1,2,-3]],diagonal:[[10,-1,2,6],[-1,11,-1,25],[2,-1,10,-11]],ill:[[1,1,1,3],[1,1.0001,1,3.0001],[1,1,1.0001,3.0001]]};
+  function buildMatrix(values=matrixPresets.classic){const ed=$('#matrixEditor');ed.innerHTML='';values.flat().forEach((v,i)=>{const inp=document.createElement('input');inp.type='number';inp.step='any';inp.value=v;inp.setAttribute('aria-label',`matrix entry ${i+1}`);ed.appendChild(inp)})}
+  buildMatrix();
+  $('#matrixPreset')?.addEventListener('change',e=>buildMatrix(matrixPresets[e.target.value]));
+  $('#runLinear')?.addEventListener('click',solveLinearLab);
+  $('#checkDominance')?.addEventListener('click',()=>{const {A}=readMatrix();const ok=A.every((r,i)=>Math.abs(r[i])>=r.reduce((s,v,j)=>s+(j===i?0:Math.abs(v)),0));$('#linearStatus').textContent=ok?'Matrix is diagonally dominant (favorable for iteration).':'Matrix is not diagonally dominant; Jacobi/Gauss–Seidel convergence is not guaranteed.'});
+  function readMatrix(){const v=$$('#matrixEditor input').map(x=>+x.value);return{A:[v.slice(0,3),v.slice(4,7),v.slice(8,11)],b:[v[3],v[7],v[11]]}}
+  function gaussianSolve(A0,b0,jordan=false){const A=A0.map((r,i)=>[...r,b0[i]]),steps=[];const n=3;for(let k=0;k<n;k++){let p=k;for(let i=k+1;i<n;i++)if(Math.abs(A[i][k])>Math.abs(A[p][k]))p=i;if(Math.abs(A[p][k])<1e-14)throw Error('Singular or nearly singular matrix');if(p!==k){[A[p],A[k]]=[A[k],A[p]];steps.push(`Swap R${k+1} ↔ R${p+1}`)}if(jordan){const q=A[k][k];A[k]=A[k].map(v=>v/q);steps.push(`Normalize R${k+1}`);for(let i=0;i<n;i++)if(i!==k){const m=A[i][k];A[i]=A[i].map((v,j)=>v-m*A[k][j]);steps.push(`R${i+1} ← R${i+1} − (${fmt(m,4)})R${k+1}`)}}else{for(let i=k+1;i<n;i++){const m=A[i][k]/A[k][k];A[i]=A[i].map((v,j)=>v-m*A[k][j]);steps.push(`m${i+1}${k+1}=${fmt(m,5)}; R${i+1} ← R${i+1} − mR${k+1}`)}}}let x=[0,0,0];if(jordan)x=A.map(r=>r[3]);else for(let i=n-1;i>=0;i--)x[i]=(A[i][3]-A[i].slice(i+1,n).reduce((s,v,j)=>s+v*x[i+1+j],0))/A[i][i];return{x,steps,A}}
+  function iterativeSolve(A,b,seidel,tol,max){let x=[0,0,0],steps=[];for(let it=1;it<=max;it++){const old=[...x],next=[...x];for(let i=0;i<3;i++){if(Math.abs(A[i][i])<1e-14)throw Error('Zero diagonal entry');let s=0;for(let j=0;j<3;j++)if(j!==i)s+=A[i][j]*(seidel?next[j]:old[j]);next[i]=(b[i]-s)/A[i][i]}x=next;const err=Math.max(...x.map((v,i)=>Math.abs(v-old[i])));if(it<=20||it%10===0)steps.push(`iter ${it}: [${x.map(v=>fmt(v,7)).join(', ')}], Δ∞=${fmt(err,4)}`);if(err<tol)return{x,steps,iterations:it}}return{x,steps,iterations:max,warning:'Maximum iterations reached'}}
+  function solveLinearLab(){const {A,b}=readMatrix(),method=$('#linearMethod').value,tol=+$('#linearTol').value,max=+$('#linearMax').value;try{let r;if(method==='gaussian')r=gaussianSolve(A,b,false);else if(method==='jordan')r=gaussianSolve(A,b,true);else r=iterativeSolve(A,b,method==='seidel',tol,max);const residual=b.map((bi,i)=>bi-A[i].reduce((s,a,j)=>s+a*r.x[j],0)),rn=Math.max(...residual.map(Math.abs));$('#linearMetrics').innerHTML=metric('x₁',fmt(r.x[0],8))+metric('x₂',fmt(r.x[1],8))+metric('x₃',fmt(r.x[2],8))+metric('‖residual‖∞',fmt(rn,4));$('#linearSolution').innerHTML=`<div class="formula-box" style="margin:.5rem 0"><div class="formula-title">Computed solution</div>\[\mathbf{x}\approx[${r.x.map(v=>fmt(v,8)).join(',\;')}]^T\]</div>`;$('#linearSteps').textContent=r.steps.join('\n')+(r.warning?'\n'+r.warning:'');$('#linearStatus').textContent=r.warning||`Solved successfully using ${method}.`;if(window.renderMathInElement)renderMathInElement($('#linearSolution'),{delimiters:[{left:'\\[',right:'\\]',display:true}]});}catch(e){$('#linearStatus').textContent=e.message}}
+
+  /* Tridiagonal FDM */
+  let lastFdmSeries=null;
+  $('#runFdm')?.addEventListener('click',runFdm);
+  $('#refineFdm')?.addEventListener('click',()=>{$('#fdmNodes').value=Math.min(101,2*(+$('#fdmNodes').value-1)+1);runFdm()});
+  function thomas(a,b,c,d){const n=d.length,cp=[...c],dp=[...d],bp=[...b];for(let i=1;i<n;i++){const m=a[i]/bp[i-1];bp[i]-=m*cp[i-1];dp[i]-=m*dp[i-1]}const x=Array(n);x[n-1]=dp[n-1]/bp[n-1];for(let i=n-2;i>=0;i--)x[i]=(dp[i]-cp[i]*x[i+1])/bp[i];return x}
+  function runFdm(){const TL=+$('#fdmTL').value,TR=+$('#fdmTR').value,S=+$('#fdmSource').value,L=+$('#fdmLength').value,N=Math.round(+$('#fdmNodes').value),k=+$('#fdmConductivity').value;if(N<3||L<=0||k<=0)return;const h=L/(N-1),n=N-2,a=Array(n).fill(1),b=Array(n).fill(-2),c=Array(n).fill(1),d=Array(n).fill(-S*h*h/k);d[0]-=TL;d[n-1]-=TR;const inner=thomas(a,b,c,d),T=[TL,...inner,TR],data=T.map((v,i)=>({x:i*h,y:v})),exact=data.map(p=>({x:p.x,y:TL+(TR-TL)*p.x/L+(S/(2*k))*p.x*(L-p.x)})),err=Math.max(...T.map((v,i)=>Math.abs(v-exact[i].y)));lastFdmSeries=[{name:'FDM',data,points:true},{name:'Exact',data:exact,dash:[6,4]}];drawPlot($('#fdmCanvas'),lastFdmSeries,{xLabel:'x',yLabel:'T',title:'1D steady conduction'});$('#fdmMetrics').innerHTML=metric('Δx',fmt(h,5))+metric('Interior nodes',n)+metric('Max error',fmt(err,4))+metric('Peak T',fmt(Math.max(...T),6));$('#fdmTable').innerHTML=`<table class="mini-table"><thead><tr><th>node</th><th>x</th><th>T_FDM</th><th>T_exact</th></tr></thead><tbody>${data.map((p,i)=>`<tr><td>${i}</td><td>${fmt(p.x,5)}</td><td>${fmt(p.y,7)}</td><td>${fmt(exact[i].y,7)}</td></tr>`).join('')}</tbody></table>`;$('#fdmStatus').textContent=`Solved ${n} unknown temperatures with a tridiagonal Thomas algorithm.`}
+
+  /* 2D heat */
+  let lastHeat=null;
+  $('#runHeat')?.addEventListener('click',runHeat);
+  function runHeat(){const top=+$('#heatTop').value,right=+$('#heatRight').value,bottom=+$('#heatBottom').value,left=+$('#heatLeft').value,N=Math.round(+$('#heatGrid').value),tol=+$('#heatTol').value;const G=Array.from({length:N},()=>Array(N).fill((top+right+bottom+left)/4));for(let j=0;j<N;j++){G[0][j]=top;G[N-1][j]=bottom}for(let i=0;i<N;i++){G[i][0]=left;G[i][N-1]=right}G[0][0]=(top+left)/2;G[0][N-1]=(top+right)/2;G[N-1][0]=(bottom+left)/2;G[N-1][N-1]=(bottom+right)/2;let it=0,maxDelta=Infinity;while(it<20000&&maxDelta>tol){maxDelta=0;for(let i=1;i<N-1;i++)for(let j=1;j<N-1;j++){const nv=.25*(G[i-1][j]+G[i+1][j]+G[i][j-1]+G[i][j+1]);maxDelta=Math.max(maxDelta,Math.abs(nv-G[i][j]));G[i][j]=nv}it++}lastHeat=G;drawHeat(G);$('#heatStatus').textContent=`Converged in ${it} Gauss–Seidel sweeps; maximum update ${fmt(maxDelta,4)}.`}
+  function heatColor(u){u=clamp(u,0,1);const stops=[[26,35,126],[0,119,182],[0,180,216],[144,224,239],[255,230,109],[255,123,0],[183,28,28]];const p=u*(stops.length-1),i=Math.min(stops.length-2,Math.floor(p)),f=p-i;return `rgb(${stops[i].map((v,k)=>Math.round(v+(stops[i+1][k]-v)*f)).join(',')})`}
+  function drawHeat(G){const canvas=$('#heatCanvas'),{ctx,w,h}=prepCanvas(canvas),N=G.length,min=Math.min(...G.flat()),max=Math.max(...G.flat()),cw=w/N,ch=h/N;for(let i=0;i<N;i++)for(let j=0;j<N;j++){ctx.fillStyle=heatColor((G[i][j]-min)/(max-min||1));ctx.fillRect(j*cw,i*ch,Math.ceil(cw)+.5,Math.ceil(ch)+.5)}ctx.strokeStyle='rgba(255,255,255,.18)';ctx.strokeRect(.5,.5,w-1,h-1);ctx.fillStyle='rgba(0,0,0,.65)';ctx.font='600 12px sans-serif';ctx.fillText(`min ${fmt(min,4)}   max ${fmt(max,4)}`,10,h-12)}
+
+  /* Regression */
+  let lastRegSeries=null;
+  $('#runRegression')?.addEventListener('click',runRegression);
+  $('#loadArrhenius')?.addEventListener('click',()=>{$('#regData').value='0.00310,-3.12\n0.00300,-2.78\n0.00290,-2.41\n0.00280,-2.05\n0.00270,-1.63\n0.00260,-1.20';runRegression()});
+  function runRegression(){const rows=$('#regData').value.split(/\n+/).map(r=>r.trim().split(/[;,\s]+/).map(Number)).filter(r=>r.length>=2&&r.every(Number.isFinite));if(rows.length<2){$('#regStatus').textContent='Enter at least two valid x,y pairs.';return}const n=rows.length,sx=rows.reduce((s,r)=>s+r[0],0),sy=rows.reduce((s,r)=>s+r[1],0),sxx=rows.reduce((s,r)=>s+r[0]**2,0),sxy=rows.reduce((s,r)=>s+r[0]*r[1],0),den=n*sxx-sx*sx;if(Math.abs(den)<1e-18){$('#regStatus').textContent='All x values are identical.';return}const m=(n*sxy-sx*sy)/den,b=(sy-m*sx)/n,ybar=sy/n,pred=rows.map(r=>m*r[0]+b),res=rows.map((r,i)=>r[1]-pred[i]),sse=res.reduce((s,v)=>s+v*v,0),sst=rows.reduce((s,r)=>s+(r[1]-ybar)**2,0),r2=1-sse/sst,rmse=Math.sqrt(sse/n),xmin=Math.min(...rows.map(r=>r[0])),xmax=Math.max(...rows.map(r=>r[0]));lastRegSeries=[{name:'Data',data:rows.map(r=>({x:r[0],y:r[1]})),points:true,width:0},{name:'Fit',data:[{x:xmin,y:m*xmin+b},{x:xmax,y:m*xmax+b}]}];drawPlot($('#regCanvas'),lastRegSeries,{xLabel:'x',yLabel:'y',title:'Linear least-squares fit',points:true});$('#regMetrics').innerHTML=metric('Slope',fmt(m,8))+metric('Intercept',fmt(b,8))+metric('R²',fmt(r2,7))+metric('RMSE',fmt(rmse,6));$('#regEquation').innerHTML=`<div class="formula-box" style="margin:.5rem 0"><div class="formula-title">Best-fit model</div>\[\hat y=${fmt(m,8)}x${b>=0?'+':''}${fmt(b,8)}\]</div><table class="mini-table"><thead><tr><th>x</th><th>y</th><th>ŷ</th><th>residual</th></tr></thead><tbody>${rows.map((r,i)=>`<tr><td>${fmt(r[0],6)}</td><td>${fmt(r[1],6)}</td><td>${fmt(pred[i],6)}</td><td>${fmt(res[i],5)}</td></tr>`).join('')}</tbody></table>`;if(window.renderMathInElement)renderMathInElement($('#regEquation'),{delimiters:[{left:'\\[',right:'\\]',display:true}]});$('#regStatus').textContent=`Fitted ${n} observations by ordinary least squares.`}
+
+  /* Quiz */
+  const quiz=[
+    {q:'A batch-reactor model is a smooth, non-stiff IVP and high accuracy is required. Which is the best default among the lecture methods?',o:['Gauss–Jordan','RK4','FDM 2D','Linear regression'],a:1,e:'RK4 is a high-order general-purpose explicit solver for non-stiff initial-value problems.'},
+    {q:'For an order-p one-step method, the global truncation error usually scales as:',o:['O(h⁻ᵖ)','O(hᵖ)','O(hᵖ⁺¹) only','Independent of h'],a:1,e:'The local error is commonly O(h^{p+1}), while accumulation gives global error O(h^p).'},
+    {q:'Why is partial pivoting used in Gaussian elimination?',o:['To force diagonal dominance','To reduce division by small pivots and improve robustness','To make A symmetric','To calculate eigenvalues'],a:1,e:'Swapping in the largest available pivot reduces amplification of round-off and avoids zero pivots.'},
+    {q:'Forward Euler applied to y′=λy has amplification factor:',o:['e^{hλ}','1+hλ','1/(1−hλ)','1−h²λ'],a:1,e:'Euler gives y_{n+1}=y_n+hλy_n=(1+hλ)y_n.'},
+    {q:'A boundary-value problem specifies y(0) and y(1). What is a suitable approach?',o:['Use RK4 directly without another condition','Shooting method or finite differences','Only regression','Only Taylor expansion at x=1'],a:1,e:'Shooting supplies the missing initial slope; FDM solves the nodal boundary-value system directly.'},
+    {q:'A small residual ‖b−Ax̂‖ always guarantees a small solution error.',o:['True','False'],a:1,e:'False. An ill-conditioned matrix can convert small data or residual perturbations into a large solution error.'},
+    {q:'The standard five-point stencil for the 2D Laplace equation uses:',o:['Only east and west nodes','Four orthogonal neighbors and the center','Eight diagonal neighbors only','Time levels n and n+1'],a:1,e:'For equal spacing: T_E+T_W+T_N+T_S−4T_P=0.'},
+    {q:'What is the strongest numerical verification step?',o:['Use more decimal places','Repeat with a refined step or mesh and estimate convergence','Accept a smooth-looking graph','Use the same method twice'],a:1,e:'Refinement and convergence analysis directly test discretization sensitivity.'},
+    {q:'A stiff kinetic model is usually better handled by:',o:['A very large explicit Euler step','An implicit stiff solver','Linear regression','Gauss–Jordan only'],a:1,e:'Implicit methods have larger stability regions and avoid the severe explicit stability restriction.'},
+    {q:'In regression, residuals are:',o:['Observed minus predicted responses','Exact minus truncation error','Only measurement units','Matrix pivots'],a:0,e:'Residual r_i=y_i−ŷ_i is the discrepancy minimized or diagnosed during model fitting.'}
+  ];
+  let qi=0,score=0,answered=false;
+  function renderQuiz(){const q=quiz[qi];answered=false;$('#quizQuestion').textContent=`${qi+1}. ${q.q}`;$('#quizOptions').innerHTML=q.o.map((o,i)=>`<button class="quiz-option" data-i="${i}">${String.fromCharCode(65+i)}. ${o}</button>`).join('');$('#quizFeedback').textContent='';$('#quizBar').style.width=`${qi/quiz.length*100}%`;$('#quizScore').textContent=`${score} / ${quiz.length}`;$$('.quiz-option').forEach(b=>b.addEventListener('click',()=>answerQuiz(+b.dataset.i)))}
+  function answerQuiz(i){if(answered)return;answered=true;const q=quiz[qi];$$('.quiz-option').forEach((b,j)=>{b.disabled=true;if(j===q.a)b.classList.add('correct');else if(j===i)b.classList.add('wrong')});if(i===q.a){score++;$('#quizFeedback').innerHTML=`<strong style="color:var(--success)">Correct.</strong> ${q.e}`}else $('#quizFeedback').innerHTML=`<strong style="color:var(--error)">Not correct.</strong> ${q.e}`;$('#quizScore').textContent=`${score} / ${quiz.length}`}
+  $('#quizNext')?.addEventListener('click',()=>{if(!answered){$('#quizFeedback').textContent='Choose an answer before continuing.';return}if(qi<quiz.length-1){qi++;renderQuiz()}else{const best=Math.max(score,+(localStorage.getItem('nm-quiz-best')||0));localStorage.setItem('nm-quiz-best',best);$('#quizBar').style.width='100%';$('#quizQuestion').textContent=`Quiz complete: ${score} / ${quiz.length}`;$('#quizOptions').innerHTML='';$('#quizFeedback').innerHTML=score>=8?'<strong style="color:var(--success)">Strong mastery.</strong> Review only the topics you missed.':'Review the relevant lecture sections and run the interactive labs again.';$('#quizNext').disabled=true;updateDashboard()}});
+  $('#quizRestart')?.addEventListener('click',()=>{qi=0;score=0;$('#quizNext').disabled=false;renderQuiz()});
+  renderQuiz();
+
+  /* Initialization and responsive redraw */
+  function redrawAll(){if(lastOdeSeries)drawPlot($('#odeCanvas'),lastOdeSeries,{xLabel:'t',yLabel:'y',title:presetInfo[$('#odePreset').value].label});if(lastFdmSeries)drawPlot($('#fdmCanvas'),lastFdmSeries,{xLabel:'x',yLabel:'T',title:'1D steady conduction'});if(lastHeat)drawHeat(lastHeat);if(lastRegSeries)drawPlot($('#regCanvas'),lastRegSeries,{xLabel:'x',yLabel:'y',title:'Linear least-squares fit',points:true})}
+  let resizeTimer;addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(redrawAll,180)});
+  runOde();solveLinearLab();runFdm();runHeat();runRegression();
+
+  /* Keyboard shortcuts */
+  document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();searchInput.focus()}if(e.key==='Escape'){searchResults.classList.remove('show');$('.sidebar')?.classList.remove('open')}});
+})();
 </script>
 
 </body>
